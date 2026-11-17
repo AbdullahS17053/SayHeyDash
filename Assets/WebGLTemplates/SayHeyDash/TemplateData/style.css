@@ -1,0 +1,118 @@
+/* The Say Hey Dash - WebGL template styles. Palette from the GDD (pending client approval). */
+:root {
+  --shd-midnight: #17152F;
+  --shd-yellow: #F6CE4B;
+  --shd-orange: #F38B37;
+  --shd-offwhite: #F5F1D9;
+  --shd-red: #D94D58;
+  --shd-font: "Courier New", Courier, monospace; /* replaced by the licensed pixel font in M3 */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--shd-midnight);
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 16:9 stage that always fits inside the viewport / iframe box (letterboxed, never cropped). */
+#shd-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
+}
+@supports (height: 100dvh) {
+  #shd-stage {
+    width: min(100vw, calc(100dvh * 16 / 9));
+    height: min(100dvh, calc(100vw * 9 / 16));
+  }
+}
+
+#unity-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--shd-midnight);
+  outline: none;
+  touch-action: none;
+  image-rendering: pixelated;
+}
+
+.shd-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5%;
+  background: var(--shd-midnight);
+  color: var(--shd-offwhite);
+  font-family: var(--shd-font);
+  font-weight: bold;
+  text-align: center;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  cursor: pointer;
+}
+#shd-loading { cursor: default; }
+
+.shd-presents { color: var(--shd-orange); font-size: clamp(9px, 2.2vmin, 16px); letter-spacing: 0.1em; }
+.shd-title { color: var(--shd-yellow); font-size: clamp(16px, 6vmin, 52px); letter-spacing: 0.05em; }
+
+.shd-bar {
+  width: 50%;
+  height: clamp(8px, 2.5vmin, 18px);
+  border: 3px solid var(--shd-offwhite);
+  padding: 2px;
+  box-sizing: border-box;
+}
+#shd-bar-fill { height: 100%; width: 0; background: var(--shd-orange); }
+#shd-loading-text { font-size: clamp(9px, 2.2vmin, 16px); }
+
+/* 1 Hz blink - well below the 3 Hz photosensitivity threshold; disabled for reduced motion. */
+.shd-blink { color: var(--shd-offwhite); font-size: clamp(10px, 3vmin, 24px); animation: shd-blink 1s steps(1) infinite; }
+@keyframes shd-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .shd-blink { animation: none; } }
+
+#shd-refocus {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  background: var(--shd-yellow);
+  color: var(--shd-midnight);
+  font-family: var(--shd-font);
+  font-weight: bold;
+  font-size: clamp(9px, 2vmin, 14px);
+  border: 3px solid var(--shd-midnight);
+  padding: 0.6em 1em;
+  cursor: pointer;
+}
+
+#shd-error {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  top: 40%;
+  background: var(--shd-red);
+  color: var(--shd-offwhite);
+  font-family: var(--shd-font);
+  padding: 1em;
+  text-align: center;
+}
+
+.shd-hidden { display: none !important; }
+
+button:focus-visible { outline: 3px solid var(--shd-yellow); outline-offset: -6px; }

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wix Embed Simulator - The Say Hey Dash (M1 feasibility test)</title>
+<style>
+  body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #fafafa; color: #222; }
+  header { background: #222; color: #fff; padding: 14px 24px; display: flex; gap: 24px; align-items: center; }
+  header nav a { color: #ddd; margin-right: 16px; text-decoration: none; font-size: 14px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  .filler { height: 500px; background: repeating-linear-gradient(#fff, #fff 38px, #eee 38px, #eee 40px); border: 1px solid #ddd; padding: 16px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 12px 0; padding: 12px; background: #fff; border: 1px solid #ddd; }
+  .controls label { font-size: 13px; }
+  #frame-wrap { background: #fff; border: 1px dashed #999; padding: 8px; display: inline-block; }
+  iframe { border: 0; display: block; }
+  code { background: #eee; padding: 1px 4px; }
+  ol li { margin-bottom: 6px; }
+  #log { font-family: monospace; font-size: 12px; background: #111; color: #9f9; padding: 8px; height: 90px; overflow: auto; }
+</style>
+</head>
+<body>
+<header>
+  <strong>Fastball Fuel (simulated Wix page)</strong>
+  <nav><a href="#">Shop</a><a href="#">Museum</a><a href="#">Story Mode</a><a href="#">Arcade</a></nav>
+</header>
+<main>
+  <p>This page mimics a Wix site that embeds the game in an <b>HTML iframe element</b> on a
+     <b>different origin</b> than the game (as Wix does). It is a local stand-in until the build is
+     hosted on HTTPS and tested on the real Wix page.</p>
+
+  <div class="filler">Scroll content above the game (tests that Space / arrow keys do not scroll the host page while the game has focus).</div>
+
+  <h2>Arcade Mode</h2>
+  <div class="controls">
+    <label>Game URL <input id="src" size="34"></label>
+    <label>Size
+      <select id="size">
+        <option value="960x540">Desktop 960x540</option>
+        <option value="1280x720">Desktop 1280x720</option>
+        <option value="640x360">Small 640x360</option>
+        <option value="360x640">Phone portrait box 360x640</option>
+        <option value="100%x560">Responsive 100% x 560</option>
+      </select>
+    </label>
+    <label>Sandbox
+      <select id="sandbox">
+        <option value="allow-scripts allow-same-origin allow-popups allow-forms">Typical: scripts + same-origin + popups</option>
+        <option value="allow-scripts allow-same-origin">Strict: scripts + same-origin (no popups)</option>
+        <option value="allow-scripts">Very strict: scripts only</option>
+        <option value="none">No sandbox attribute</option>
+      </select>
+    </label>
+    <label><input type="checkbox" id="fs" checked> allow="fullscreen"</label>
+    <button id="apply">Reload iframe</button>
+  </div>
+
+  <div id="frame-wrap"><div id="game"></div></div>
+
+  <h3>Manual checklist</h3>
+  <ol>
+    <li>Game loads, loading bar shows, then "CLICK OR TAP TO PLAY" gate appears.</li>
+    <li>Click the gate &rarr; arrows / WASD move the outfielder; Space blips. Host page does <b>not</b> scroll.</li>
+    <li>Click outside the iframe &rarr; "click game to resume" hint appears; click the game &rarr; control returns.</li>
+    <li>Diagnostics panel shows <code>IFRAME YES</code>, sensible FPS, no console errors.</li>
+    <li>FULLSCREEN works only with <code>allow="fullscreen"</code>; OPEN LINK only with <code>allow-popups</code>.</li>
+    <li>Each size preset: canvas letterboxes to 16:9, UI never cropped.</li>
+  </ol>
+  <div id="log"></div>
+  <div class="filler">Scroll content below the game.</div>
+</main>
+<script>
+  var params = new URLSearchParams(location.search);
+  var srcInput = document.getElementById("src");
+  srcInput.value = params.get("game") || "http://localhost:8601/";
+  var logBox = document.getElementById("log");
+  function log(msg) { logBox.textContent += new Date().toLocaleTimeString() + "  " + msg + "\n"; logBox.scrollTop = 1e9; }
+
+  // Optional URL overrides: ?game=...&size=960x540&sandbox=allow-scripts%20allow-same-origin&fs=0
+  if (params.get("size")) document.getElementById("size").value = params.get("size");
+  if (params.get("sandbox")) document.getElementById("sandbox").value = params.get("sandbox");
+  if (params.get("fs") === "0") document.getElementById("fs").checked = false;
+
+  function apply() {
+    // Always build a NEW iframe: browsers only apply sandbox flags at creation/navigation time,
+    // and re-using one element across sandbox changes gives misleading results.
+    var old = document.getElementById("game");
+    var frame = document.createElement("iframe");
+    frame.id = "game";
+    frame.title = "The Say Hey Dash";
+    var size = document.getElementById("size").value.split("x");
+    var sandbox = document.getElementById("sandbox").value;
+    frame.style.width = size[0].indexOf("%") > 0 ? size[0] : size[0] + "px";
+    frame.style.height = size[1] + "px";
+    if (sandbox === "none") frame.removeAttribute("sandbox"); else frame.setAttribute("sandbox", sandbox);
+    if (document.getElementById("fs").checked) { frame.setAttribute("allow", "fullscreen; autoplay"); frame.setAttribute("allowfullscreen", ""); }
+    else { frame.setAttribute("allow", "autoplay"); frame.removeAttribute("allowfullscreen"); }
+    frame.src = srcInput.value + (srcInput.value.indexOf("?") >= 0 ? "&" : "?") + "t=" + Date.now();
+    old.replaceWith(frame);
+    log("iframe " + size.join("x") + " | sandbox=" + sandbox + " | fullscreen=" + document.getElementById("fs").checked);
+  }
+  document.getElementById("apply").addEventListener("click", apply);
+  window.addEventListener("scroll", function () { log("HOST PAGE SCROLLED to y=" + Math.round(window.scrollY)); }, { passive: true });
+  apply();
+</script>
+</body>
+</html>

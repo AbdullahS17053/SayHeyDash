@@ -1,0 +1,24 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "webgl-build",
+      "runtimeExecutable": "py",
+      "runtimeArgs": ["-I", "Tools/WebTest/serve.py", "Builds/WebGL", "8601"],
+      "port": 8601
+    },
+    {
+      "name": "wix-harness",
+      "runtimeExecutable": "py",
+      "runtimeArgs": ["-I", "Tools/WebTest/serve.py", "Tools/WixHarness", "8602"],
+      "port": 8602
+    },
+    {
+      "name": "docs",
+      "runtimeExecutable": "py",
+      "runtimeArgs": ["-I", "Tools/WebTest/serve.py", ".", "8603"],
+      "port": 8603,
+      "url": "http://localhost:8603"
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Say Hey Dash — Gameplay Storyboard (M1)</title>
+<style>
+  :root { --mid:#17152F; --yel:#F6CE4B; --org:#F38B37; --grn:#3C7659; --off:#F5F1D9; --red:#D94D58; --dusk:#2E2A52; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#0d0c1d; color:var(--off); font-family:"Courier New",monospace; }
+  main { max-width:1180px; margin:0 auto; padding:32px 20px 64px; }
+  h1 { color:var(--yel); margin:0; }
+  .sub { opacity:.8; margin:4px 0 24px; }
+  .board { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:22px; }
+  .panel { background:#211e40; border:3px solid var(--dusk); }
+  .panel .head { display:flex; justify-content:space-between; padding:6px 10px; background:var(--dusk); font-weight:bold; font-size:13px; }
+  .panel .head .n { color:var(--yel); }
+  .frame { position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; background:var(--mid); image-rendering:pixelated; font-weight:bold; }
+  .frame.field { background:url(../Assets/_Project/Art/Sprites/Prototype/proto_field_background.png) center/100% 100% no-repeat; }
+  .spr { position:absolute; image-rendering:pixelated; transform:translate(-50%,-50%); }
+  .p32 { width:10%; } .p8 { width:2.5%; } .s8 { width:2.5%; }
+  .txt { position:absolute; left:0; right:0; text-align:center; font-size:clamp(8px,1.6vw,13px); text-shadow:2px 2px 0 var(--mid); }
+  .big { font-size:clamp(14px,3vw,26px); color:var(--yel); }
+  .org { color:var(--org); } .red { color:var(--red); } .yel { color:var(--yel); }
+  .arc { position:absolute; inset:0; width:100%; height:100%; }
+  .meter { position:absolute; left:20%; right:20%; bottom:12%; height:7%; border:2px solid var(--off); background:var(--mid); }
+  .meter .zone { position:absolute; top:0; bottom:0; left:44%; width:12%; background:var(--grn); border-left:2px solid var(--yel); border-right:2px solid var(--yel); }
+  .meter .needle { position:absolute; top:-30%; bottom:-30%; left:38%; width:2%; background:var(--yel); }
+  .ring { position:absolute; border:2px dashed var(--yel); border-radius:50%; transform:translate(-50%,-50%); }
+  .pad { position:absolute; bottom:5%; width:11%; aspect-ratio:1; border-radius:50%; border:2px solid rgba(245,241,217,.5); }
+  .notes { padding:10px 12px 14px; font-size:13px; line-height:1.45; }
+  .notes b { color:var(--org); }
+  .flow { margin:26px 0; padding:12px; border:3px dashed var(--dusk); font-size:13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>GAMEPLAY STORYBOARD</h1>
+  <p class="sub">The Say Hey Dash · Milestone 1 · 10 beats covering all 7 required screens and the 3 gameplay stages. Placeholder art; compositions are indicative and will be validated in the M2 greybox.</p>
+
+  <div class="flow">FLOW: 01 TITLE → 02 MISSION → 03 GAMEPLAY [A TRACK → B CATCH] → 04 CATCH SEQUENCE → 03 GAMEPLAY [C THROW] → 06 COMPLETE → 07 REPLAY · any miss → 05 FAILED → retry (03)</div>
+
+  <div class="board">
+
+    <section class="panel"><div class="head"><span class="n">01 · TITLE / PRESS START</span><span>Screen 01</span></div>
+      <div class="frame">
+        <div class="txt org" style="top:10%">FASTBALL FUEL COFFEE COMPANY PRESENTS</div>
+        <div class="txt" style="top:18%">[ARCADE MODE]</div>
+        <div class="txt big" style="top:30%">THE CATCH</div>
+        <div class="txt" style="top:52%">PLAYER ONE: WILLIE MAYS<br>WORLD SERIES: 1954<br>LEVEL 01: POLO GROUNDS</div>
+        <div class="txt yel" style="top:80%">▶ PRESS START ◀</div>
+        <div class="txt" style="top:91%;font-size:10px;opacity:.8">SOUND: ON · CREDITS · ASSISTED MODE: OFF</div>
+      </div>
+      <div class="notes"><b>Input:</b> Enter / Space / tap. <b>Motion:</b> prompt blinks at 1 Hz (static in reduced motion). Sound toggle + credits reachable by keyboard and touch. Name line subject to licensing (Q1).</div></section>
+
+    <section class="panel"><div class="head"><span class="n">02 · MISSION OBJECTIVE</span><span>Screen 02</span></div>
+      <div class="frame">
+        <div class="txt big" style="top:8%">MISSION OBJECTIVE</div>
+        <div class="txt" style="top:24%;text-align:left;left:12%">YEAR: 1954<br>LOCATION: POLO GROUNDS<br>INNING: TOP 8 · SCORE: 2–2 · OUTS: 0<br>RUNNERS: 1ST &amp; 2ND</div>
+        <div class="txt org" style="top:58%">OBJECTIVE: MAKE THE CATCH. MAKE THE THROW.</div>
+        <div class="txt" style="top:70%;font-size:10px">MOVE: ARROWS/WASD · CATCH/THROW: SPACE · PAUSE: ESC</div>
+        <div class="txt yel" style="top:86%">CONTINUE ▶   SKIP INTRO ▶▶</div>
+      </div>
+      <div class="notes">Brief, approved historical setup (typewriter reveal, instantly completable). <b>Skippable</b> per accessibility list. Controls shown for the active device (keys or touch icons).</div></section>
+
+    <section class="panel"><div class="head"><span class="n">03a · THE HIT</span><span>Screen 03 · intro beat</span></div>
+      <div class="frame field">
+        <svg class="arc" viewBox="0 0 320 180"><path d="M160 178 Q 170 40 205 60" fill="none" stroke="#F5F1D9" stroke-width="1" stroke-dasharray="3 3"/></svg>
+        <img class="spr p8" src="../Assets/_Project/Art/Sprites/Prototype/proto_ball.png" style="left:56%;top:40%" alt="">
+        <img class="spr p32" src="../Assets/_Project/Art/Sprites/Prototype/proto_outfielder_idle.png" style="left:47%;top:72%" alt="">
+        <div class="txt big" style="top:8%">CRACK!</div>
+        <div class="txt" style="top:88%">DEEP FLY BALL TO CENTER!</div>
+      </div>
+      <div class="notes">≈1.5 s non-interactive beat: bat-crack SFX, crowd swell, ball launches from behind the camera. Camera holds on centre field. Sets the deterministic, scripted trajectory (no random events — GDD fairness).</div></section>
+
+    <section class="panel"><div class="head"><span class="n">03b · STAGE A — TRACK THE BALL</span><span>Screen 03</span></div>
+      <div class="frame field">
+        <img class="spr p8" src="../Assets/_Project/Art/Sprites/Prototype/proto_ball.png" style="left:64%;top:24%" alt="">
+        <img class="spr s8" src="../Assets/_Project/Art/Sprites/Prototype/proto_ball_shadow.png" style="left:64%;top:60%" alt="">
+        <div class="ring" style="left:64%;top:60%;width:9%;height:7%"></div>
+        <img class="spr p32" src="../Assets/_Project/Art/Sprites/Prototype/proto_outfielder_idle.png" style="left:44%;top:76%" alt="">
+        <div class="txt" style="top:4%;text-align:right;right:3%;left:auto">❚❚</div>
+        <div class="txt org" style="top:4%;text-align:left;left:3%">TRACK THE BALL!</div>
+        <div class="pad" style="left:3%"></div><div class="pad" style="right:3%;background:rgba(243,139,55,.5)"></div>
+      </div>
+      <div class="notes"><b>Mechanic: movement &amp; positioning.</b> Player runs toward the wall. Ball <b>shadow + dashed ring</b> = landing indicator (shape cue, not just colour). Pause icon top-right. Mobile: stick bottom-left, action bottom-right. Tunables: <code>playerRunSpeed</code>, <code>landingZoneRadius</code>, <code>ballFlightDuration</code>.</div></section>
+
+    <section class="panel"><div class="head"><span class="n">03c · STAGE B — MAKE THE CATCH</span><span>Screen 03</span></div>
+      <div class="frame field">
+        <img class="spr p8" src="../Assets/_Project/Art/Sprites/Prototype/proto_ball.png" style="left:62%;top:48%" alt="">
+        <img class="spr s8" src="../Assets/_Project/Art/Sprites/Prototype/proto_ball_shadow.png" style="left:62%;top:62%" alt="">
+        <div class="ring" style="left:62%;top:62%;width:7%;height:5%;border-style:solid"></div>
+        <img class="spr p32" src="../Assets/_Project/Art/Sprites/Prototype/proto_outfielder_idle.png" style="left:61%;top:62%" alt="">
+        <div class="txt big" style="top:14%">NOW! [SPACE]</div>
+        <div class="txt" style="top:84%">IN ZONE ✓</div>
+      </div>
+      <div class="notes"><b>Mechanic: reaction timing.</b> Inside the catch zone the cue appears; press Action within <code>catchWindowSeconds</code> (wider in <b>Assisted mode</b>). Too early / late / out of zone → 05. Text cue + icon, not colour alone.</div></section>
+
+    <section class="panel"><div class="head"><span class="n">04 · CATCH SEQUENCE</span><span>Screen 04</span></div>
+      <div class="frame field">
+        <img class="spr" src="../Assets/_Project/Art/Sprites/Prototype/proto_outfielder_idle.png" style="left:50%;top:58%;width:22%" alt="">
+        <img class="spr" src="../Assets/_Project/Art/Sprites/Prototype/proto_ball.png" style="left:56%;top:42%;width:5%" alt="">
+        <div class="txt big" style="top:10%">OVER THE SHOULDER!</div>
+        <div class="txt" style="top:88%;font-size:10px;opacity:.85">PRESS SPACE TO SKIP</div>
+      </div>
+      <div class="notes">Original over-the-shoulder catch animation, brief zoom/hold to emphasise the play, then immediately into the throw. <b>Skippable</b>; in reduced-motion mode it's shortened to the key pose (no zoom).</div></section>
+
+    <section class="panel"><div class="head"><span class="n">03d · STAGE C — MAKE THE THROW</span><span>Screen 03</span></div>
+      <div class="frame field">
+        <img class="spr p32" src="../Assets/_Project/Art/Sprites/Prototype/proto_outfielder_idle.png" style="left:50%;top:62%;transform:translate(-50%,-50%) scaleX(-1)" alt="">
+        <div class="txt org" style="top:10%">SPIN AND THROW!</div>
+        <div class="txt" style="top:20%;font-size:10px">TARGET: INFIELD CUTOFF</div>
+        <div class="meter"><div class="zone"></div><div class="needle"></div></div>
+        <div class="txt" style="top:72%;font-size:10px">PRESS SPACE IN THE ZONE</div>
+      </div>
+      <div class="notes"><b>Mechanic: precision timing.</b> Player turns to the infield; a needle sweeps a meter; press Action while it's inside the target zone (notched edges = non-colour cue). Tunables: <code>throwMeterSpeed</code>, <code>throwTargetZoneWidth</code>.</div></section>
+
+    <section class="panel"><div class="head"><span class="n">05 · MISSION FAILED</span><span>Screen 05</span></div>
+      <div class="frame">
+        <div class="txt big red" style="top:18%">TRY AGAIN</div>
+        <div class="txt" style="top:38%">BALL MISSED</div>
+        <div class="txt" style="top:50%;font-size:10px;opacity:.85">HINT: FOLLOW THE SHADOW — BE INSIDE THE RING BEFORE YOU PRESS.</div>
+        <div class="txt yel" style="top:72%">RETRY MISSION? ▶</div>
+      </div>
+      <div class="notes">Framed strictly as a <b>retry</b>, never as what happened historically. Message = BALL MISSED or THROW MISSED; short contextual hint; unlimited retries, no lives. Restart is one press.</div></section>
+
+    <section class="panel"><div class="head"><span class="n">06 · MISSION COMPLETE</span><span>Screen 06</span></div>
+      <div class="frame field">
+        <div style="position:absolute;inset:8% 14%;background:rgba(23,21,47,.92);border:3px solid #F5F1D9"></div>
+        <div class="txt big" style="top:13%">MISSION COMPLETE</div>
+        <div class="txt" style="top:28%">THE CATCH · SEPTEMBER 29, 1954</div>
+        <div class="txt" style="top:40%">POSITION 360 · TIMING 255 · THROW 300</div>
+        <div class="txt yel" style="top:52%">SCORE 915 · ★★★ LEGENDARY</div>
+        <div class="txt" style="top:64%;font-size:10px">LEAD RUNNER HOLDS AT THIRD — NO RUN SCORES</div>
+        <div class="txt org" style="top:76%">REPLAY ▶   REPLAY MODE ▶</div>
+      </div>
+      <div class="notes">Shows the documented outcome (runner to third, the Giants keep it tied). Score breakdown + rank with stars and text. Buttons: Replay mission, Continue to Replay Mode.</div></section>
+
+    <section class="panel"><div class="head"><span class="n">07 · REPLAY / HISTORY</span><span>Screen 07</span></div>
+      <div class="frame field">
+        <svg class="arc" viewBox="0 0 320 180"><path d="M160 178 Q 175 30 200 100" fill="none" stroke="#F6CE4B" stroke-width="1.5" stroke-dasharray="4 2"/></svg>
+        <div style="position:absolute;left:4%;top:8%;width:46%;bottom:8%;background:rgba(23,21,47,.92);border:3px solid #F6CE4B"></div>
+        <div class="txt" style="top:12%;left:6%;right:auto;width:42%;text-align:left;font-size:10px">THE REAL CATCH<br><br>POLO GROUNDS, NYC<br>SEPT 29, 1954<br><br>[CLIENT-APPROVED<br>RECAP TEXT]</div>
+        <div class="txt org" style="top:84%;left:54%;right:4%;width:auto">◀ MUSEUM / STORY MODE</div>
+      </div>
+      <div class="notes">Short approved recap + simplified animated replay drawn with the game's own sprites (no archival footage). Link to the Fastball Fuel museum / STORY MODE page (opened safely from the iframe — tested in M1). Back to title.</div></section>
+
+  </div>
+</main>
+</body>
+</html>

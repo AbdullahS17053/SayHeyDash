@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Say Hey Dash — Art Direction Reference Sheet (M1)</title>
+<style>
+  :root { --mid:#17152F; --yel:#F6CE4B; --org:#F38B37; --grn:#3C7659; --off:#F5F1D9; --red:#D94D58; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--mid); color:var(--off); font-family:"Courier New",monospace; line-height:1.45; }
+  main { max-width:1120px; margin:0 auto; padding:32px 24px 64px; }
+  h1 { color:var(--yel); font-size:32px; margin:0 0 4px; letter-spacing:.04em; }
+  h2 { color:var(--org); font-size:20px; border-bottom:3px solid var(--org); padding-bottom:4px; margin-top:40px; }
+  .sub { color:var(--off); opacity:.8; margin:0 0 24px; }
+  .tag { display:inline-block; background:var(--red); color:var(--off); padding:2px 8px; font-size:12px; font-weight:bold; }
+  .grid { display:grid; gap:14px; }
+  .g6 { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }
+  .g3 { grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
+  .sw { border:3px solid var(--off); }
+  .sw .chip { height:72px; }
+  .sw .meta { padding:6px 8px; font-size:13px; background:#0d0c1d; }
+  .sw .meta b { display:block; }
+  .card { background:#211e40; border:3px solid #2E2A52; padding:14px; }
+  .card h3 { margin:0 0 8px; color:var(--yel); font-size:15px; }
+  .px { image-rendering:pixelated; image-rendering:crisp-edges; display:block; }
+  .checker { background-color:#2E2A52; background-image:linear-gradient(45deg,#26234a 25%,transparent 25%),linear-gradient(-45deg,#26234a 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#26234a 75%),linear-gradient(-45deg,transparent 75%,#26234a 75%); background-size:16px 16px; background-position:0 0,0 8px,8px -8px,-8px 0; }
+  table { border-collapse:collapse; width:100%; font-size:14px; }
+  th, td { border:2px solid #2E2A52; padding:6px 8px; text-align:left; vertical-align:top; }
+  th { background:#2E2A52; color:var(--yel); }
+  .do { color:#8fd9a8; } .dont { color:#ff9aa2; }
+  .type-title { font-size:36px; color:var(--yel); font-weight:bold; letter-spacing:.08em; text-shadow:3px 3px 0 var(--red); }
+  .type-body { font-size:16px; }
+  .btn { display:inline-block; padding:8px 18px; border:3px solid var(--off); background:var(--org); color:var(--mid); font-weight:bold; margin-right:8px; box-shadow:4px 4px 0 #000; }
+  .btn.alt { background:var(--mid); color:var(--off); }
+  .rank { display:inline-flex; align-items:center; gap:8px; margin-right:16px; font-weight:bold; }
+  .rank span.ic { width:28px; height:28px; display:inline-grid; place-items:center; border:3px solid var(--off); }
+  footer { margin-top:48px; opacity:.7; font-size:12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>THE SAY HEY DASH</h1>
+  <p class="sub">Art-direction reference sheet · Milestone 1 · <span class="tag">DRAFT — REQUIRES CLIENT APPROVAL</span></p>
+  <p>Goal: <b>"a forgotten 1990s arcade cabinet that teaches baseball history."</b> Simple, readable, chunky pixel art; flat colour; strong contrast; expressive but minimal animation. All artwork is original — creative references are thematic only.</p>
+
+  <h2>1. Palette</h2>
+  <p>Core six from the GDD. Every pixel in the game should come from this palette plus the approved extensions.</p>
+  <div class="grid g6">
+    <div class="sw"><div class="chip" style="background:#17152F"></div><div class="meta"><b>Midnight purple</b>#17152F · outlines, UI backgrounds, text on light</div></div>
+    <div class="sw"><div class="chip" style="background:#F6CE4B"></div><div class="meta"><b>Bright yellow</b>#F6CE4B · titles, highlights, scoreboard digits, "perfect"</div></div>
+    <div class="sw"><div class="chip" style="background:#F38B37"></div><div class="meta"><b>Arcade orange</b>#F38B37 · buttons, prompts, action cues</div></div>
+    <div class="sw"><div class="chip" style="background:#3C7659"></div><div class="meta"><b>Muted field green</b>#3C7659 · grass, outfield wall</div></div>
+    <div class="sw"><div class="chip" style="background:#F5F1D9"></div><div class="meta"><b>Off-white</b>#F5F1D9 · uniform, ball, body text</div></div>
+    <div class="sw"><div class="chip" style="background:#D94D58"></div><div class="meta"><b>Accent red</b>#D94D58 · ball stitches, socks/trim, fail state</div></div>
+  </div>
+  <p style="margin-top:16px"><b>Proposed extensions</b> (needed for a readable character and field — pending approval, Q2):</p>
+  <div class="grid g6">
+    <div class="sw"><div class="chip" style="background:#2E2A52"></div><div class="meta"><b>Dusk</b>#2E2A52 · sky, panel borders</div></div>
+    <div class="sw"><div class="chip" style="background:#2C5A44"></div><div class="meta"><b>Green dark</b>#2C5A44 · wall caps, clubhouse</div></div>
+    <div class="sw"><div class="chip" style="background:#46866A"></div><div class="meta"><b>Green light</b>#46866A · mowing stripes</div></div>
+    <div class="sw"><div class="chip" style="background:#9C6B3E"></div><div class="meta"><b>Dirt</b>#9C6B3E · warning track, base paths</div></div>
+    <div class="sw"><div class="chip" style="background:#7A4A2E"></div><div class="meta"><b>Skin</b>#7A4A2E · character skin tone</div></div>
+    <div class="sw"><div class="chip" style="background:#A85F2C"></div><div class="meta"><b>Leather</b>#A85F2C · glove</div></div>
+  </div>
+
+  <h2>2. Pixel grid & technical rules</h2>
+  <table>
+    <tr><th>Rule</th><th>Value</th><th>Why</th></tr>
+    <tr><td>Game resolution</td><td><b>320 × 180</b> logical pixels, upscaled (Pixel Perfect Camera, Upscale RT)</td><td>Authentic chunky look; identical pixels at any iframe size</td></tr>
+    <tr><td>Pixels per unit</td><td><b>16 PPU</b></td><td>GDD: 16×16 / 32×32 grid units</td></tr>
+    <tr><td>Character cell</td><td><b>32 × 32</b> (figure ≈ 14 × 26 px)</td><td>Readable silhouette at 320×180</td></tr>
+    <tr><td>Ball / shadow</td><td>8 × 8 / 8 × 4 (shadow at 55 % opacity Midnight)</td><td>Must read clearly while small</td></tr>
+    <tr><td>Tiles / props</td><td>16 × 16 multiples</td><td>Grid alignment</td></tr>
+    <tr><td>Filtering</td><td>Point (nearest neighbour), no mipmaps, no compression</td><td>No blur, no colour drift</td></tr>
+    <tr><td>Outlines</td><td>1 px Midnight outline on characters and ball</td><td>Contrast on any background</td></tr>
+    <tr><td>Shading</td><td>Max 1 shade step per material; no gradients, no dithering on sprites</td><td>"Minimal textures" / flat colour</td></tr>
+    <tr><td>Source format</td><td>Aseprite (.aseprite) — imported directly by Unity's Aseprite Importer (already installed); PNG exports kept alongside</td><td>Editable source handed to client (deliverable #2)</td></tr>
+  </table>
+
+  <h2>3. Character & object studies</h2>
+  <p>Placeholder studies generated for the M1 proof of concept (<code>Tools/ArtGen</code>). They set scale, outline and palette — <b>not final art</b> (M3).</p>
+  <div class="grid g3">
+    <div class="card"><h3>Outfielder · idle (32×32 @ 8×)</h3>
+      <img class="px checker" src="../Assets/_Project/Art/Sprites/Prototype/proto_outfielder_idle.png" width="256" height="256" alt="Placeholder outfielder sprite">
+      <p>1950s flannel uniform in off-white, red socks/belt trim, cap with brim to the facing side, brown leather glove. <b>No team logos, numbers or lettering</b> until name/marks licensing is approved (Q1). Generic-variant ready by design.</p></div>
+    <div class="card"><h3>Ball & landing shadow (@ 12×)</h3>
+      <div style="display:flex;gap:24px;align-items:flex-end">
+        <img class="px checker" src="../Assets/_Project/Art/Sprites/Prototype/proto_ball.png" width="96" height="96" alt="Ball sprite">
+        <img class="px checker" src="../Assets/_Project/Art/Sprites/Prototype/proto_ball_shadow.png" width="96" height="48" alt="Ball shadow sprite">
+      </div>
+      <p>Ball grows slightly with height (1–2 px) — the <b>shadow is the landing indicator</b>: it sits on the ground at the predicted landing point and tightens as the ball drops. A pulsing ring (non-colour cue: shape + size) marks the catch zone.</p></div>
+    <div class="card"><h3>Animation budget (M3)</h3>
+      <table>
+        <tr><th>Animation</th><th>Frames</th><th>FPS</th></tr>
+        <tr><td>Idle (breathing, glove tap)</td><td>2–4</td><td>4</td></tr>
+        <tr><td>Run (away from camera / sideways)</td><td>6</td><td>12</td></tr>
+        <tr><td>Over-the-shoulder catch</td><td>6–8</td><td>12</td></tr>
+        <tr><td>Spin / turn</td><td>4</td><td>12</td></tr>
+        <tr><td>Throw</td><td>5–6</td><td>12</td></tr>
+        <tr><td>Lead runner (generic, tiny)</td><td>4</td><td>10</td></tr>
+      </table>
+      <p>Reduced-motion mode: the catch sequence cuts to its key pose (shortened, skippable).</p></div>
+  </div>
+
+  <h2>4. Environment — evoking the Polo Grounds</h2>
+  <img class="px" src="../Assets/_Project/Art/Sprites/Prototype/proto_field_background.png" width="960" height="540" alt="Placeholder centre-field background" style="max-width:100%;height:auto;border:3px solid var(--off)">
+  <p>Not a scale reconstruction (GDD), but recognisable cues: <b>vast, deep centre field</b> (the "483" marker), the <b>centre-field clubhouse with scoreboard</b> above the wall, <b>green outfield wall</b>, bleachers as a simple band of crowd dots, dirt warning track before the wall. Scoreboard shows the moment: tied 2–2, 8th inning, 0 outs — no team names.</p>
+  <p>Camera framing during Stage A looks out toward centre field (player runs <i>away</i> from the camera toward the wall), matching the iconic over-the-shoulder view. Final layout to be confirmed in M2 greybox.</p>
+
+  <h2>5. Typography & UI</h2>
+  <div class="card">
+    <div class="type-title">THE CATCH</div>
+    <div class="type-body">PLAYER ONE: WILLIE MAYS* · WORLD SERIES: 1954 · LEVEL 01: POLO GROUNDS</div>
+    <p style="margin:14px 0">
+      <span class="btn">START</span><span class="btn alt">SOUND: ON</span><span class="btn alt">CREDITS</span>
+    </p>
+    <p>
+      <span class="rank"><span class="ic" style="background:var(--grn)">★</span>ROOKIE</span>
+      <span class="rank"><span class="ic" style="background:var(--org)">★★</span>ALL-STAR</span>
+      <span class="rank"><span class="ic" style="background:var(--yel);color:var(--mid)">★★★</span>LEGENDARY</span>
+    </p>
+    <p style="font-size:13px;opacity:.8">* Name display subject to licensing approval (Q1). Preview uses a system monospace font; production will use OFL pixel fonts — <b>Press Start 2P</b> for titles, <b>Pixelify Sans</b> (or Silkscreen) for body text for readability.</p>
+  </div>
+  <table style="margin-top:14px">
+    <tr><th>UI rule</th><th>Spec</th></tr>
+    <tr><td>Buttons</td><td>Hard-edged rectangles, 3 px off-white border, 4 px drop shadow, orange fill = primary action. Focus state: yellow outline (keyboard navigable).</td></tr>
+    <tr><td>Minimum text size</td><td>8 px glyph height at 320×180 (≈ 24–32 CSS px on desktop). Body never smaller.</td></tr>
+    <tr><td>Touch targets</td><td>≥ 48 CSS px; on-screen stick bottom-left, ACTION bottom-right, pause top-right.</td></tr>
+    <tr><td>Non-colour cues</td><td>Rank = stars + word; timing meter = notch + "PERFECT/GOOD/MISS" text; catch zone = ring shape.</td></tr>
+    <tr><td>Motion</td><td>Blinks ≤ 1 Hz (no rapid flashing). Reduced-motion disables screen shake, blink, decorative tweens.</td></tr>
+  </table>
+
+  <h2>6. Do / Don't</h2>
+  <div class="grid g3">
+    <div class="card"><h3 class="do">DO</h3><ul class="do">
+      <li>Clean silhouettes readable at 1×</li><li>Flat colour, 1 shade step</li><li>Integer-pixel motion (no sub-pixel jitter)</li><li>Strong contrast between player, ball and field</li><li>Exaggerated key poses (the catch, the spin)</li></ul></div>
+    <div class="card"><h3 class="dont">DON'T</h3><ul class="dont">
+      <li>Photorealism, gradients, soft shading</li><li>Particle storms / complex effects</li><li>Real team logos, uniform numbers or archival imagery without approval</li><li>Busy backgrounds behind the ball's flight path</li><li>Art copied from existing games</li></ul></div>
+    <div class="card"><h3>Thematic references (inspiration only)</h3><ul>
+      <li>Early-90s arcade sports cabinets</li><li>Vintage 1950s sports-magazine covers (type, colour blocking)</li><li>Museum exhibit placards (for the history screen)</li><li>Side-scrolling arcade HUDs</li></ul></div>
+  </div>
+
+  <footer>The Say Hey Dash · Fastball Fuel Coffee Company · Art direction v0.1 (Milestone 1). Placeholder images generated by Tools/ArtGen/generate_placeholder_art.py.</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#17152F">
+    <title>{{{ PRODUCT_NAME }}}</title>
+    <link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+  <body>
+    <!--
+      The Say Hey Dash - custom WebGL template (Milestone 1).
+      Designed to run full-page OR inside an iframe (Wix "Embed a site" / custom HTML element):
+       - fills whatever box it is given, letterboxed to 16:9, never cropped
+       - "click / tap to play" gate = guaranteed iframe keyboard focus + audio unlock
+       - re-focus hint when the iframe loses keyboard focus
+       - no external fonts/scripts (works under strict CSP / sandboxed iframes)
+    -->
+    <div id="shd-stage">
+      <canvas id="unity-canvas" width="{{{ WIDTH }}}" height="{{{ HEIGHT }}}" tabindex="-1" aria-label="{{{ PRODUCT_NAME }}} game"></canvas>
+
+      <div id="shd-loading" class="shd-overlay" role="status" aria-live="polite">
+        <div class="shd-presents">FASTBALL FUEL COFFEE COMPANY PRESENTS</div>
+        <div class="shd-title">THE SAY HEY DASH</div>
+        <div class="shd-bar"><div id="shd-bar-fill"></div></div>
+        <div id="shd-loading-text">LOADING 0%</div>
+      </div>
+
+      <button id="shd-start" class="shd-overlay shd-hidden" type="button">
+        <span class="shd-title">THE SAY HEY DASH</span>
+        <span class="shd-blink">CLICK OR TAP TO PLAY</span>
+      </button>
+
+      <button id="shd-refocus" class="shd-hidden" type="button">CLICK GAME TO RESUME KEYBOARD CONTROL</button>
+      <div id="shd-error" class="shd-hidden" role="alert"></div>
+    </div>
+
+    <script>
+      (function () {
+        var canvas = document.getElementById("unity-canvas");
+        var loading = document.getElementById("shd-loading");
+        var barFill = document.getElementById("shd-bar-fill");
+        var loadingText = document.getElementById("shd-loading-text");
+        var startGate = document.getElementById("shd-start");
+        var refocus = document.getElementById("shd-refocus");
+        var errorBox = document.getElementById("shd-error");
+        var started = false;
+
+        function show(el) { el.classList.remove("shd-hidden"); }
+        function hide(el) { el.classList.add("shd-hidden"); }
+
+        function showError(msg) {
+          errorBox.textContent = msg;
+          show(errorBox);
+        }
+
+        function focusGame() {
+          try { window.focus(); } catch (e) { /* cross-origin: ignore */ }
+          canvas.focus();
+        }
+
+        function showBanner(msg, type) {
+          if (type === "error") showError(msg);
+          else console.warn("[SayHeyDash] " + msg);
+        }
+
+        // Stop the host page from scrolling / zooming while the game is being played.
+        ["touchmove", "gesturestart", "contextmenu"].forEach(function (evt) {
+          canvas.addEventListener(evt, function (e) { e.preventDefault(); }, { passive: false });
+        });
+
+        // Keyboard focus is lost when the player clicks elsewhere on the host (Wix) page.
+        window.addEventListener("blur", function () { if (started) show(refocus); });
+        window.addEventListener("focus", function () { hide(refocus); });
+        refocus.addEventListener("click", function () { hide(refocus); focusGame(); });
+        canvas.addEventListener("pointerdown", function () { hide(refocus); focusGame(); });
+
+        var buildUrl = "Build";
+        var config = {
+          arguments: [],
+          dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+          frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+#if USE_THREADS
+          workerUrl: buildUrl + "/{{{ WORKER_FILENAME }}}",
+#endif
+#if USE_WASM
+          codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+          symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+#endif
+          streamingAssetsUrl: "StreamingAssets",
+          companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+          productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+          productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+          showBanner: showBanner,
+          // Pixel-art game rendered to a 320x180 target and upscaled: rendering above 2x DPR
+          // only costs GPU time on phones without visible benefit.
+          devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2)
+        };
+
+        var script = document.createElement("script");
+        script.src = buildUrl + "/{{{ LOADER_FILENAME }}}";
+        script.onerror = function () { showError("Could not load the game files. Please refresh the page."); };
+        script.onload = function () {
+          createUnityInstance(canvas, config, function (progress) {
+            var pct = Math.round(progress * 100);
+            barFill.style.width = pct + "%";
+            loadingText.textContent = "LOADING " + pct + "%";
+          }).then(function (unityInstance) {
+            window.sayHeyDash = unityInstance; // handy for debugging from the console
+            hide(loading);
+            show(startGate);
+            startGate.focus();
+          }).catch(function (message) {
+            showError(String(message));
+          });
+        };
+
+        // The start gate is a real user gesture inside the iframe: it gives the iframe keyboard
+        // focus and lets the browser unlock WebAudio. Required for reliable Wix embeds.
+        startGate.addEventListener("click", function () {
+          started = true;
+          hide(startGate);
+          focusGame();
+        });
+
+        document.body.appendChild(script);
+      })();
+    </script>
+  </body>
+</html>
