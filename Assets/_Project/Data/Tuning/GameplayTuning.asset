@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207d43a3c5b47104f8e41f47df8168d0, type: 3}
+  m_Name: GameplayTuning
+  m_EditorClassIdentifier: SayHeyDash.Runtime::SayHeyDash.Data.GameplayTuning
+  playerRunSpeed: 3.4
+  playerAcceleration: 24
+  playerStartPosition: {x: -2, y: -4}
+  playerBounds:
+    serializedVersion: 2
+    x: -9
+    y: -5
+    width: 18
+    height: 5
+  ballLaunchPoint: {x: 0.5, y: -8}
+  landingPoint: {x: 3.5, y: -0.25}
+  ballFlightDuration: 3.6
+  ballApexHeight: 7
+  catchHeight: 0.65
+  landingZoneRadius: 1
+  catchWindowSeconds: 0.4
+  catchInputOpenSeconds: 0.65
+  catchSequenceSeconds: 1.2
+  reducedMotionCatchSequenceSeconds: 0.4
+  throwMeterSpeed: 1.1
+  throwTargetZoneCenter: 0.65
+  throwTargetZoneWidth: 0.16
+  throwTimeLimitSeconds: 5
+  throwTargetPoint: {x: 0, y: -7.5}
+  throwFlightSeconds: 0.6
+  missRevealSeconds: 1

@@ -195,8 +195,31 @@ def field_background():
     return w, h, px
 
 
+def landing_ring(dashed):
+    """32x32 ring (radius 1 world unit at 16 PPU). Dashed = outside the zone, solid = inside.
+    Added in Milestone 2 for the landing indicator; the dash pattern is the non-colour cue."""
+    import math
+    size = 32
+    px = [[CLEAR for _ in range(size)] for _ in range(size)]
+    c = (size - 1) / 2.0
+    for y in range(size):
+        for x in range(size):
+            d = math.hypot(x - c, y - c)
+            if 14.0 <= d <= 15.6:
+                if dashed:
+                    angle = math.degrees(math.atan2(y - c, x - c)) % 360
+                    if int(angle // 15) % 2 == 1:
+                        continue
+                px[y][x] = YELLOW
+            elif not dashed and 12.6 <= d < 14.0:
+                px[y][x] = MIDNIGHT
+    return px
+
+
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
+    write_png(os.path.join(OUT_DIR, "proto_landing_ring_dashed.png"), 32, 32, landing_ring(True))
+    write_png(os.path.join(OUT_DIR, "proto_landing_ring_solid.png"), 32, 32, landing_ring(False))
     write_png(os.path.join(OUT_DIR, "proto_outfielder_idle.png"), 32, 32,
               from_charmap(OUTFIELDER, OUTFIELDER_KEY, 32))
     write_png(os.path.join(OUT_DIR, "proto_ball.png"), 8, 8, from_charmap(BALL, BALL_KEY, 8))

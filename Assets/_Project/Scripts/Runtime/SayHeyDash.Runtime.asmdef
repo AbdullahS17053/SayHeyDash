@@ -2,7 +2,8 @@
     "name": "SayHeyDash.Runtime",
     "rootNamespace": "SayHeyDash",
     "references": [
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

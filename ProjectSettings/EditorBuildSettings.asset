@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Project/Scenes/Prototype/M1_TechPoC.unity
-    guid: 0108f4f6e8b1ce5439462f7a28bb7e6e
+    path: Assets/_Project/Scenes/Main.unity
+    guid: 26aca75caafb46144a191273f78fca2c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

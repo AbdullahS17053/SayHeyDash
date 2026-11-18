@@ -52,7 +52,10 @@ A 3–5 minute, browser-playable 2D pixel-art arcade recreation of Willie Mays's
 | `SayHeyDash.Runtime` | `Assets/_Project/Scripts/Runtime` | `SayHeyDash.*` (`Controls`, `Platform`, later `Flow`, `Gameplay`, `Scoring`, `UI`, `Audio`, `Settings`, `Data`) | All production code |
 | `SayHeyDash.Prototype` | `Assets/_Project/Scripts/Prototype` | `SayHeyDash.Prototype` | **M1 throwaway PoC code** — delete the folder after M2 |
 | `SayHeyDash.Editor` | `Assets/_Project/Scripts/Editor` | `SayHeyDash.EditorTools.*` | Build pipeline, import rules, scene generators |
-| *(M2+)* `SayHeyDash.Tests.EditMode` | `Assets/_Project/Tests` | | Unit tests for scoring/state machine |
+| `SayHeyDash.Tests.EditMode` | `Assets/_Project/Tests/EditMode` | `SayHeyDash.Tests` | Unit tests: scoring, catch/throw rules, trajectory, state table (M2) |
+| `SayHeyDash.Tests.PlayMode` | `Assets/_Project/Tests/PlayMode` | `SayHeyDash.Tests` | Drives `Main.unity` through 25 full missions + fail/retry/pause loops (M2) |
+
+`SayHeyDash.Runtime` references `Unity.InputSystem` and (from M2) `UnityEngine.UI`. Internal test hooks (`SimulateActionPress`, `TeleportTo`) are visible only to the two test assemblies (`AssemblyInfo.cs`).
 
 ## 4. Systems map (who does what)
 
@@ -105,13 +108,14 @@ flowchart LR
 | `BrowserBridge` | static C# + `.jslib` | iframe detection, focus, touch detection, DPR, gesture-safe URL opening (**done in M1**) | M1 |
 | `WebGLBuildPipeline` | Editor | Reproducible WebGL settings & build (**done in M1**) | M1 |
 | `PixelArtTexturePostprocessor` | Editor | Enforces Point/16 PPU/uncompressed on new sprites (**done in M1**) | M1 |
-| `GameFlowController` + `GameState` | MonoBehaviour + enum | Drives the 7 states, restart, pause | M2 |
-| `OutfielderController` | MonoBehaviour | Movement within field bounds; reads `GameInput.Move` | M2 |
-| `BallFlight` / `LandingIndicator` | MonoBehaviour | Scripted, deterministic arc (no randomness — GDD fairness) + shadow | M2 |
-| `CatchSystem` | MonoBehaviour | Catch zone + timing window, emits `CatchResolved(result)` | M2 |
-| `ThrowSystem` | MonoBehaviour | Moving accuracy meter + target zone, emits `ThrowResolved(result)` | M2 |
-| `ScoreCalculator` | plain C# | Pure scoring + rank function (unit-testable) | M2 (basic) / M4 (final) |
-| `RunnerSequence` | MonoBehaviour | Scripted base-runner outcome (Doby to 3rd, no run scores) | M2 basic / M4 |
+| `GameFlowController` + `GameState` + `GameFlowRules` | MonoBehaviour + enum + pure table | Drives the 7 states, restart, pause; routes the Action button to the active mechanic (**done in M2**) | M2 |
+| `OutfielderController` | MonoBehaviour | Movement with acceleration within field bounds; reads `GameInput.Move` (**done in M2**) | M2 |
+| `BallFlight` / `BallTrajectory` / `LandingIndicator` | MonoBehaviour / pure struct / MonoBehaviour | Scripted, deterministic arc (no randomness — GDD fairness) + shadow + dashed/solid ring (**done in M2**) | M2 |
+| `CatchSystem` / `CatchJudge` | MonoBehaviour / pure | Landing zone + timing window + READY/NOW cues, emits `CatchResolved(result)` (**done in M2**) | M2 |
+| `ThrowSystem` / `ThrowJudge` | MonoBehaviour / pure | Ping-pong accuracy needle + target zone + time limit, emits `ThrowResolved(result)` (**done in M2**) | M2 |
+| `ScoreCalculator` | plain C# | Pure scoring + rank function (unit-tested) (**done in M2**, final sign-off Q6) | M2 (basic) / M4 (final) |
+| `PlaceholderFlowView` + `ThrowMeterView` | MonoBehaviour | **M2 placeholder UI** — one panel per state, text from `MissionContent`; replaced by per-screen views in M3 | M2 → M3 |
+| `RunnerSequence` | MonoBehaviour | Scripted base-runner outcome (Doby to 3rd, no run scores). M2 shows it as text on Screen 06; animation in M4 | M2 basic / M4 |
 | Screen views (`TitleScreenView`, ...) | MonoBehaviour per screen | Show/hide on `StateChanged`; no game logic | M3 |
 | `AudioService` | MonoBehaviour | Plays cues from an `AudioCueLibrary` SO; mute | M3 / M4 |
 | `SettingsService` | plain C# + PlayerPrefs | Mute, reduced motion, assisted mode (persisted, fails gracefully in partitioned iframes) | M4 |
@@ -147,11 +151,11 @@ Screen mapping: 01 Title · 02 MissionBriefing · 03 Gameplay (TrackBall/CatchWi
 
 **History rule (GDD):** a failed attempt only ever shows *TRY AGAIN — BALL MISSED / THROW MISSED*. The runner outcome (lead runner holds at third, no run scores) is shown **only** on success and in the replay.
 
-## 6. Data (ScriptableObjects) — designed now, created in M2+
+## 6. Data (ScriptableObjects) — created in M2 under `Assets/_Project/Data/`
 
 | Asset | Fields (clearly named, per GDD) |
 |---|---|
-| `GameplayTuning` | `playerRunSpeed`, `playerAcceleration`, `ballFlightDuration`, `landingZoneRadius`, `catchZoneRadius`, `catchWindowSeconds`, `throwMeterSpeed`, `throwTargetZoneWidth`, `catchSequenceSeconds`, `reducedMotionCatchSequenceSeconds` |
+| `GameplayTuning` (`Data/Tuning/GameplayTuning.asset`) | `playerRunSpeed`, `playerAcceleration`, `playerStartPosition`, `playerBounds`, `ballLaunchPoint`, `landingPoint`, `ballFlightDuration`, `ballApexHeight`, `catchHeight`, `landingZoneRadius`, `catchWindowSeconds`, `catchInputOpenSeconds`, `catchSequenceSeconds`, `reducedMotionCatchSequenceSeconds`, `throwMeterSpeed`, `throwTargetZoneCenter`, `throwTargetZoneWidth`, `throwTimeLimitSeconds`, `throwTargetPoint`, `throwFlightSeconds`, `missRevealSeconds`. *(M2: the separate `catchZoneRadius` was merged into `landingZoneRadius` — the ring you see is exactly the zone you must stand in.)* |
 | `DifficultyProfile` (×2: `Default`, `Assisted`) | `catchWindowMultiplier`, `landingZoneMultiplier`, `throwZoneMultiplier`, `displayName` |
 | `ScoringConfig` | `maxPositioningPoints = 400`, `maxCatchTimingPoints = 300`, `maxThrowAccuracyPoints = 300`, `minimumSuccessFraction = 0.5`, rank thresholds `500 / 750 / 900` |
 | `MissionContent` | All on-screen text: title lines, mission briefing, controls help, fail messages, hints, historical recap, credits, museum URL, player-name strings (for Q1 generic variant) |
@@ -164,7 +168,7 @@ Each category is scored only on a successful mission and pays **50–100 % of it
 ```
 quality ∈ [0,1]           (1 = perfect)
 points(category) = round(max × (0.5 + 0.5 × quality))
-positioning quality  = 1 − distance_from_landing_point / catchZoneRadius
+positioning quality  = 1 − distance_from_landing_point / landingZoneRadius
 catch timing quality = 1 − |press_time − perfect_time| / (catchWindowSeconds / 2)
 throw quality        = 1 − |meter_position − target_centre| / (throwTargetZoneWidth / 2)
 total = Σ points  →  500–749 ROOKIE · 750–899 ALL-STAR · 900–1000 LEGENDARY
@@ -182,7 +186,9 @@ Rank is also shown as **text + icon**, never by colour alone (accessibility requ
 | `Submit` (Button) | Enter, Space | Start | Start / Continue (tap via UI) |
 | `Pause` (Button) | Escape | Select | Pause (pause icon via UI) |
 
-Mobile controls are Input System **On-Screen Controls** that emulate a gamepad, so mobile needs no separate code path. UI navigation uses `InputSystemUIInputModule` default actions. No key combinations anywhere.
+Mobile controls are Input System **On-Screen Controls** that emulate a gamepad, so mobile needs no separate code path. No key combinations anywhere.
+
+**UI map (added in M2):** a second map `UI` (Navigate = arrows/WASD/stick/D-pad, Submit = Enter/Space/South/Start, Cancel = East, Point/Click = mouse/pen/**multi-touch**, ScrollWheel) is assigned to the `InputSystemUIInputModule` by the scene builder, so menu buttons work with Space as the GDD requires. Menus are driven by uGUI selection (the focused button is highlighted); during live gameplay nothing is selected, so Space only ever reaches the `Action` route. The flow controller ignores an Action press on the frame a state changes, so one Space press can never both confirm a menu and catch/throw.
 
 ## 8. Rendering
 

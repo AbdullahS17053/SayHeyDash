@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eec81a207e79831419e4f9dcb3139ae0, type: 3}
+  m_Name: MissionContent
+  m_EditorClassIdentifier: SayHeyDash.Runtime::SayHeyDash.Data.MissionContent
+  presentsLine: FASTBALL FUEL COFFEE COMPANY PRESENTS
+  arcadeModeLine: '[ARCADE MODE]'
+  gameTitle: THE CATCH
+  playerLine: 'PLAYER ONE: WILLIE MAYS'
+  seriesLine: 'WORLD SERIES: 1954'
+  levelLine: 'LEVEL 01: POLO GROUNDS'
+  pressStart: PRESS START
+  startButton: START
+  assistedOnLabel: 'ASSISTED MODE: ON'
+  assistedOffLabel: 'ASSISTED MODE: OFF'
+  briefingHeader: MISSION OBJECTIVE
+  briefingFacts: 'YEAR: 1954
+
+    LOCATION: POLO GROUNDS
+
+    INNING: TOP 8
+
+    SCORE:
+    2-2
+
+    OUTS: 0'
+  objectiveLine: 'OBJECTIVE: MAKE THE CATCH. MAKE THE THROW.'
+  historicalSetup: RUNNERS ON FIRST AND SECOND. A DEEP FLY BALL HEADS FOR CENTER
+    FIELD...
+  controlsHelp: 'MOVE: ARROWS / WASD / STICK    CATCH + THROW: SPACE / (A)    PAUSE:
+    ESC'
+  continueButton: CONTINUE
+  trackPrompt: TRACK THE BALL! GET INSIDE THE RING
+  readyPrompt: GET READY...
+  nowPrompt: 'NOW! [SPACE]'
+  inZoneLabel: 'IN ZONE [OK]'
+  outOfZoneLabel: 'OUT OF ZONE [X]'
+  missPrompt: MISSED!
+  throwPrompt: SPIN AND THROW! PRESS SPACE IN THE ZONE
+  throwTargetLabel: 'TARGET: INFIELD CUTOFF'
+  pauseButton: II
+  catchSequenceHeadline: OVER THE SHOULDER!
+  skipHint: PRESS SPACE TO SKIP
+  pausedTitle: PAUSED
+  resumeButton: RESUME
+  restartButton: RESTART
+  tryAgainTitle: TRY AGAIN
+  ballMissedLine: BALL MISSED
+  throwMissedLine: THROW MISSED
+  retryPrompt: RETRY MISSION?
+  retryButton: RETRY
+  hintTooEarly: 'HINT: WAIT FOR "NOW!" BEFORE YOU PRESS.'
+  hintTooLate: 'HINT: PRESS AS THE BALL DROPS INTO YOUR GLOVE.'
+  hintOutOfZone: 'HINT: FOLLOW THE SHADOW - BE INSIDE THE RING BEFORE YOU PRESS.'
+  hintThrow: 'HINT: PRESS WHILE THE NEEDLE IS BETWEEN THE NOTCHES.'
+  missionCompleteTitle: MISSION COMPLETE
+  missionCompleteSubtitle: 'THE CATCH
+
+    SEPTEMBER 29, 1954'
+  runnerOutcome: LEAD RUNNER HOLDS AT THIRD - NO RUN SCORES
+  positioningLabel: POSITION
+  timingLabel: TIMING
+  throwLabel: THROW
+  scoreLabel: SCORE
+  rankRookie: ROOKIE
+  rankAllStar: ALL-STAR
+  rankLegendary: LEGENDARY
+  replayMissionButton: REPLAY
+  replayModeButton: REPLAY MODE
+  replayHeader: THE REAL CATCH
+  historicalRecap: 'POLO GROUNDS, NEW YORK
+
+    SEPTEMBER 29, 1954
+
+
+    [CLIENT-APPROVED
+    RECAP TEXT - MILESTONE 4]'
+  museumButton: MUSEUM / STORY MODE
+  museumUrl: 
+  backToTitleButton: BACK TO TITLE
