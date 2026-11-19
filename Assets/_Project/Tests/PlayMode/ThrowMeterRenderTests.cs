@@ -59,15 +59,17 @@ namespace SayHeyDash.Tests
                 while (flow.State != GameState.Throw) yield return null;
                 for (int i = 0; i < 5; i++) yield return null;
                 Time.timeScale = 0f; // freeze the needle
-                yield return null;   // let the normal canvas update run (no forced rebuild)
-                cam.Render();
 
                 Image zone = null, left = null;
                 foreach (Image img in Object.FindObjectsByType<Image>(FindObjectsSortMode.None))
                 {
                     if (img.name == "TargetZone") zone = img;
                     if (img.name == "TrackLeft") left = img;
+                    // The needle can sit over either sample point; this test is about the zone.
+                    if (img.name == "Needle") img.gameObject.SetActive(false);
                 }
+                yield return null;   // let the normal canvas update run (no forced rebuild)
+                cam.Render();
                 Assert.IsNotNull(zone, "TargetZone not found");
                 Assert.IsNotNull(left, "TrackLeft not found");
 

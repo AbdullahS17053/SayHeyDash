@@ -37,8 +37,8 @@ namespace SayHeyDash.Data
         [Tooltip("Highest point of the arc above the ground, in world units.")]
         [Min(0f)] public float ballApexHeight = 7f;
 
-        [Tooltip("Height above the ground at which the ball is caught (glove height).")]
-        [Min(0f)] public float catchHeight = 0.65f;
+        [Tooltip("Height above the ground at which the ball is caught (glove height of the over-the-shoulder pose).")]
+        [Min(0f)] public float catchHeight = 1.1f;
 
         [Header("Catch (Stage B)")]
         [Tooltip("Radius of the landing zone. The outfielder's feet must be inside it to catch. Drawn as the ring.")]

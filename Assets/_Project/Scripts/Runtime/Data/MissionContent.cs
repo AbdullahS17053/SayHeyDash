@@ -22,6 +22,17 @@ namespace SayHeyDash.Data
         public string startButton = "START";
         public string assistedOnLabel = "ASSISTED MODE: ON";
         public string assistedOffLabel = "ASSISTED MODE: OFF";
+        public string soundOnLabel = "SOUND: ON";
+        public string soundOffLabel = "SOUND: OFF";
+        public string creditsButton = "CREDITS";
+        public string creditsTitle = "CREDITS";
+        [TextArea(4, 14)]
+        public string creditsText =
+            "THE SAY HEY DASH\nA FASTBALL FUEL COFFEE COMPANY ARCADE GAME\n\n" +
+            "GAME DESIGN, CODE, PIXEL ART AND SOUND:\n[DEVELOPER CREDIT - TO CONFIRM]\n\n" +
+            "TYPEFACE: SAY HEY PIXEL (ORIGINAL)\nMADE WITH UNITY\n\n" +
+            "INSPIRED BY GAME 1 OF THE 1954 WORLD SERIES.\nALL ARTWORK, MUSIC AND SOUND ARE ORIGINAL.";
+        public string closeButton = "BACK";
 
         [Header("02 Mission objective")]
         public string briefingHeader = "MISSION OBJECTIVE";
@@ -31,7 +42,7 @@ namespace SayHeyDash.Data
         [TextArea(2, 6)]
         public string historicalSetup = "RUNNERS ON FIRST AND SECOND. A DEEP FLY BALL HEADS FOR CENTER FIELD...";
         [TextArea(2, 6)]
-        public string controlsHelp = "MOVE: ARROWS / WASD / STICK    CATCH + THROW: SPACE / (A)    PAUSE: ESC";
+        public string controlsHelp = "MOVE: ARROWS / WASD / STICK\nCATCH + THROW: SPACE / (A)\nPAUSE: ESC / II BUTTON";
         public string continueButton = "CONTINUE";
 
         [Header("03 Gameplay prompts")]
@@ -44,6 +55,15 @@ namespace SayHeyDash.Data
         public string throwPrompt = "SPIN AND THROW! PRESS SPACE IN THE ZONE";
         public string throwTargetLabel = "TARGET: INFIELD CUTOFF";
         public string pauseButton = "II";
+        [Tooltip("Game situation chip in the gameplay HUD.")]
+        public string hudSituation = "TOP 8   2-2   0 OUT";
+        public string throwMeterLabel = "THROW";
+        [Tooltip("Shown after the throw. Words, not just colour (accessibility).")]
+        public string throwPerfectLabel = "PERFECT THROW!";
+        public string throwGoodLabel = "GOOD THROW!";
+        public string throwWideLabel = "WIDE!";
+        public string throwTooSlowLabel = "TOO SLOW!";
+        [Range(0f, 1f)] public float throwPerfectQuality = 0.8f;
 
         [Header("04 Catch sequence")]
         public string catchSequenceHeadline = "OVER THE SHOULDER!";
@@ -73,6 +93,7 @@ namespace SayHeyDash.Data
         public string timingLabel = "TIMING";
         public string throwLabel = "THROW";
         public string scoreLabel = "SCORE";
+        public string rankLabel = "RANK";
         public string rankRookie = "ROOKIE";
         public string rankAllStar = "ALL-STAR";
         public string rankLegendary = "LEGENDARY";
@@ -88,7 +109,16 @@ namespace SayHeyDash.Data
         public string museumUrl = "";
         public string backToTitleButton = "BACK TO TITLE";
 
-        /// <summary>Display text for a rank, with a non-colour star marker (accessibility).</summary>
+        /// <summary>Text after the throw: PERFECT / GOOD / WIDE / TOO SLOW.</summary>
+        public string ThrowFeedback(bool success, bool timedOut, float quality)
+        {
+            if (timedOut) return throwTooSlowLabel;
+            if (!success) return throwWideLabel;
+            return quality >= throwPerfectQuality ? throwPerfectLabel : throwGoodLabel;
+        }
+
+        /// <summary>Display text for a rank, with a non-colour star marker (accessibility).
+        /// '*' is drawn as a star by the Say Hey Pixel font.</summary>
         public string RankText(Rank rank)
         {
             switch (rank)

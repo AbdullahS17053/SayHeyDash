@@ -1,0 +1,2548 @@
+fileFormatVersion: 2
+guid: 59a26174193cbb74ea5f949d6d509b18
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1066641610729932142
+    second: sayhey_pixel_atlas_0
+  - first:
+      213: 3505790450512860680
+    second: sayhey_pixel_atlas_1
+  - first:
+      213: 8883374206340218633
+    second: sayhey_pixel_atlas_2
+  - first:
+      213: -7804309585290575482
+    second: sayhey_pixel_atlas_3
+  - first:
+      213: -9037718722726863899
+    second: sayhey_pixel_atlas_4
+  - first:
+      213: 8938490065514547365
+    second: sayhey_pixel_atlas_5
+  - first:
+      213: -5430709325557217202
+    second: sayhey_pixel_atlas_6
+  - first:
+      213: -8076494862424435171
+    second: sayhey_pixel_atlas_7
+  - first:
+      213: 7177384575611814882
+    second: sayhey_pixel_atlas_8
+  - first:
+      213: -1122442344330953655
+    second: sayhey_pixel_atlas_9
+  - first:
+      213: -3099746742383776173
+    second: sayhey_pixel_atlas_10
+  - first:
+      213: 3649169530452386099
+    second: sayhey_pixel_atlas_11
+  - first:
+      213: -6919787754053557859
+    second: sayhey_pixel_atlas_12
+  - first:
+      213: -708433446044084202
+    second: sayhey_pixel_atlas_13
+  - first:
+      213: 6615777750835664061
+    second: sayhey_pixel_atlas_14
+  - first:
+      213: 2150157660770015539
+    second: sayhey_pixel_atlas_15
+  - first:
+      213: -6551027067431759200
+    second: sayhey_pixel_atlas_16
+  - first:
+      213: -4982225756779430821
+    second: sayhey_pixel_atlas_17
+  - first:
+      213: 8672443209503648801
+    second: sayhey_pixel_atlas_18
+  - first:
+      213: -8627567303947732436
+    second: sayhey_pixel_atlas_19
+  - first:
+      213: -8285907995050308488
+    second: sayhey_pixel_atlas_20
+  - first:
+      213: -9138553120715457375
+    second: sayhey_pixel_atlas_21
+  - first:
+      213: 9089853185606065514
+    second: sayhey_pixel_atlas_22
+  - first:
+      213: -9156850489948940121
+    second: sayhey_pixel_atlas_23
+  - first:
+      213: -2889355754037851926
+    second: sayhey_pixel_atlas_24
+  - first:
+      213: 618925276877701437
+    second: sayhey_pixel_atlas_25
+  - first:
+      213: 6339444148939175871
+    second: sayhey_pixel_atlas_26
+  - first:
+      213: 4908925463220882962
+    second: sayhey_pixel_atlas_27
+  - first:
+      213: 4281764403634774245
+    second: sayhey_pixel_atlas_28
+  - first:
+      213: 2468492916671002166
+    second: sayhey_pixel_atlas_29
+  - first:
+      213: -2865166416570710496
+    second: sayhey_pixel_atlas_30
+  - first:
+      213: 5314358459777690081
+    second: sayhey_pixel_atlas_31
+  - first:
+      213: -7595427418956088681
+    second: sayhey_pixel_atlas_32
+  - first:
+      213: -7257639180767192531
+    second: sayhey_pixel_atlas_33
+  - first:
+      213: 714914966025013465
+    second: sayhey_pixel_atlas_34
+  - first:
+      213: 2171601873567609186
+    second: sayhey_pixel_atlas_35
+  - first:
+      213: -4265545927765163957
+    second: sayhey_pixel_atlas_36
+  - first:
+      213: -6950743436476162951
+    second: sayhey_pixel_atlas_37
+  - first:
+      213: 4260651159920276453
+    second: sayhey_pixel_atlas_38
+  - first:
+      213: 490991460895595698
+    second: sayhey_pixel_atlas_39
+  - first:
+      213: -4265026575815577938
+    second: sayhey_pixel_atlas_40
+  - first:
+      213: 7987214042286710058
+    second: sayhey_pixel_atlas_41
+  - first:
+      213: -2937166554279484347
+    second: sayhey_pixel_atlas_42
+  - first:
+      213: 4959966970293736452
+    second: sayhey_pixel_atlas_43
+  - first:
+      213: -6030484380895430007
+    second: sayhey_pixel_atlas_44
+  - first:
+      213: 2580662418328192610
+    second: sayhey_pixel_atlas_45
+  - first:
+      213: 513263915393684573
+    second: sayhey_pixel_atlas_46
+  - first:
+      213: 6756090332499623120
+    second: sayhey_pixel_atlas_47
+  - first:
+      213: 2915999767562903390
+    second: sayhey_pixel_atlas_48
+  - first:
+      213: 2041252874012951453
+    second: sayhey_pixel_atlas_49
+  - first:
+      213: 3452282619265159421
+    second: sayhey_pixel_atlas_50
+  - first:
+      213: 1703475127098502737
+    second: sayhey_pixel_atlas_51
+  - first:
+      213: 3188731924614682899
+    second: sayhey_pixel_atlas_52
+  - first:
+      213: -4656946139346941992
+    second: sayhey_pixel_atlas_53
+  - first:
+      213: -5550600185508245452
+    second: sayhey_pixel_atlas_54
+  - first:
+      213: 8908409011599277724
+    second: sayhey_pixel_atlas_55
+  - first:
+      213: -1619528883959372730
+    second: sayhey_pixel_atlas_56
+  - first:
+      213: -5442681685525002139
+    second: sayhey_pixel_atlas_57
+  - first:
+      213: -7826132673558364422
+    second: sayhey_pixel_atlas_58
+  - first:
+      213: 1865368726368172031
+    second: sayhey_pixel_atlas_59
+  - first:
+      213: 1304858595970248686
+    second: sayhey_pixel_atlas_60
+  - first:
+      213: -4768326564068632581
+    second: sayhey_pixel_atlas_61
+  - first:
+      213: 2129782759633195551
+    second: sayhey_pixel_atlas_62
+  - first:
+      213: 7681843921469136980
+    second: sayhey_pixel_atlas_63
+  - first:
+      213: 4822622468863090155
+    second: sayhey_pixel_atlas_64
+  - first:
+      213: -2398054880145998747
+    second: sayhey_pixel_atlas_65
+  - first:
+      213: 8682691683607223862
+    second: sayhey_pixel_atlas_66
+  - first:
+      213: 2531159314881718399
+    second: sayhey_pixel_atlas_67
+  - first:
+      213: 4971674655405812347
+    second: sayhey_pixel_atlas_68
+  - first:
+      213: 6213842557653218772
+    second: sayhey_pixel_atlas_69
+  - first:
+      213: -1379432454414683659
+    second: sayhey_pixel_atlas_70
+  - first:
+      213: 7880921832139262248
+    second: sayhey_pixel_atlas_71
+  - first:
+      213: 5791118991863504706
+    second: sayhey_pixel_atlas_72
+  - first:
+      213: 5668445922784776034
+    second: sayhey_pixel_atlas_73
+  - first:
+      213: 8827756476127705617
+    second: sayhey_pixel_atlas_74
+  - first:
+      213: 425344851689459048
+    second: sayhey_pixel_atlas_75
+  - first:
+      213: 3348299886657441935
+    second: sayhey_pixel_atlas_76
+  - first:
+      213: 9117593498481150933
+    second: sayhey_pixel_atlas_77
+  - first:
+      213: -2010537279194341637
+    second: sayhey_pixel_atlas_78
+  - first:
+      213: -4539052301857805430
+    second: sayhey_pixel_atlas_79
+  - first:
+      213: 1986726109778934656
+    second: sayhey_pixel_atlas_80
+  - first:
+      213: -5460749097765991790
+    second: sayhey_pixel_atlas_81
+  - first:
+      213: -7092020954080950940
+    second: sayhey_pixel_atlas_82
+  - first:
+      213: 407704492316338749
+    second: sayhey_pixel_atlas_83
+  - first:
+      213: -5892472700239872219
+    second: sayhey_pixel_atlas_84
+  - first:
+      213: 7114086560757550156
+    second: sayhey_pixel_atlas_85
+  - first:
+      213: 3278355373153967225
+    second: sayhey_pixel_atlas_86
+  - first:
+      213: 6471537315642300018
+    second: sayhey_pixel_atlas_87
+  - first:
+      213: 5102455157333120369
+    second: sayhey_pixel_atlas_88
+  - first:
+      213: 6920868249638405583
+    second: sayhey_pixel_atlas_89
+  - first:
+      213: -3414584766386114190
+    second: sayhey_pixel_atlas_90
+  - first:
+      213: -6742404561526533372
+    second: sayhey_pixel_atlas_91
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 110
+        width: 6
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e654536c4e87dce00800000000000000
+      internalID: 1066641610729932142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_1
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 121
+        width: 16
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80696cb17d117a030800000000000000
+      internalID: 3505790450512860680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_2
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 100
+        width: 7
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90fb6c746c5184b70800000000000000
+      internalID: 8883374206340218633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_3
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 110
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 681449bf7c581b390800000000000000
+      internalID: -7804309585290575482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_4
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 120
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ebd7ff94b2939280800000000000000
+      internalID: -9037718722726863899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_5
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 110
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a84a5f3b55eb0c70800000000000000
+      internalID: 8938490065514547365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_6
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 120
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e48c2cb34ae32a4b0800000000000000
+      internalID: -5430709325557217202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_7
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 110
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d169ce6b6b68aef80800000000000000
+      internalID: -8076494862424435171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_8
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 110
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e3c5bd7e313b9360800000000000000
+      internalID: 7177384575611814882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_9
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 110
+        width: 7
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94cfb4182a84c60f0800000000000000
+      internalID: -1122442344330953655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_10
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 110
+        width: 7
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35e6a8ec2cc7bf4d0800000000000000
+      internalID: -3099746742383776173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_11
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 120
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3312bc39a5474a230800000000000000
+      internalID: 3649169530452386099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_12
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 110
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d912a8643b9f7ff90800000000000000
+      internalID: -6919787754053557859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_13
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 119
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6185985c8832b26f0800000000000000
+      internalID: -708433446044084202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_14
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 110
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db41e7fffc6ffcb50800000000000000
+      internalID: 6615777750835664061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_15
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 109
+        width: 24
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 339184d1005e6dd10800000000000000
+      internalID: 2150157660770015539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_16
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 120
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a2d2cb47931615a0800000000000000
+      internalID: -6551027067431759200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_17
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 100
+        width: 5
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5c3c5832149bdab0800000000000000
+      internalID: -4982225756779430821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_18
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12ca6358625ba5870800000000000000
+      internalID: 8672443209503648801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_19
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2abb647f39b44880800000000000000
+      internalID: -8627567303947732436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_20
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87c0571449a820d80800000000000000
+      internalID: -8285907995050308488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_21
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1acb7b6da565d2180800000000000000
+      internalID: -9138553120715457375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_22
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6d908cef45a52e70800000000000000
+      internalID: 9089853185606065514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_23
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a85b359ef45ce080800000000000000
+      internalID: -9156850489948940121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_24
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae8c7da0042f6e7d0800000000000000
+      internalID: -2889355754037851926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_25
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d314ec6924dd69800800000000000000
+      internalID: 618925276877701437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_26
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 90
+        width: 7
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb7b2fa9dda3af750800000000000000
+      internalID: 6339444148939175871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_27
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21e862043b1002440800000000000000
+      internalID: 4908925463220882962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_28
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e020921a02eb6b30800000000000000
+      internalID: 4281764403634774245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_29
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 100
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6363eb4aa39d14220800000000000000
+      internalID: 2468492916671002166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 70
+        width: 6
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0268ced0352ec38d0800000000000000
+      internalID: -2865166416570710496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_31
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 75
+        width: 7
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e9242cccd460c940800000000000000
+      internalID: 5314358459777690081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_32
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79a3cd7310f979690800000000000000
+      internalID: -7595427418956088681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_33
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2a1a622e9fa74b90800000000000000
+      internalID: -7257639180767192531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_34
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d80882bf53ebe900800000000000000
+      internalID: 714914966025013465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_35
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 261f19bf564132e10800000000000000
+      internalID: 2171601873567609186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_36
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b40817a149cbdc4c0800000000000000
+      internalID: -4265545927765163957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_37
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97cd5ffcbaff98f90800000000000000
+      internalID: -6950743436476162951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_38
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e377e2f7afd02b30800000000000000
+      internalID: 4260651159920276453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_39
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bc9e6ed12a50d600800000000000000
+      internalID: 490991460895595698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_40
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eae69e62de49fc4c0800000000000000
+      internalID: -4265026575815577938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_41
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2dd2877ad848de60800000000000000
+      internalID: 7987214042286710058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_42
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 90
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5446306a4961d37d0800000000000000
+      internalID: -2937166554279484347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_43
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 60
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40457023ea755d440800000000000000
+      internalID: 4959966970293736452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_44
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 60
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98abf2d086a6f4ca0800000000000000
+      internalID: -6030484380895430007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_45
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 71
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26607a9ebca50d320800000000000000
+      internalID: 2580662418328192610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_46
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 60
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d541119cfca7f1700800000000000000
+      internalID: 513263915393684573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_47
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 70
+        width: 8
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dc3713bc5472cd50800000000000000
+      internalID: 6756090332499623120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_48
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 60
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5f55b6c656b77820800000000000000
+      internalID: 2915999767562903390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_49
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 70
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9389448cacf35c10800000000000000
+      internalID: 2041252874012951453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_50
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 60
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df01e8150c8f8ef20800000000000000
+      internalID: 3452282619265159421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_51
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 60
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15e6b6a4a95f3a710800000000000000
+      internalID: 1703475127098502737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_52
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 70
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3191b927ac6a04c20800000000000000
+      internalID: 3188731924614682899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_53
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 60
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d7491ae8243f5fb0800000000000000
+      internalID: -4656946139346941992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_54
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 70
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43050942a8e48f2b0800000000000000
+      internalID: -5550600185508245452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_55
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 60
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9e734a1cc601ab70800000000000000
+      internalID: 8908409011599277724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_56
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 70
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 644ed188f074689e0800000000000000
+      internalID: -1619528883959372730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_57
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 60
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56802c4f7d5b774b0800000000000000
+      internalID: -5442681685525002139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_58
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 69
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afeb97b4ccdf36390800000000000000
+      internalID: -7826132673558364422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_59
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 60
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff73c4639fe13e910800000000000000
+      internalID: 1865368726368172031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_60
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 59
+        width: 25
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eefebe6caf9cb1210800000000000000
+      internalID: 1304858595970248686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_61
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 70
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf751afe04083ddb0800000000000000
+      internalID: -4768326564068632581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_62
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 50
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1210b4c2228e8d10800000000000000
+      internalID: 2129782759633195551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_63
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 450692fa8546b9a60800000000000000
+      internalID: 7681843921469136980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_64
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bedd66685956de240800000000000000
+      internalID: 4822622468863090155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_65
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56c710dbac568bed0800000000000000
+      internalID: -2398054880145998747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_66
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63e95a7551e1f7870800000000000000
+      internalID: 8682691683607223862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_67
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7822797cfb702320800000000000000
+      internalID: 2531159314881718399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_68
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7aa64e02cfeef440800000000000000
+      internalID: 4971674655405812347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_69
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d5ff1342e00c3650800000000000000
+      internalID: 6213842557653218772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_70
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f1b7f2cd754bdce0800000000000000
+      internalID: -1379432454414683659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_71
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8290843c6a8ae5d60800000000000000
+      internalID: 7880921832139262248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_72
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 50
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24fda0a5a003e5050800000000000000
+      internalID: 5791118991863504706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_73
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26f0918b88d5aae40800000000000000
+      internalID: 5668445922784776034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_74
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11afe3b5ebd728a70800000000000000
+      internalID: 8827756476127705617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_75
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 50
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86dcdf793e027e500800000000000000
+      internalID: 425344851689459048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_76
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 40
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8092b1c10d877e20800000000000000
+      internalID: 3348299886657441935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_77
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5db4163daf2388e70800000000000000
+      internalID: 9117593498481150933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_78
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfed0f13ff22914e0800000000000000
+      internalID: -2010537279194341637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_79
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 30
+        width: 17
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8ba8dafafb0201c0800000000000000
+      internalID: -4539052301857805430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_80
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08bfd57eed4429b10800000000000000
+      internalID: 1986726109778934656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_81
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29a8f1cb0a58734b0800000000000000
+      internalID: -5460749097765991790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_82
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 465c0647484149d90800000000000000
+      internalID: -7092020954080950940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_83
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3aa8dd531578a500800000000000000
+      internalID: 407704492316338749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_84
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52ff38d7c4bb93ea0800000000000000
+      internalID: -5892472700239872219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_85
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4c8553f8005ab260800000000000000
+      internalID: 7114086560757550156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_86
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97cd558a7de0f7d20800000000000000
+      internalID: 3278355373153967225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_87
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2765b81a6e48fc950800000000000000
+      internalID: 6471537315642300018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_88
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 175533f7eef8fc640800000000000000
+      internalID: 5102455157333120369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_89
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 40
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc50af4310ddb0060800000000000000
+      internalID: 6920868249638405583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_90
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 30
+        width: 5
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27178180f35fc90d0800000000000000
+      internalID: -3414584766386114190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sayhey_pixel_atlas_91
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 30
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 403dc3a26ca2e62a0800000000000000
+      internalID: -6742404561526533372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      sayhey_pixel_atlas_0: 1066641610729932142
+      sayhey_pixel_atlas_1: 3505790450512860680
+      sayhey_pixel_atlas_10: -3099746742383776173
+      sayhey_pixel_atlas_11: 3649169530452386099
+      sayhey_pixel_atlas_12: -6919787754053557859
+      sayhey_pixel_atlas_13: -708433446044084202
+      sayhey_pixel_atlas_14: 6615777750835664061
+      sayhey_pixel_atlas_15: 2150157660770015539
+      sayhey_pixel_atlas_16: -6551027067431759200
+      sayhey_pixel_atlas_17: -4982225756779430821
+      sayhey_pixel_atlas_18: 8672443209503648801
+      sayhey_pixel_atlas_19: -8627567303947732436
+      sayhey_pixel_atlas_2: 8883374206340218633
+      sayhey_pixel_atlas_20: -8285907995050308488
+      sayhey_pixel_atlas_21: -9138553120715457375
+      sayhey_pixel_atlas_22: 9089853185606065514
+      sayhey_pixel_atlas_23: -9156850489948940121
+      sayhey_pixel_atlas_24: -2889355754037851926
+      sayhey_pixel_atlas_25: 618925276877701437
+      sayhey_pixel_atlas_26: 6339444148939175871
+      sayhey_pixel_atlas_27: 4908925463220882962
+      sayhey_pixel_atlas_28: 4281764403634774245
+      sayhey_pixel_atlas_29: 2468492916671002166
+      sayhey_pixel_atlas_3: -7804309585290575482
+      sayhey_pixel_atlas_30: -2865166416570710496
+      sayhey_pixel_atlas_31: 5314358459777690081
+      sayhey_pixel_atlas_32: -7595427418956088681
+      sayhey_pixel_atlas_33: -7257639180767192531
+      sayhey_pixel_atlas_34: 714914966025013465
+      sayhey_pixel_atlas_35: 2171601873567609186
+      sayhey_pixel_atlas_36: -4265545927765163957
+      sayhey_pixel_atlas_37: -6950743436476162951
+      sayhey_pixel_atlas_38: 4260651159920276453
+      sayhey_pixel_atlas_39: 490991460895595698
+      sayhey_pixel_atlas_4: -9037718722726863899
+      sayhey_pixel_atlas_40: -4265026575815577938
+      sayhey_pixel_atlas_41: 7987214042286710058
+      sayhey_pixel_atlas_42: -2937166554279484347
+      sayhey_pixel_atlas_43: 4959966970293736452
+      sayhey_pixel_atlas_44: -6030484380895430007
+      sayhey_pixel_atlas_45: 2580662418328192610
+      sayhey_pixel_atlas_46: 513263915393684573
+      sayhey_pixel_atlas_47: 6756090332499623120
+      sayhey_pixel_atlas_48: 2915999767562903390
+      sayhey_pixel_atlas_49: 2041252874012951453
+      sayhey_pixel_atlas_5: 8938490065514547365
+      sayhey_pixel_atlas_50: 3452282619265159421
+      sayhey_pixel_atlas_51: 1703475127098502737
+      sayhey_pixel_atlas_52: 3188731924614682899
+      sayhey_pixel_atlas_53: -4656946139346941992
+      sayhey_pixel_atlas_54: -5550600185508245452
+      sayhey_pixel_atlas_55: 8908409011599277724
+      sayhey_pixel_atlas_56: -1619528883959372730
+      sayhey_pixel_atlas_57: -5442681685525002139
+      sayhey_pixel_atlas_58: -7826132673558364422
+      sayhey_pixel_atlas_59: 1865368726368172031
+      sayhey_pixel_atlas_6: -5430709325557217202
+      sayhey_pixel_atlas_60: 1304858595970248686
+      sayhey_pixel_atlas_61: -4768326564068632581
+      sayhey_pixel_atlas_62: 2129782759633195551
+      sayhey_pixel_atlas_63: 7681843921469136980
+      sayhey_pixel_atlas_64: 4822622468863090155
+      sayhey_pixel_atlas_65: -2398054880145998747
+      sayhey_pixel_atlas_66: 8682691683607223862
+      sayhey_pixel_atlas_67: 2531159314881718399
+      sayhey_pixel_atlas_68: 4971674655405812347
+      sayhey_pixel_atlas_69: 6213842557653218772
+      sayhey_pixel_atlas_7: -8076494862424435171
+      sayhey_pixel_atlas_70: -1379432454414683659
+      sayhey_pixel_atlas_71: 7880921832139262248
+      sayhey_pixel_atlas_72: 5791118991863504706
+      sayhey_pixel_atlas_73: 5668445922784776034
+      sayhey_pixel_atlas_74: 8827756476127705617
+      sayhey_pixel_atlas_75: 425344851689459048
+      sayhey_pixel_atlas_76: 3348299886657441935
+      sayhey_pixel_atlas_77: 9117593498481150933
+      sayhey_pixel_atlas_78: -2010537279194341637
+      sayhey_pixel_atlas_79: -4539052301857805430
+      sayhey_pixel_atlas_8: 7177384575611814882
+      sayhey_pixel_atlas_80: 1986726109778934656
+      sayhey_pixel_atlas_81: -5460749097765991790
+      sayhey_pixel_atlas_82: -7092020954080950940
+      sayhey_pixel_atlas_83: 407704492316338749
+      sayhey_pixel_atlas_84: -5892472700239872219
+      sayhey_pixel_atlas_85: 7114086560757550156
+      sayhey_pixel_atlas_86: 3278355373153967225
+      sayhey_pixel_atlas_87: 6471537315642300018
+      sayhey_pixel_atlas_88: 5102455157333120369
+      sayhey_pixel_atlas_89: 6920868249638405583
+      sayhey_pixel_atlas_9: -1122442344330953655
+      sayhey_pixel_atlas_90: -3414584766386114190
+      sayhey_pixel_atlas_91: -6742404561526533372
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

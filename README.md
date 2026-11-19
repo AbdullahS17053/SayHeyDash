@@ -9,8 +9,8 @@
 | Engine | **Unity 6.3 LTS (6000.3.9f1)**, C#, URP 2D — *replaces the Godot 4 suggested in the GDD* |
 | Target | WebGL (desktop + mobile browsers), embedded in the client's Wix site |
 | Design source | `THE SAY HEY DASH 2D GAME.pdf` (GDD) |
-| Current milestone | **Milestone 2 — Gameplay Prototype: complete, awaiting review** |
-| Last updated | 2026-11-18 |
+| Current milestone | **Milestone 3 — Visual Production: complete, awaiting review** |
+| Last updated | 2026-11-19 |
 
 ---
 
@@ -20,8 +20,8 @@
 |---|---|---|
 | 1 | Discovery & Technical Proof | ✅ Delivered — awaiting client review |
 | 2 | Gameplay Prototype | ✅ Delivered — awaiting client review |
-| 3 | Visual Production | ⏳ Not started (waiting for "Start Milestone 3") |
-| 4 | Content & Polish | ⏳ |
+| 3 | Visual Production | ✅ Delivered — awaiting client review (art/palette approval: Q1, Q2) |
+| 4 | Content & Polish | ⏳ Not started (waiting for "Start Milestone 4") |
 | 5 | Testing & Final Handover | ⏳ |
 
 ### Milestone 1 deliverables
@@ -46,6 +46,18 @@ Full report, tuning guide and test results: [Docs/05_M2_Gameplay_Prototype.md](D
 | Throwing mechanic | `Gameplay/ThrowSystem`, `ThrowJudge`, `UI/ThrowMeterView` | ✅ needle meter, notched zone, time limit |
 | Basic win/retry loop | `Flow/GameFlowController` + `Scenes/Main.unity` | ✅ all 7 states + pause; 25-mission soak test passes |
 | Placeholder graphics | `Art/Sprites/Prototype` (+ landing rings) | ✅ |
+
+### Milestone 3 deliverables
+Full report, editing guide and test results: [Docs/06_M3_Visual_Production.md](Docs/06_M3_Visual_Production.md). Screenshots of every screen: `Docs/img/m3_screens/`.
+
+| GDD deliverable | Where | Status |
+|---|---|---|
+| Approved pixel-art character | `Art/Sprites/Character` · sheet `Docs/img/m3_outfielder_sheet.png` | ✅ submitted for approval |
+| Stadium environment | `Art/Sprites/Environment` (Polo Grounds-style centre field, clubhouse scoreboard, 483 marker) | ✅ submitted for approval |
+| Animations | `Visuals/SpriteAnimator`, `OutfielderAnimator`, `EnvironmentAnimator` · `Data/Visuals/OutfielderAnimations` | ✅ idle, run, over-the-shoulder run, catch, whiff, spin, throw; ball, crowd, flags |
+| Title and mission screens | `UI/TitleScreenView` (+ credits), `UI/BriefingScreenView` | ✅ |
+| HUD, menus and results screens | `UI/HudView`, `PauseMenuView`, `MissionFailedView`, `MissionCompleteView`, `ReplayScreenView`, `PixelButton` | ✅ (Screen 07 content is M4) |
+| Initial sound implementation | `Audio/AudioService`, `Data/Audio/AudioCueLibrary`, `Assets/_Project/Audio` | ✅ 14 original cues + mute |
 
 ---
 
@@ -75,11 +87,26 @@ Full report, tuning guide and test results: [Docs/05_M2_Gameplay_Prototype.md](D
 - `UI` action map in `SayHeyDashControls.inputactions` (Space/Enter submit, multi-touch pointers) wired to the EventSystem.
 - Tests: `Tests/EditMode` (51) + `Tests/PlayMode` (5: `MissionLoopTests` incl. 25 consecutive missions, and `ThrowMeterRenderTests`, a pixel check that the throw zone is drawn).
 
-## Pending / next (Milestone 3 — do not start until requested)
-- Approved pixel-art character (idle, run, over-the-shoulder catch, turn & throw) and stadium environment (needs Q1, Q2).
-- Styled Title / Mission screens, HUD, menus and results screens (one view per screen, replacing `PlaceholderFlowView`); TextMeshPro + OFL pixel font.
-- Initial sound implementation (`AudioService`, `AudioCueLibrary`) + mute toggle.
-- Delete the M1 prototype code/scene once M2 is approved.
+**Milestone 3**
+- `Tools/ArtGen/generate_m3_art.py` — draws all production art from code: outfielder pose rig (31 frames, 32×32), ball spin, stadium + crowd/flag layers, title backdrop and logo, UI kit (9-slice panels/buttons, cursor, icons, rank badges, touch controls), the **Say Hey Pixel** font atlas, and preview sheets in `Docs/img/`.
+- `Tools/AudioGen/generate_audio.py` — synthesises 14 original cues (SFX, crowd bed + cheer, jingles, title loop) into `Assets/_Project/Audio/`.
+- `Visuals/` — `SpriteAnimationClip` (pure frame maths), `SpriteAnimator` (SpriteRenderer or UI Image), `OutfielderAnimator` (clip from state + catch/throw events; spin faces the infield), `EnvironmentAnimator` (crowd cheer, flags; frozen by reduced motion).
+- `Audio/` — `AudioCue`, `AudioCueLibrary` SO, `AudioService` (event-driven; SFX / music / crowd sources; mute; pause pauses music + crowd).
+- `UI/` — `ScreenView` base + one view per screen (Title with credits overlay, Briefing, HUD, Pause, Failed, Complete with count-up and rank badge, Replay), `PixelButton` (cursor arrow, hover = focus, menu sounds), `UiSelection`. `PlaceholderFlowView` deleted.
+- `Editor/Fonts/PixelFontBuilder` (**Say Hey Dash → Rebuild Pixel Fonts**) — builds the original font into two legacy custom fonts (Regular/Bold, size 10: `fontSize 40` = 4×).
+- `PixelArtTexturePostprocessor` — `*_slice{N}.png` gets an N-px 9-slice border; `Apply()` reused by the scene builder.
+- `MainSceneBuilder` rebuilt for M3: stadium layers, animators, audio, 7 styled screens on the 320×180 art grid (1 art px = 4 canvas units, `referencePixelsPerUnit` 64), new data assets `Data/Visuals/OutfielderAnimations.asset` and `Data/Audio/AudioCueLibrary.asset` (created if missing; only empty clips/entries are filled).
+- Gameplay touch-ups: `catchHeight` 0.65 → 1.1 (glove height; timing unchanged), ball hidden while in the glove, throw leaves from the throwing hand, throw meter recoloured (yellow zone, red needle), word feedback after the throw.
+- Tests: EditMode 70 (+ frame timing, font covers every on-screen string, every cue has a clip, every clip has frames, throw feedback words); PlayMode 9 (+ `PresentationTests`: one screen per state, animation follows the play, ball in glove, run → idle, mute). `ScreenGalleryCapture` (Explicit) writes `Docs/img/m3_screens/*.png`.
+
+## Pending / next (Milestone 4 — do not start until requested)
+- Historical narrative + animated replay on Screen 07 (client-approved copy, Q1/Q6), runner animation (lead runner holds at third).
+- Final scoring and rankings sign-off (Q6).
+- Sound mixing and a settings screen: `SettingsService` (mute, reduced motion, assisted mode persisted).
+- Mobile controls: show the on-screen stick/button on touch devices only; rotate-to-landscape overlay.
+- Accessibility pass (reduced-motion toggle in the UI, focus order, contrast check).
+- Client feedback on the M3 art (character, stadium, palette) and the developer credit line.
+- Delete the M1 prototype code/scene once the client confirms M2.
 
 ## Open questions for the client
 See [Docs/01 §1.2](Docs/01_Scope_and_Architecture.md#12-decisions-needed-from-the-client-blocking-later-milestones-not-m1): name/likeness licensing (Q1), palette extensions (Q2), HTTPS host (Q3), Wix editor & page (Q4), museum URL (Q5), scoring formula (Q6).
@@ -92,7 +119,9 @@ Full table: [Docs/04 §6](Docs/04_WebGL_and_Wix_Feasibility.md#6-findings-limita
 - **Settings persistence may fail in third-party iframes** (storage partitioning) → best-effort `SettingsService` (M4).
 - URP logs two harmless "shader not supported" lines on WebGL → strip in M5.
 - On-screen controls overlap the field edges → show only on touch devices (M4).
-- **M2 placeholders (by design):** placeholder UI with the built-in font, no animations or audio, Screen 07 is placeholder text, reduced motion/assisted mode are not persisted, on-screen controls always visible. See [Docs/05 §5](Docs/05_M2_Gameplay_Prototype.md#5-known-limitations-of-this-prototype-by-design-later-milestones).
+- **M3 by design (later milestones):** Screen 07 has placeholder history text and no animated replay; mute / assisted / reduced motion are not saved and reduced motion has no UI toggle yet; on-screen controls always visible; first-pass sound levels; credits show "[DEVELOPER CREDIT - TO CONFIRM]". See [Docs/06 §6](Docs/06_M3_Visual_Production.md#6-known-limitations-later-milestones).
+- **M3 art is generated from code** (`Tools/ArtGen`), delivered as PNG frames + sheets, not Aseprite files.
+- **In-browser scripted play is unreliable while the browser pane is hidden** (background tab throttling). Visual checks of the catch/throw/results screens use the `ScreenGalleryCapture` PlayMode capture instead.
 - **Gameplay feel not yet tuned with real players:** the default values (3.6 s flight, ±0.2 s catch window, 0.16 throw zone) were checked only by automated tests and a scripted browser run. Client playtest feedback is wanted before M3.
 - **Re-running *Rebuild M1 Tech PoC Scene* makes the PoC the only build scene.** Fix it with *Build Main Scene*.
 - **Not yet verified:** real Wix page, Safari macOS/iPhone, Firefox, Chrome Android, fullscreen and popup with a real human click, `sandbox="allow-scripts"`-only embeds.
@@ -123,6 +152,13 @@ Full table: [Docs/04 §6](Docs/04_WebGL_and_Wix_Feasibility.md#6-findings-limita
 | 2026-11-18 | Throw has a 5 s time limit (`throwTimeLimitSeconds`) → THROW MISSED | The mission never stalls; set it to 0 to disable |
 | 2026-11-18 | Throw meter built from three non-overlapping images (track left / zone / track right) | In WebGL a resized fill drawn over a same-material background did not render. Laying them side by side avoids depending on draw order |
 | 2026-11-18 | Scene and data assets are generated by `MainSceneBuilder`; existing data assets are never overwritten | The scene is reproducible, and designers' tuning/text edits survive a rebuild |
+| 2026-11-19 | **Original bitmap font "Say Hey Pixel" + legacy uGUI `Text`** instead of TextMeshPro + OFL fonts (reverses the 2026-11-17 plan) | GDD asks for original arcade typography; no licence file; no TMP essentials import; one pixel grid with the game |
+| 2026-11-19 | All M3 art and audio generated by scripts (`Tools/ArtGen`, `Tools/AudioGen`) | Reproducible, original, palette-locked; a pose or colour change updates every frame |
+| 2026-11-19 | Own `SpriteAnimator` + `OutfielderAnimator` instead of Animator controllers | No controller assets, no allocations, clip state visible to tests |
+| 2026-11-19 | UI authored on the 320×180 art grid (1 art px = 4 canvas units, `referencePixelsPerUnit` 64) | UI pixels match game pixels; 9-slice borders scale with the art |
+| 2026-11-19 | `catchHeight` 0.65 → 1.1 | Ball meets the glove of the over-the-shoulder pose; perfect-catch time unchanged |
+| 2026-11-19 | HUD prompt in the top sky band, zone label bottom centre | The fly ball never rises above row ~37, so prompts never hide the ball or the scoreboard |
+| 2026-11-19 | `OutfielderController.MoveOverride` test hook | Batch-mode runs have no window focus, so simulated keyboard input is dropped |
 
 ---
 
@@ -133,7 +169,7 @@ Full table: [Docs/04 §6](Docs/04_WebGL_and_Wix_Feasibility.md#6-findings-limita
 3. Open `Assets/_Project/Scenes/Main.unity` → Play.
    Controls: arrows/WASD (or drag the on-screen stick) to run; Space (or the **A** button) to catch, throw and skip; Enter/Space to confirm menus; Esc or **II** to pause.
 
-If the scene is missing or broken: **Say Hey Dash → Build Main Scene**. Gameplay numbers and all text are edited in `Assets/_Project/Data/` (see the [tuning guide](Docs/05_M2_Gameplay_Prototype.md#3-tuning-guide-no-code-changes-needed)).
+If the scene is missing or broken: **Say Hey Dash → Build Main Scene**. To regenerate art or sound (from the repo root): `py -I Tools/ArtGen/generate_m3_art.py` and `py -I Tools/AudioGen/generate_audio.py`, then Build Main Scene. Gameplay numbers and all text are edited in `Assets/_Project/Data/` (see the [tuning guide](Docs/05_M2_Gameplay_Prototype.md#3-tuning-guide-no-code-changes-needed)).
 
 ## How to run the tests
 
@@ -145,7 +181,7 @@ Unity → Window → General → **Test Runner** → EditMode / PlayMode → Run
 ## How to build for the web
 
 - Editor: **Say Hey Dash → Build → WebGL (Release)** (or *Development*). Output: `Builds/WebGL/`.
-- Milestone 2 deliverable build: `Builds/SayHeyDash_M2_WebGL.zip` (9.3 MB, repackaged 2026-11-19). Upload the zip as-is to itch.io (Kind: HTML, "played in the browser"), or unzip it onto any HTTPS static host. No special server headers are needed.
+- Milestone 3 deliverable build: `Builds/SayHeyDash_M3_WebGL.zip` (2026-11-19). M2 build: `Builds/SayHeyDash_M2_WebGL.zip`. Upload the zip as-is to itch.io (Kind: HTML, "played in the browser"), or unzip it onto any HTTPS static host. No special server headers are needed.
 - **Always package with** `py -I Tools/Release/zip_webgl.py Builds/WebGL Builds/<name>.zip`. Do **not** use Windows' `Compress-Archive` or "Send to → Compressed folder": they write backslash paths, and itch.io then shows an unstyled page with "Could not load the game files".
 - Command line (editor closed):
   ```bash
@@ -166,21 +202,23 @@ Open <http://localhost:8601/> (standalone) and <http://localhost:8602/> (simulat
 
 ```
 Assets/_Project/       all game content (see Docs/01 §9 for the full tree)
-  Art/Sprites/Prototype/   placeholder art (generated by Tools/ArtGen)
-  Data/                    Tuning/, Scoring/, Content/ ScriptableObjects (edit these to tune)
+  Art/Sprites/             Character/, Environment/, Gameplay/, Title/, UI/ (M3, generated) · Prototype/ (M1)
+  Art/Fonts/               Say Hey Pixel atlas + metrics + Regular/Bold font assets
+  Audio/                   SFX/, Music/ (M3, generated by Tools/AudioGen)
+  Data/                    Tuning/, Scoring/, Content/, Visuals/, Audio/ ScriptableObjects (edit these to tune)
   Input/                   SayHeyDashControls.inputactions (Gameplay + UI maps)
   Plugins/WebGL/           BrowserBridge.jslib
   Scenes/                  Main.unity (the game) · Prototype/M1_TechPoC.unity (temporary)
   Scripts/Runtime/         production code  (SayHeyDash.Runtime.asmdef)
-                           Controls/ Platform/ Data/ Flow/ Gameplay/ Scoring/ UI/
+                           Controls/ Platform/ Data/ Flow/ Gameplay/ Scoring/ UI/ Visuals/ Audio/
   Scripts/Prototype/       M1 throwaway code (SayHeyDash.Prototype.asmdef)
   Scripts/Editor/          build + import + scene generators (SayHeyDash.Editor.asmdef)
   Tests/EditMode/          unit tests          Tests/PlayMode/  mission loop tests
 Assets/WebGLTemplates/SayHeyDash/   custom web page template
 Docs/                  milestone documents
-Tools/                 ArtGen, WebTest server, WixHarness, Release/zip_webgl.py (upload zip)
+Tools/                 ArtGen, AudioGen, WebTest server, WixHarness, Release/zip_webgl.py (upload zip)
 Builds/                build output (git-ignored)
 ```
 
 ## Third-party assets
-None shipped yet. All art/audio so far is original. Planned candidates and licences: [Docs/01 §11](Docs/01_Scope_and_Architecture.md#11-third-party-assets--licensing-plan).
+None. All art, the font and all audio are original (generated by the project's own scripts). Licence record: [Docs/ThirdPartyLicenses.md](Docs/ThirdPartyLicenses.md).

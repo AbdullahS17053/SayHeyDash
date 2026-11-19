@@ -36,8 +36,11 @@ MonoBehaviour:
   objectiveLine: 'OBJECTIVE: MAKE THE CATCH. MAKE THE THROW.'
   historicalSetup: RUNNERS ON FIRST AND SECOND. A DEEP FLY BALL HEADS FOR CENTER
     FIELD...
-  controlsHelp: 'MOVE: ARROWS / WASD / STICK    CATCH + THROW: SPACE / (A)    PAUSE:
-    ESC'
+  controlsHelp: 'MOVE: ARROWS / WASD / STICK
+
+    CATCH + THROW: SPACE / (A)
+
+    PAUSE: ESC / II BUTTON'
   continueButton: CONTINUE
   trackPrompt: TRACK THE BALL! GET INSIDE THE RING
   readyPrompt: GET READY...

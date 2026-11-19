@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51a1bf5860a8de44fa6328ebbf72c741, type: 3}
+  m_Name: AudioCueLibrary
+  m_EditorClassIdentifier: SayHeyDash.Runtime::SayHeyDash.Audio.AudioCueLibrary
+  entries:
+  - cue: 1
+    clip: {fileID: 8300000, guid: a91c3a9dd443f57458b07b130423bee8, type: 3}
+    volume: 0.5
+  - cue: 2
+    clip: {fileID: 8300000, guid: b97a98a7b625e014a8c68c64cc5c0814, type: 3}
+    volume: 0.6
+  - cue: 3
+    clip: {fileID: 8300000, guid: dd79b3a903243df4e99e372105372985, type: 3}
+    volume: 0.5
+  - cue: 10
+    clip: {fileID: 8300000, guid: da245f4e30c65b0429ed61a35c7eadd1, type: 3}
+    volume: 0.9
+  - cue: 11
+    clip: {fileID: 8300000, guid: 086eaf0282b1ecf4182e7e7d31677120, type: 3}
+    volume: 0.35
+  - cue: 12
+    clip: {fileID: 8300000, guid: 5671c00fe5b87de4b87cba7f1e4e913e, type: 3}
+    volume: 0.7
+  - cue: 13
+    clip: {fileID: 8300000, guid: 1db7c9c3463262642977898fbd62f41c, type: 3}
+    volume: 0.5
+  - cue: 14
+    clip: {fileID: 8300000, guid: 8f82608c930a98b4ba59802cbcf56cf3, type: 3}
+    volume: 0.6
+  - cue: 15
+    clip: {fileID: 8300000, guid: 1f9c57e835008c1419a7bb1468a8ec96, type: 3}
+    volume: 0.9
+  - cue: 16
+    clip: {fileID: 8300000, guid: ef658fea019fcb644b22a0a1f463d9cf, type: 3}
+    volume: 0.6
+  - cue: 17
+    clip: {fileID: 8300000, guid: cdbfe5f40d162d84ab394fcec000adbd, type: 3}
+    volume: 0.8
+  - cue: 20
+    clip: {fileID: 8300000, guid: 5a41696772ac613469e10477a7e7f80c, type: 3}
+    volume: 0.7
+  - cue: 21
+    clip: {fileID: 8300000, guid: 56c69ad16933b1f4f9dff5ec76abd1a3, type: 3}
+    volume: 0.6
+  - cue: 30
+    clip: {fileID: 8300000, guid: 6f2e6c5bede3a084e8d21533e47fe353, type: 3}
+    volume: 0.45

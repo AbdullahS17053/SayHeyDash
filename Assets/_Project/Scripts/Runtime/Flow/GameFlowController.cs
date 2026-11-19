@@ -33,7 +33,8 @@ namespace SayHeyDash.Flow
         [SerializeField] private DifficultyProfile assistedDifficulty;
 
         [Header("Options (moved to SettingsService in Milestone 4)")]
-        [Tooltip("Shortens the catch sequence (GDD: skippable or shortened in reduced-motion mode).")]
+        [Tooltip("Shortens the catch sequence (GDD: skippable or shortened in reduced-motion mode) and freezes " +
+                 "decorative animation: crowd, flags, blinking prompt, score count-up.")]
         [SerializeField] private bool reducedMotion;
         [Tooltip("Log every state change to the console.")]
         [SerializeField] private bool logStateChanges;
@@ -227,6 +228,8 @@ namespace SayHeyDash.Flow
         {
             _lastThrow = result;
             if (logStateChanges) Debug.Log($"[Flow] Throw: {result}");
+            // The ball leaves from the throwing hand, not from where it was caught.
+            if (!result.TimedOut) ball.HoldAt(outfielder.transform, outfielder.ThrowReleasePosition);
 
             if (result.Success)
             {

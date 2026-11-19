@@ -1,10 +1,15 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SayHeyDash.Audio;
 using SayHeyDash.Controls;
 using SayHeyDash.Data;
+using SayHeyDash.EditorTools.Fonts;
+using SayHeyDash.EditorTools.Import;
 using SayHeyDash.Flow;
 using SayHeyDash.Gameplay;
 using SayHeyDash.UI;
+using SayHeyDash.Visuals;
 using UnityEditor;
 using UnityEditor.Events;
 using UnityEditor.SceneManagement;
@@ -23,7 +28,9 @@ namespace SayHeyDash.EditorTools.Scenes
     /// <summary>
     /// Generates the single gameplay scene (Main.unity) and any missing data assets from code,
     /// so the scene is reproducible and every reference is wired the same way each time.
-    /// Existing data assets are NEVER overwritten - tuning/text edits survive a rebuild.
+    /// Existing data assets are NEVER overwritten - tuning/text/audio/animation edits survive
+    /// a rebuild (only empty animation clips / audio entries are filled in).
+    /// UI layout is authored on the 320x180 art grid: 1 art pixel = 4 units on the 1280x720 canvas.
     /// Menu: Say Hey Dash > Build Main Scene.
     /// </summary>
     public static class MainSceneBuilder
@@ -34,22 +41,34 @@ namespace SayHeyDash.EditorTools.Scenes
         public const string AssistedDifficultyPath = "Assets/_Project/Data/Tuning/Difficulty_Assisted.asset";
         public const string ScoringPath = "Assets/_Project/Data/Scoring/ScoringConfig.asset";
         public const string ContentPath = "Assets/_Project/Data/Content/MissionContent.asset";
+        public const string AnimationsPath = "Assets/_Project/Data/Visuals/OutfielderAnimations.asset";
+        public const string AudioLibraryPath = "Assets/_Project/Data/Audio/AudioCueLibrary.asset";
 
-        private const string SpriteFolder = "Assets/_Project/Art/Sprites/Prototype/";
+        private const string Sprites = "Assets/_Project/Art/Sprites/";
+        private const string AudioFolder = "Assets/_Project/Audio/";
         private const string ActionsPath = "Assets/_Project/Input/SayHeyDashControls.inputactions";
         private const int ReferenceWidth = 320;
         private const int ReferenceHeight = 180;
         private const int PixelsPerUnit = 16;
+        private const float U = 4f;            // canvas units per art pixel
+        private const int Body = 40;           // Text.fontSize: 1 font px = 1 art px
+        private const int Big = 80;            // 2 art px per font px
 
         private static readonly Color32 Midnight = new Color32(0x17, 0x15, 0x2F, 0xFF);
         private static readonly Color32 Yellow = new Color32(0xF6, 0xCE, 0x4B, 0xFF);
         private static readonly Color32 Orange = new Color32(0xF3, 0x8B, 0x37, 0xFF);
-        private static readonly Color32 Green = new Color32(0x3C, 0x76, 0x59, 0xFF);
         private static readonly Color32 OffWhite = new Color32(0xF5, 0xF1, 0xD9, 0xFF);
-        private static readonly Color32 Dim = new Color32(0x17, 0x15, 0x2F, 0xE0);
+        private static readonly Color32 Red = new Color32(0xD9, 0x4D, 0x58, 0xFF);
+        private static readonly Color32 Dim = new Color32(0x17, 0x15, 0x2F, 0xD8);
+        private static readonly Color32 DimLight = new Color32(0x17, 0x15, 0x2F, 0xA0);
 
-        private static Font _font;
+        private enum ButtonStyle { Primary, Secondary }
+
+        private static Font _regular;
+        private static Font _bold;
+        private static AudioService _audio;
         private static int _errors;
+        private static readonly Dictionary<string, Sprite> SpriteCache = new Dictionary<string, Sprite>();
 
         [MenuItem("Say Hey Dash/Build Main Scene", priority = 0)]
         public static void Rebuild()
@@ -68,57 +87,62 @@ namespace SayHeyDash.EditorTools.Scenes
         public static bool Build()
         {
             _errors = 0;
-            _font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            SpriteCache.Clear();
+            EnsureSpriteImportSettings();
+            if (!PixelFontBuilder.Build(out _, out _)) return false;
 
             // Data assets first (created only if missing), then the scene. NewScene(Single)
             // unloads unused assets, so everything is (re)loaded after it.
             EnsureDataAssets();
             Directory.CreateDirectory(Path.GetDirectoryName(ScenePath));
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            SpriteCache.Clear();
 
+            _regular = AssetDatabase.LoadAssetAtPath<Font>(PixelFontBuilder.RegularPath);
+            _bold = AssetDatabase.LoadAssetAtPath<Font>(PixelFontBuilder.BoldPath);
             var tuning = AssetDatabase.LoadAssetAtPath<GameplayTuning>(TuningPath);
             var defaultDifficulty = AssetDatabase.LoadAssetAtPath<DifficultyProfile>(DefaultDifficultyPath);
             var assistedDifficulty = AssetDatabase.LoadAssetAtPath<DifficultyProfile>(AssistedDifficultyPath);
             var scoring = AssetDatabase.LoadAssetAtPath<ScoringConfig>(ScoringPath);
             var content = AssetDatabase.LoadAssetAtPath<MissionContent>(ContentPath);
+            var animations = AssetDatabase.LoadAssetAtPath<OutfielderAnimationSet>(AnimationsPath);
+            var audioLibrary = AssetDatabase.LoadAssetAtPath<AudioCueLibrary>(AudioLibraryPath);
             var actions = AssetDatabase.LoadAssetAtPath<InputActionAsset>(ActionsPath);
-            Sprite field = LoadSprite("proto_field_background.png");
-            Sprite outfielderSprite = LoadSprite("proto_outfielder_idle.png");
-            Sprite ballSprite = LoadSprite("proto_ball.png");
-            Sprite shadowSprite = LoadSprite("proto_ball_shadow.png");
-            Sprite ringDashed = LoadSprite("proto_landing_ring_dashed.png");
-            Sprite ringSolid = LoadSprite("proto_landing_ring_solid.png");
-            if (tuning == null || defaultDifficulty == null || assistedDifficulty == null || scoring == null ||
-                content == null || actions == null || field == null || outfielderSprite == null ||
-                ballSprite == null || shadowSprite == null || ringDashed == null || ringSolid == null)
+            if (_regular == null || _bold == null || tuning == null || defaultDifficulty == null ||
+                assistedDifficulty == null || scoring == null || content == null || animations == null ||
+                audioLibrary == null || actions == null)
             {
-                Debug.LogError("[MainSceneBuilder] Missing data assets, input actions or sprites " +
-                               "(run Tools/ArtGen/generate_placeholder_art.py). Scene NOT saved.");
+                Debug.LogError("[MainSceneBuilder] Missing fonts, data assets or input actions. Scene NOT saved.");
                 return false;
             }
 
             // ---------------------------------------------------------------- world
             CreateCamera();
-            CreateSprite("FieldBackground", field, Vector3.zero, -100, null);
+            EnvironmentAnimator environment = CreateStadium();
 
             var indicatorGo = new GameObject("LandingIndicator");
-            SpriteRenderer ring = CreateSprite("Ring", ringDashed, Vector3.zero, 4, indicatorGo.transform);
+            SpriteRenderer ring = CreateSprite("Ring", LoadSprite("Gameplay/landing_ring_dashed"), Vector3.zero, 4, indicatorGo.transform);
             ring.enabled = false;
             var indicator = indicatorGo.AddComponent<LandingIndicator>();
             Set(indicator, "ring", ring);
-            Set(indicator, "dashedSprite", ringDashed);
-            Set(indicator, "solidSprite", ringSolid);
+            Set(indicator, "dashedSprite", LoadSprite("Gameplay/landing_ring_dashed"));
+            Set(indicator, "solidSprite", LoadSprite("Gameplay/landing_ring_solid"));
 
             var outfielderGo = new GameObject("Outfielder");
             outfielderGo.transform.position = tuning.playerStartPosition;
-            SpriteRenderer body = CreateSprite("Body", outfielderSprite, Vector3.zero, 10, outfielderGo.transform);
-            body.transform.localPosition = new Vector3(0f, 0.75f, 0f); // root = feet
+            SpriteRenderer body = CreateSprite("Body", LoadSprite("Character/outfielder_idle_00"), Vector3.zero, 10, outfielderGo.transform);
+            body.transform.localPosition = new Vector3(0f, 0.75f, 0f); // root = feet (row 26 of the 32 px cell)
+            var bodyAnimator = body.gameObject.AddComponent<SpriteAnimator>();
+            Set(bodyAnimator, "spriteRenderer", body);
 
             var ballGo = new GameObject("Ball");
-            SpriteRenderer shadow = CreateSprite("Shadow", shadowSprite, Vector3.zero, 5, ballGo.transform);
-            SpriteRenderer ballRenderer = CreateSprite("Ball", ballSprite, Vector3.zero, 20, ballGo.transform);
+            SpriteRenderer shadow = CreateSprite("Shadow", LoadSprite("Character/ball_shadow"), Vector3.zero, 5, ballGo.transform);
+            SpriteRenderer ballRenderer = CreateSprite("Ball", LoadSprite("Character/ball_spin_00"), Vector3.zero, 20, ballGo.transform);
             shadow.enabled = false;
             ballRenderer.enabled = false;
+            var ballSpin = ballRenderer.gameObject.AddComponent<SpriteAnimator>();
+            Set(ballSpin, "spriteRenderer", ballRenderer);
+            SetClip(ballSpin, "startClip", LoadFrames("Character/ball_spin_"), 12f, true);
 
             // ---------------------------------------------------------------- systems
             var systems = new GameObject("Systems");
@@ -155,8 +179,21 @@ namespace SayHeyDash.EditorTools.Scenes
             Set(flow, "defaultDifficulty", defaultDifficulty);
             Set(flow, "assistedDifficulty", assistedDifficulty);
 
+            var outfielderAnimator = outfielderGo.AddComponent<OutfielderAnimator>();
+            Set(outfielderAnimator, "flow", flow);
+            Set(outfielderAnimator, "outfielder", outfielder);
+            Set(outfielderAnimator, "catchSystem", catchSystem);
+            Set(outfielderAnimator, "throwSystem", throwSystem);
+            Set(outfielderAnimator, "tuning", tuning);
+            Set(outfielderAnimator, "clips", animations);
+            Set(outfielderAnimator, "body", bodyAnimator);
+            Set(outfielderAnimator, "bodyRenderer", body);
+
+            Set(environment, "flow", flow);
+            _audio = CreateAudio(audioLibrary, flow, catchSystem, throwSystem);
+
             CreateEventSystem(actions);
-            CreateUi(flow, catchSystem, throwSystem, content);
+            CreateUi(flow, catchSystem, throwSystem, content, animations);
 
             if (_errors > 0)
             {
@@ -186,6 +223,10 @@ namespace SayHeyDash.EditorTools.Scenes
             });
             CreateIfMissing<ScoringConfig>(ScoringPath, null);
             CreateIfMissing<MissionContent>(ContentPath, null);
+            CreateIfMissing<OutfielderAnimationSet>(AnimationsPath, null);
+            CreateIfMissing<AudioCueLibrary>(AudioLibraryPath, null);
+            FillAnimations(AssetDatabase.LoadAssetAtPath<OutfielderAnimationSet>(AnimationsPath));
+            FillAudioLibrary(AssetDatabase.LoadAssetAtPath<AudioCueLibrary>(AudioLibraryPath));
             AssetDatabase.SaveAssets();
         }
 
@@ -197,6 +238,66 @@ namespace SayHeyDash.EditorTools.Scenes
             init?.Invoke(asset);
             AssetDatabase.CreateAsset(asset, path);
             Debug.Log($"[MainSceneBuilder] Created {path}");
+        }
+
+        /// <summary>Fills only clips that have no frames, so designer edits are kept.</summary>
+        private static void FillAnimations(OutfielderAnimationSet set)
+        {
+            Sprite[] throwFrames = LoadFrames("Character/outfielder_throw_");
+            bool changed = false;
+            changed |= Fill(set.idle, LoadFrames("Character/outfielder_idle_"));
+            changed |= Fill(set.run, LoadFrames("Character/outfielder_run_"));
+            changed |= Fill(set.runReach, LoadFrames("Character/outfielder_run_reach_"));
+            changed |= Fill(set.reachIdle, new[] { LoadSprite("Character/outfielder_run_reach_02") });
+            changed |= Fill(set.catchBall, LoadFrames("Character/outfielder_catch_"));
+            changed |= Fill(set.whiff, LoadFrames("Character/outfielder_whiff_"));
+            changed |= Fill(set.spin, LoadFrames("Character/outfielder_spin_"));
+            changed |= Fill(set.throwReady, throwFrames.Take(1).ToArray());
+            changed |= Fill(set.throwRelease, throwFrames.Skip(1).ToArray());
+            if (changed) EditorUtility.SetDirty(set);
+        }
+
+        private static bool Fill(SpriteAnimationClip clip, Sprite[] frames)
+        {
+            if (clip.IsValid || frames.Length == 0 || frames.Any(f => f == null)) return false;
+            clip.frames = frames;
+            return true;
+        }
+
+        private static void FillAudioLibrary(AudioCueLibrary library)
+        {
+            if (library.entries != null && library.entries.Length > 0) return;
+            (AudioCue cue, string file, float volume)[] map =
+            {
+                (AudioCue.UiMove, "SFX/ui_move", 0.5f),
+                (AudioCue.UiConfirm, "SFX/ui_confirm", 0.6f),
+                (AudioCue.UiBack, "SFX/ui_back", 0.5f),
+                (AudioCue.BatCrack, "SFX/sfx_bat_crack", 0.9f),
+                (AudioCue.CrowdLoop, "SFX/sfx_crowd_loop", 0.35f),
+                (AudioCue.CrowdCheer, "SFX/sfx_crowd_cheer", 0.7f),
+                (AudioCue.CatchReady, "SFX/sfx_ready", 0.5f),
+                (AudioCue.CatchNow, "SFX/sfx_now", 0.6f),
+                (AudioCue.Catch, "SFX/sfx_catch", 0.9f),
+                (AudioCue.Whiff, "SFX/sfx_whiff", 0.6f),
+                (AudioCue.Throw, "SFX/sfx_throw", 0.8f),
+                (AudioCue.SuccessJingle, "Music/jingle_success", 0.7f),
+                (AudioCue.FailJingle, "Music/jingle_fail", 0.6f),
+                (AudioCue.TitleMusic, "Music/music_title_loop", 0.45f),
+            };
+            var entries = new List<AudioCueLibrary.Entry>();
+            foreach (var (cue, file, volume) in map)
+            {
+                var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(AudioFolder + file + ".wav");
+                if (clip == null)
+                {
+                    _errors++;
+                    Debug.LogError($"[MainSceneBuilder] Audio clip not found: {AudioFolder}{file}.wav (run Tools/AudioGen/generate_audio.py)");
+                    continue;
+                }
+                entries.Add(new AudioCueLibrary.Entry { cue = cue, clip = clip, volume = volume });
+            }
+            library.entries = entries.ToArray();
+            EditorUtility.SetDirty(library);
         }
 
         // ---------------------------------------------------------------- world helpers
@@ -218,6 +319,58 @@ namespace SayHeyDash.EditorTools.Scenes
             ppc.refResolutionY = ReferenceHeight;
             ppc.gridSnapping = PixelPerfectCamera.GridSnapping.UpscaleRenderTexture;
             ppc.cropFrame = PixelPerfectCamera.CropFrame.StretchFill;
+        }
+
+        /// <summary>Polo Grounds-style centre field: base image, animated crowd band and flags.</summary>
+        private static EnvironmentAnimator CreateStadium()
+        {
+            var root = new GameObject("Stadium");
+            CreateSprite("Field", LoadSprite("Environment/env_stadium"), Vector3.zero, -100, root.transform);
+            // Bands are placed by their pixel rows in the 320x180 image (see generate_m3_art.py).
+            SpriteRenderer crowd = CreateSprite("Crowd", LoadSprite("Environment/env_crowd_00"),
+                new Vector3(0f, BandCenterY(26, 44), 0f), -99, root.transform);
+            SpriteRenderer flags = CreateSprite("Flags", LoadSprite("Environment/env_flags_00"),
+                new Vector3(0f, BandCenterY(0, 12), 0f), -98, root.transform);
+            var crowdAnim = crowd.gameObject.AddComponent<SpriteAnimator>();
+            Set(crowdAnim, "spriteRenderer", crowd);
+            var flagsAnim = flags.gameObject.AddComponent<SpriteAnimator>();
+            Set(flagsAnim, "spriteRenderer", flags);
+
+            var env = root.AddComponent<EnvironmentAnimator>();
+            Set(env, "crowd", crowdAnim);
+            Set(env, "flags", flagsAnim);
+            Sprite[] crowdFrames = LoadFrames("Environment/env_crowd_");
+            SetClip(env, "crowdIdle", crowdFrames.Take(2).ToArray(), 2f, true);
+            SetClip(env, "crowdCheer", crowdFrames.Skip(1).Take(2).ToArray(), 6f, true);
+            SetClip(env, "flagsWave", LoadFrames("Environment/env_flags_"), 3f, true);
+            return env;
+        }
+
+        private static float BandCenterY(int topRow, int height) =>
+            (ReferenceHeight / 2f - (topRow + height / 2f)) / PixelsPerUnit;
+
+        private static AudioService CreateAudio(AudioCueLibrary library, GameFlowController flow,
+            CatchSystem catchSystem, ThrowSystem throwSystem)
+        {
+            var go = new GameObject("Audio");
+            AudioSource Source(string name)
+            {
+                var child = new GameObject(name);
+                child.transform.SetParent(go.transform, false);
+                var s = child.AddComponent<AudioSource>();
+                s.playOnAwake = false;
+                s.spatialBlend = 0f;
+                return s;
+            }
+            var service = go.AddComponent<AudioService>();
+            Set(service, "library", library);
+            Set(service, "flow", flow);
+            Set(service, "catchSystem", catchSystem);
+            Set(service, "throwSystem", throwSystem);
+            Set(service, "sfxSource", Source("Sfx"));
+            Set(service, "musicSource", Source("Music"));
+            Set(service, "ambienceSource", Source("Ambience"));
+            return service;
         }
 
         private static SpriteRenderer CreateSprite(string name, Sprite sprite, Vector3 position, int order, Transform parent)
@@ -266,140 +419,114 @@ namespace SayHeyDash.EditorTools.Scenes
         // ---------------------------------------------------------------- UI
 
         private static void CreateUi(GameFlowController flow, CatchSystem catchSystem, ThrowSystem throwSystem,
-            MissionContent content)
+            MissionContent content, OutfielderAnimationSet animations)
         {
-            var canvasGo = new GameObject("PlaceholderCanvas (M2)", typeof(RectTransform), typeof(Canvas),
+            var canvasGo = new GameObject("UI", typeof(RectTransform), typeof(Canvas),
                 typeof(CanvasScaler), typeof(GraphicRaycaster));
-            canvasGo.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+            var canvas = canvasGo.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.pixelPerfect = true;
             var scaler = canvasGo.GetComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1280f, 720f);
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 0.5f;
+            scaler.referencePixelsPerUnit = PixelsPerUnit * U; // 16 PPU sprites draw 4 units per pixel
             Transform root = canvasGo.transform;
-            var view = canvasGo.AddComponent<PlaceholderFlowView>();
-            Set(view, "flow", flow);
-            Set(view, "catchSystem", catchSystem);
-            Set(view, "content", content);
 
-            // --- HUD (gameplay + catch sequence + throw) -----------------------------
-            RectTransform hud = CreatePanel(root, "HudPanel", null);
-            Set(view, "hudPanel", hud.gameObject);
-            Set(view, "promptText", CreateText(hud, "Prompt", 36, Yellow, TextAnchor.MiddleCenter,
-                new Vector2(0.5f, 1f), new Vector2(0f, -24f), new Vector2(1100f, 50f)));
-            Set(view, "subText", CreateText(hud, "SubPrompt", 24, OffWhite, TextAnchor.MiddleCenter,
-                new Vector2(0.5f, 1f), new Vector2(0f, -78f), new Vector2(1100f, 34f)));
-            Set(view, "modeText", CreateText(hud, "ModeLabel", 20, Orange, TextAnchor.UpperLeft,
-                new Vector2(0f, 1f), new Vector2(20f, -20f), new Vector2(400f, 30f)));
-            Button pause = CreateButton(hud, "PauseButton", new Vector2(1f, 1f), new Vector2(-16f, -16f), new Vector2(72f, 60f));
-            pause.navigation = new Navigation { mode = Navigation.Mode.None };
-            Set(view, "pauseButton", pause);
-            Wire(pause, view.OnPauseClicked);
-            CreateThrowMeter(hud, throwSystem, view);
-            CreateOnScreenControls(hud);
-
-            // --- 01 Title --------------------------------------------------------------
-            RectTransform title = CreatePanel(root, "TitlePanel", Dim);
-            Set(view, "titlePanel", title.gameObject);
-            Set(view, "titleText", CreateText(title, "TitleText", 30, OffWhite, TextAnchor.UpperCenter,
-                new Vector2(0.5f, 1f), new Vector2(0f, -60f), new Vector2(1100f, 380f)));
-            Text pressStart = CreateText(title, "PressStart", 34, Yellow, TextAnchor.MiddleCenter,
-                new Vector2(0.5f, 0.5f), new Vector2(0f, -110f), new Vector2(800f, 50f));
-            pressStart.gameObject.AddComponent<BlinkingText>();
-            Set(view, "pressStartText", pressStart);
-            Button start = CreateButton(title, "StartButton", new Vector2(0.5f, 0f), new Vector2(0f, 120f), new Vector2(360f, 56f));
-            Button assisted = CreateButton(title, "AssistedButton", new Vector2(0.5f, 0f), new Vector2(0f, 50f), new Vector2(360f, 56f));
-            Set(view, "startButton", start);
-            Set(view, "assistedButton", assisted);
-            Wire(start, view.OnStartClicked);
-            Wire(assisted, view.OnAssistedClicked);
-
-            // --- 02 Briefing ----------------------------------------------------------
-            RectTransform briefing = CreatePanel(root, "BriefingPanel", Dim);
-            Set(view, "briefingPanel", briefing.gameObject);
-            Set(view, "briefingText", CreateText(briefing, "BriefingText", 26, OffWhite, TextAnchor.UpperCenter,
-                new Vector2(0.5f, 1f), new Vector2(0f, -50f), new Vector2(1150f, 520f)));
-            Button cont = CreateButton(briefing, "ContinueButton", new Vector2(0.5f, 0f), new Vector2(0f, 50f), new Vector2(360f, 56f));
-            Set(view, "continueButton", cont);
-            Wire(cont, view.OnContinueClicked);
-
-            // --- Pause overlay --------------------------------------------------------
-            RectTransform pausePanel = CreatePanel(root, "PausePanel", Dim);
-            Set(view, "pausePanel", pausePanel.gameObject);
-            Set(view, "pauseTitleText", CreateText(pausePanel, "PauseTitle", 48, Yellow, TextAnchor.MiddleCenter,
-                new Vector2(0.5f, 0.5f), new Vector2(0f, 120f), new Vector2(800f, 70f)));
-            Button resume = CreateButton(pausePanel, "ResumeButton", new Vector2(0.5f, 0.5f), new Vector2(0f, 10f), new Vector2(360f, 56f));
-            Button restart = CreateButton(pausePanel, "RestartButton", new Vector2(0.5f, 0.5f), new Vector2(0f, -60f), new Vector2(360f, 56f));
-            Set(view, "resumeButton", resume);
-            Set(view, "restartButton", restart);
-            Wire(resume, view.OnResumeClicked);
-            Wire(restart, view.OnRestartClicked);
-
-            // --- 05 Failed ------------------------------------------------------------
-            RectTransform failed = CreatePanel(root, "FailedPanel", Dim);
-            Set(view, "failedPanel", failed.gameObject);
-            Set(view, "failedText", CreateText(failed, "FailedText", 32, OffWhite, TextAnchor.MiddleCenter,
-                new Vector2(0.5f, 0.5f), new Vector2(0f, 70f), new Vector2(1150f, 380f)));
-            Button retry = CreateButton(failed, "RetryButton", new Vector2(0.5f, 0f), new Vector2(0f, 70f), new Vector2(360f, 56f));
-            Set(view, "retryButton", retry);
-            Wire(retry, view.OnRetryClicked);
-
-            // --- 06 Complete ----------------------------------------------------------
-            RectTransform complete = CreatePanel(root, "CompletePanel", Dim);
-            Set(view, "completePanel", complete.gameObject);
-            Set(view, "completeText", CreateText(complete, "CompleteText", 30, OffWhite, TextAnchor.MiddleCenter,
-                new Vector2(0.5f, 0.5f), new Vector2(0f, 70f), new Vector2(1150f, 420f)));
-            Button replayMission = CreateButton(complete, "ReplayMissionButton", new Vector2(0.5f, 0f), new Vector2(-200f, 70f), new Vector2(360f, 56f));
-            Button replayMode = CreateButton(complete, "ReplayModeButton", new Vector2(0.5f, 0f), new Vector2(200f, 70f), new Vector2(360f, 56f));
-            Set(view, "replayMissionButton", replayMission);
-            Set(view, "replayModeButton", replayMode);
-            Wire(replayMission, view.OnReplayMissionClicked);
-            Wire(replayMode, view.OnReplayModeClicked);
-
-            // --- 07 Replay ------------------------------------------------------------
-            RectTransform replay = CreatePanel(root, "ReplayPanel", Dim);
-            Set(view, "replayPanel", replay.gameObject);
-            Set(view, "replayText", CreateText(replay, "ReplayText", 28, OffWhite, TextAnchor.MiddleCenter,
-                new Vector2(0.5f, 0.5f), new Vector2(0f, 70f), new Vector2(1150f, 420f)));
-            Button museum = CreateButton(replay, "MuseumButton", new Vector2(0.5f, 0f), new Vector2(-200f, 70f), new Vector2(360f, 56f));
-            Button back = CreateButton(replay, "BackToTitleButton", new Vector2(0.5f, 0f), new Vector2(200f, 70f), new Vector2(360f, 56f));
-            Set(view, "museumButton", museum);
-            Set(view, "backToTitleButton", back);
-            Wire(museum, view.OnMuseumClicked);
-            Wire(back, view.OnBackToTitleClicked);
-
-            // Everything starts hidden; the view shows the right panel on the first state change.
-            foreach (RectTransform p in new[] { hud, title, briefing, pausePanel, failed, complete, replay })
-                p.gameObject.SetActive(false);
+            BuildHud(root, flow, catchSystem, throwSystem, content);
+            BuildTitle(root, flow, content, animations);
+            BuildBriefing(root, flow, content);
+            BuildFailed(root, flow, content);
+            BuildComplete(root, flow, content);
+            BuildReplay(root, flow, content);
+            BuildPause(root, flow, content);
         }
 
-        private static void CreateThrowMeter(Transform parent, ThrowSystem throwSystem, PlaceholderFlowView view)
+        private static T CreateView<T>(Transform root, string name, GameFlowController flow, MissionContent content,
+            out RectTransform panel) where T : ScreenView
+        {
+            RectTransform viewRt = Stretch(new GameObject(name, typeof(RectTransform)).GetComponent<RectTransform>(), root);
+            var view = viewRt.gameObject.AddComponent<T>();
+            panel = Stretch(new GameObject(name + "Panel", typeof(RectTransform)).GetComponent<RectTransform>(), viewRt);
+            Set(view, "flow", flow);
+            Set(view, "content", content);
+            Set(view, "panel", panel.gameObject);
+            panel.gameObject.SetActive(false); // the view shows it on the first state change
+            return view;
+        }
+
+        // --- 03/04 HUD ------------------------------------------------------------------
+        private static void BuildHud(Transform root, GameFlowController flow, CatchSystem catchSystem,
+            ThrowSystem throwSystem, MissionContent content)
+        {
+            var view = CreateView<HudView>(root, "Hud", flow, content, out RectTransform hud);
+            Set(view, "catchSystem", catchSystem);
+            Set(view, "throwSystem", throwSystem);
+            Set(view, "audioService", _audio);
+
+            Set(view, "promptText", Label(hud, "Prompt", _bold, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 3), Px(312, 10), true));
+            // Bottom centre: the top band holds the prompt, and below it the scoreboard must stay readable.
+            Set(view, "subText", Label(hud, "SubPrompt", _bold, Body, OffWhite, TextAnchor.LowerCenter, Bottom(0, 5), Px(140, 10), true));
+            Image chip = Panel(hud, "SituationChip", "UI/ui_chip_slice3", TopLeft(4, 13), Px(96, 12));
+            Set(view, "situationText", Label(chip.transform, "Situation", _regular, Body, Yellow, TextAnchor.MiddleCenter,
+                Center(0, 0), Px(96, 10), false));
+            Set(view, "modeText", Label(hud, "ModeLabel", _regular, Body, Orange, TextAnchor.UpperLeft, TopLeft(4, 27), Px(116, 10), true));
+
+            // Icons sit on the second row so the prompt line can use the full width.
+            Button pause = IconButton(hud, "PauseButton", "UI/icon_pause", TopRight(4, 13), 2, out _);
+            Wire(pause, view.OnPauseClicked);
+            Image soundIcon;
+            Button sound = IconButton(hud, "SoundButton", "UI/icon_sound_on", TopRight(28, 13), 2, out soundIcon);
+            Wire(sound, view.OnSoundClicked);
+            Set(view, "soundIcon", soundIcon);
+            Set(view, "soundOnSprite", LoadSprite("UI/icon_sound_on"));
+            Set(view, "soundOffSprite", LoadSprite("UI/icon_sound_off"));
+
+            // 04 catch-sequence banner.
+            RectTransform banner = Stretch(new GameObject("CatchBanner", typeof(RectTransform)).GetComponent<RectTransform>(), hud);
+            Set(view, "catchBanner", banner.gameObject);
+            Set(view, "catchHeadlineText", Label(banner, "Headline", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 40), Px(300, 20), true));
+            Set(view, "skipHintText", Label(banner, "SkipHint", _regular, Body, OffWhite, TextAnchor.LowerCenter, Bottom(0, 6), Px(200, 10), true));
+            banner.gameObject.SetActive(false);
+
+            // Stage C meter + labels.
+            ThrowMeterView meter = CreateThrowMeter(hud, throwSystem);
+            Set(view, "throwMeter", meter);
+            Set(view, "throwLabelText", Label(hud, "ThrowLabel", _bold, Body, Yellow, TextAnchor.LowerCenter, Bottom(0, 70), Px(120, 10), true));
+            // Below the meter: at throw time the outfielder stands on the warning track above it.
+            Set(view, "throwFeedbackText", Label(hud, "ThrowFeedback", _bold, Big, Orange, TextAnchor.UpperCenter, Bottom(0, 30), Px(300, 20), true));
+
+            CreateOnScreenControls(hud);
+        }
+
+        private static ThrowMeterView CreateThrowMeter(Transform parent, ThrowSystem throwSystem)
         {
             // Outer image = off-white frame. "Track" = inner area (no graphic of its own); the
-            // left track piece, the zone and the right track piece tile it without overlapping.
-            // ThrowMeterView lays them out in pixels when the throw starts.
-            Image meter = CreateImage(parent, "ThrowMeter", OffWhite, new Vector2(0.5f, 0f), new Vector2(0f, 230f), new Vector2(648f, 48f));
-            var trackGo = new GameObject("Track", typeof(RectTransform));
-            trackGo.transform.SetParent(meter.transform, false);
-            var track = trackGo.GetComponent<RectTransform>();
+            // left track piece, the zone and the right track piece tile it without overlapping
+            // (a fill drawn over a same-material background did not render in WebGL - M2 fix).
+            Image meter = Img(parent, "ThrowMeter", null, OffWhite, Bottom(0, 56), Px(160, 12));
+            var track = new GameObject("Track", typeof(RectTransform)).GetComponent<RectTransform>();
+            track.SetParent(meter.transform, false);
             track.anchorMin = Vector2.zero;
             track.anchorMax = Vector2.one;
-            track.offsetMin = new Vector2(4f, 4f);
-            track.offsetMax = new Vector2(-4f, -4f);
+            track.offsetMin = new Vector2(U, U);
+            track.offsetMax = new Vector2(-U, -U);
 
             // Default layout (zone 0.42-0.58) so the scene looks right in the editor too.
-            Image trackLeft = CreateImage(track, "TrackLeft", Midnight, new Vector2(0f, 0.5f), Vector2.zero, new Vector2(268.8f, 40f));
-            Image zone = CreateImage(track, "TargetZone", Green, new Vector2(0f, 0.5f), new Vector2(268.8f, 0f), new Vector2(102.4f, 40f));
-            Image trackRight = CreateImage(track, "TrackRight", Midnight, new Vector2(0f, 0.5f), new Vector2(371.2f, 0f), new Vector2(268.8f, 40f));
+            const float w = 160 * U - 2 * U, h = 12 * U - 2 * U;
+            Image trackLeft = Img(track, "TrackLeft", null, Midnight, new Vector2(0f, 0.5f), Vector2.zero, new Vector2(w * 0.42f, h));
+            Image zone = Img(track, "TargetZone", null, Yellow, new Vector2(0f, 0.5f), new Vector2(w * 0.42f, 0f), new Vector2(w * 0.16f, h));
+            Image trackRight = Img(track, "TrackRight", null, Midnight, new Vector2(0f, 0.5f), new Vector2(w * 0.58f, 0f), new Vector2(w * 0.42f, h));
             // Notches on the zone edges: a shape cue that works without colour.
-            Image leftNotch = CreateImage(zone.transform, "NotchLeft", Yellow, new Vector2(0f, 0.5f), Vector2.zero, new Vector2(6f, 64f));
-            Image rightNotch = CreateImage(zone.transform, "NotchRight", Yellow, new Vector2(1f, 0.5f), Vector2.zero, new Vector2(6f, 64f));
+            Image leftNotch = Img(zone.transform, "NotchLeft", null, OffWhite, new Vector2(0f, 0.5f), Vector2.zero, new Vector2(U * 1.5f, 16 * U));
+            Image rightNotch = Img(zone.transform, "NotchRight", null, OffWhite, new Vector2(1f, 0.5f), Vector2.zero, new Vector2(U * 1.5f, 16 * U));
             leftNotch.rectTransform.pivot = new Vector2(0.5f, 0.5f);
             rightNotch.rectTransform.pivot = new Vector2(0.5f, 0.5f);
 
-            Image needle = CreateImage(track, "Needle", Yellow, new Vector2(0f, 0.5f), Vector2.zero, new Vector2(10f, 72f));
+            Image needle = Img(track, "Needle", null, Red, new Vector2(0f, 0.5f), Vector2.zero, new Vector2(3 * U, 18 * U));
             needle.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            CreateImage(needle.transform, "NeedleCore", Midnight, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(2f, 60f))
+            Img(needle.transform, "NeedleCore", null, OffWhite, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(U, 14 * U))
                 .rectTransform.pivot = new Vector2(0.5f, 0.5f);
 
             var meterView = meter.gameObject.AddComponent<ThrowMeterView>();
@@ -409,91 +536,325 @@ namespace SayHeyDash.EditorTools.Scenes
             Set(meterView, "zone", zone.rectTransform);
             Set(meterView, "trackRight", trackRight.rectTransform);
             Set(meterView, "needle", needle.rectTransform);
-            Set(view, "throwMeter", meterView);
             foreach (Image i in meter.GetComponentsInChildren<Image>(true)) i.raycastTarget = false;
+            meter.gameObject.SetActive(false);
+            return meterView;
         }
 
         private static void CreateOnScreenControls(Transform parent)
         {
-            Sprite knob = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
-            var faded = new Color32(0xF5, 0xF1, 0xD9, 0x50);
-
-            Image stickBase = CreateImage(parent, "OnScreenStickBase", faded, new Vector2(0f, 0f), new Vector2(150f, 150f), new Vector2(200f, 200f));
-            stickBase.sprite = knob;
-            stickBase.raycastTarget = false;
+            const float k = 6f; // touch controls are drawn 6x for finger-sized targets
+            Image stickBase = Img(parent, "OnScreenStickBase", "UI/ui_stick_base", Color.white, new Vector2(0f, 0f),
+                new Vector2(110f, 110f), new Vector2(28 * k, 28 * k));
             stickBase.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            Image stickHandle = CreateImage(stickBase.transform, "OnScreenStickHandle", OffWhite, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(90f, 90f));
-            stickHandle.sprite = knob;
+            stickBase.raycastTarget = false;
+            stickBase.color = new Color(1f, 1f, 1f, 0.55f);
+            Image stickHandle = Img(stickBase.transform, "OnScreenStickHandle", "UI/ui_stick_knob", Color.white,
+                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(14 * k, 14 * k));
             stickHandle.rectTransform.pivot = new Vector2(0.5f, 0.5f);
             var stick = stickHandle.gameObject.AddComponent<OnScreenStick>();
             stick.movementRange = 60f;
             SetString(stick, "m_ControlPath", "<Gamepad>/leftStick");
 
-            Image actionButton = CreateImage(parent, "OnScreenActionButton", Orange, new Vector2(1f, 0f), new Vector2(-130f, 130f), new Vector2(140f, 140f));
-            actionButton.sprite = knob;
+            Image actionButton = Img(parent, "OnScreenActionButton", "UI/ui_action_button", Color.white, new Vector2(1f, 0f),
+                new Vector2(-110f, 110f), new Vector2(24 * k, 24 * k));
             actionButton.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            CreateText(actionButton.transform, "Label", 48, Midnight, TextAnchor.MiddleCenter,
-                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(140f, 140f)).text = "A";
             var onScreenButton = actionButton.gameObject.AddComponent<OnScreenButton>();
             SetString(onScreenButton, "m_ControlPath", "<Gamepad>/buttonSouth");
         }
 
-        private static RectTransform CreatePanel(Transform parent, string name, Color? background)
+        // --- 01 Title ------------------------------------------------------------------
+        private static void BuildTitle(Transform root, GameFlowController flow, MissionContent content,
+            OutfielderAnimationSet animations)
         {
-            var go = new GameObject(name, typeof(RectTransform));
-            go.transform.SetParent(parent, false);
-            var rt = go.GetComponent<RectTransform>();
+            var view = CreateView<TitleScreenView>(root, "Title", flow, content, out RectTransform panel);
+            Set(view, "audioService", _audio);
+            Image backdrop = Img(panel, "Backdrop", "Title/title_backdrop", Color.white, Vector2.zero, Vector2.zero, Vector2.zero);
+            Stretch(backdrop.rectTransform, panel);
+            backdrop.raycastTarget = true; // blocks clicks to the field
+
+            Set(view, "presentsText", Label(panel, "Presents", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 6), Px(300, 10), true));
+            Set(view, "arcadeModeText", Label(panel, "ArcadeMode", _bold, Body, Orange, TextAnchor.UpperCenter, Top(0, 16), Px(200, 10), true));
+            Sprite logo = LoadSprite("Title/title_logo");
+            Img(panel, "Logo", "Title/title_logo", Color.white, Top(0, 27), logo != null ? Px(logo.rect.width, logo.rect.height) : Vector2.zero)
+                .raycastTarget = false;
+            Set(view, "infoText", Label(panel, "Info", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 86), Px(200, 30), true));
+            Text pressStart = Label(panel, "PressStart", _bold, Body, Yellow, TextAnchor.UpperCenter, Top(0, 118), Px(200, 10), true);
+            pressStart.gameObject.AddComponent<BlinkingText>();
+            Set(view, "pressStartText", pressStart);
+
+            // The outfielder running under the ball, glove up (title-screen artwork).
+            Image hero = Img(panel, "TitleOutfielder", "Character/outfielder_run_reach_00", Color.white, TopLeft(244, 80), Px(64, 64));
+            hero.raycastTarget = false;
+            var heroAnim = hero.gameObject.AddComponent<SpriteAnimator>();
+            Set(heroAnim, "image", hero);
+            SetClip(heroAnim, "startClip", animations.runReach.frames, 10f, true);
+
+            PixelButton start = PixelBtn(panel, "StartButton", ButtonStyle.Primary, Top(0, 130), Px(72, 16), content.startButton);
+            PixelButton sound = PixelBtn(panel, "SoundButton", ButtonStyle.Secondary, TopLeft(26, 152), Px(68, 15), content.soundOnLabel);
+            PixelButton assisted = PixelBtn(panel, "AssistedButton", ButtonStyle.Secondary, TopLeft(102, 152), Px(120, 15), content.assistedOffLabel);
+            PixelButton credits = PixelBtn(panel, "CreditsButton", ButtonStyle.Secondary, TopLeft(230, 152), Px(64, 15), content.creditsButton);
+            Set(view, "startButton", start);
+            Set(view, "soundButton", sound);
+            Set(view, "assistedButton", assisted);
+            Set(view, "creditsButton", credits);
+            Set(view, "firstSelected", start.Button);
+            Wire(start.Button, view.OnStartClicked);
+            Wire(sound.Button, view.OnSoundClicked);
+            Wire(assisted.Button, view.OnAssistedClicked);
+            Wire(credits.Button, view.OnCreditsClicked);
+
+            // Credits overlay.
+            RectTransform creditsPanel = Stretch(new GameObject("CreditsPanel", typeof(RectTransform)).GetComponent<RectTransform>(), panel);
+            Stretch(Img(creditsPanel, "Dim", null, Dim, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, creditsPanel);
+            Image box = Panel(creditsPanel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(272, 166));
+            Set(view, "creditsPanel", creditsPanel.gameObject);
+            Set(view, "creditsTitleText", Label(box.transform, "Title", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 6), Px(240, 20), false));
+            Set(view, "creditsBodyText", Label(box.transform, "Body", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 28), Px(256, 110), false));
+            PixelButton back = PixelBtn(box.transform, "BackButton", ButtonStyle.Primary, Bottom(0, 5), Px(64, 16), content.closeButton);
+            SetAudioCue(back, AudioCue.UiBack);
+            Set(view, "creditsBackButton", back);
+            Wire(back.Button, view.OnCreditsBackClicked);
+            creditsPanel.gameObject.SetActive(false);
+        }
+
+        // --- 02 Mission objective -----------------------------------------------------
+        private static void BuildBriefing(Transform root, GameFlowController flow, MissionContent content)
+        {
+            var view = CreateView<BriefingScreenView>(root, "Briefing", flow, content, out RectTransform panel);
+            Stretch(Img(panel, "Dim", null, Dim, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel).GetComponent<Image>().raycastTarget = true;
+            Set(view, "headerText", Label(panel, "Header", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 6), Px(300, 20), true));
+            Image board = Panel(panel, "Scoreboard", "UI/ui_board_slice3", Top(0, 28), Px(180, 60));
+            Set(view, "factsText", Label(board.transform, "Facts", _bold, Body, OffWhite, TextAnchor.UpperLeft, TopLeft(10, 6), Px(160, 50), false));
+            Set(view, "objectiveText", Label(panel, "Objective", _bold, Body, Yellow, TextAnchor.UpperCenter, Top(0, 93), Px(310, 10), true));
+            Set(view, "setupText", Label(panel, "Setup", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 106), Px(290, 20), true));
+            Set(view, "controlsText", Label(panel, "Controls", _regular, Body, Orange, TextAnchor.UpperCenter, Top(0, 128), Px(290, 30), true));
+            PixelButton cont = PixelBtn(panel, "ContinueButton", ButtonStyle.Primary, Bottom(0, 4), Px(96, 16), content.continueButton);
+            Set(view, "continueButton", cont);
+            Set(view, "firstSelected", cont.Button);
+            Wire(cont.Button, view.OnContinueClicked);
+        }
+
+        // --- 05 Mission failed ---------------------------------------------------------
+        private static void BuildFailed(Transform root, GameFlowController flow, MissionContent content)
+        {
+            var view = CreateView<MissionFailedView>(root, "Failed", flow, content, out RectTransform panel);
+            Stretch(Img(panel, "Dim", null, DimLight, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel);
+            Image box = Panel(panel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(216, 112));
+            Set(view, "titleText", Label(box.transform, "Title", _bold, Big, Red, TextAnchor.UpperCenter, Top(0, 8), Px(200, 20), false));
+            Set(view, "reasonText", Label(box.transform, "Reason", _bold, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 32), Px(200, 10), false));
+            Set(view, "hintText", Label(box.transform, "Hint", _regular, Body, Orange, TextAnchor.UpperCenter, Top(0, 46), Px(200, 30), false));
+            Set(view, "promptText", Label(box.transform, "Prompt", _bold, Body, Yellow, TextAnchor.UpperCenter, Top(0, 76), Px(200, 10), false));
+            PixelButton retry = PixelBtn(box.transform, "RetryButton", ButtonStyle.Primary, Bottom(0, 8), Px(80, 16), content.retryButton);
+            Set(view, "retryButton", retry);
+            Set(view, "firstSelected", retry.Button);
+            Wire(retry.Button, view.OnRetryClicked);
+        }
+
+        // --- 06 Mission complete -------------------------------------------------------
+        private static void BuildComplete(Transform root, GameFlowController flow, MissionContent content)
+        {
+            var view = CreateView<MissionCompleteView>(root, "Complete", flow, content, out RectTransform panel);
+            Stretch(Img(panel, "Dim", null, DimLight, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel);
+            Image box = Panel(panel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(280, 164));
+            Transform b = box.transform;
+            Set(view, "titleText", Label(b, "Title", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 6), Px(270, 20), false));
+            Set(view, "subtitleText", Label(b, "Subtitle", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 28), Px(260, 20), false));
+            Set(view, "labelsText", Label(b, "Labels", _regular, Body, OffWhite, TextAnchor.UpperLeft, TopLeft(40, 54), Px(80, 30), false));
+            Set(view, "valuesText", Label(b, "Values", _bold, Body, OffWhite, TextAnchor.UpperRight, TopLeft(120, 54), Px(40, 30), false));
+            Set(view, "totalLabelText", Label(b, "TotalLabel", _bold, Body, Yellow, TextAnchor.UpperLeft, TopLeft(40, 92), Px(60, 10), false));
+            Set(view, "totalValueText", Label(b, "TotalValue", _bold, Big, Yellow, TextAnchor.UpperRight, TopLeft(80, 86), Px(80, 20), false));
+            Image badge = Img(b, "RankBadge", "UI/badge_legendary", Color.white, TopLeft(190, 52), Px(52, 44));
+            badge.raycastTarget = false;
+            Set(view, "rankBadge", badge);
+            Set(view, "rookieBadge", LoadSprite("UI/badge_rookie"));
+            Set(view, "allStarBadge", LoadSprite("UI/badge_allstar"));
+            Set(view, "legendaryBadge", LoadSprite("UI/badge_legendary"));
+            Set(view, "rankText", Label(b, "Rank", _bold, Body, Orange, TextAnchor.UpperCenter, TopLeft(160, 100), Px(112, 10), false));
+            Set(view, "outcomeText", Label(b, "Outcome", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 114), Px(256, 20), false));
+            PixelButton replay = PixelBtn(b, "ReplayMissionButton", ButtonStyle.Primary, new Vector2(0.5f, 0f), new Vector2(-52 * U, 8 * U), Px(80, 16), content.replayMissionButton);
+            PixelButton replayMode = PixelBtn(b, "ReplayModeButton", ButtonStyle.Secondary, new Vector2(0.5f, 0f), new Vector2(48 * U, 8 * U), Px(104, 16), content.replayModeButton);
+            Set(view, "replayButton", replay);
+            Set(view, "replayModeButton", replayMode);
+            Set(view, "firstSelected", replay.Button);
+            Wire(replay.Button, view.OnReplayClicked);
+            Wire(replayMode.Button, view.OnReplayModeClicked);
+        }
+
+        // --- 07 Replay ------------------------------------------------------------------
+        private static void BuildReplay(Transform root, GameFlowController flow, MissionContent content)
+        {
+            var view = CreateView<ReplayScreenView>(root, "Replay", flow, content, out RectTransform panel);
+            Stretch(Img(panel, "Dim", null, Dim, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel);
+            Image box = Panel(panel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(280, 164));
+            Set(view, "headerText", Label(box.transform, "Header", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 8), Px(260, 20), false));
+            Set(view, "recapText", Label(box.transform, "Recap", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 34), Px(260, 96), false));
+            PixelButton museum = PixelBtn(box.transform, "MuseumButton", ButtonStyle.Secondary, new Vector2(0.5f, 0f), new Vector2(-58 * U, 8 * U), Px(128, 16), content.museumButton);
+            PixelButton back = PixelBtn(box.transform, "BackToTitleButton", ButtonStyle.Primary, new Vector2(0.5f, 0f), new Vector2(66 * U, 8 * U), Px(112, 16), content.backToTitleButton);
+            Set(view, "museumButton", museum);
+            Set(view, "backButton", back);
+            Set(view, "firstSelected", back.Button);
+            Wire(museum.Button, view.OnMuseumClicked);
+            Wire(back.Button, view.OnBackClicked);
+        }
+
+        // --- Pause overlay --------------------------------------------------------------
+        private static void BuildPause(Transform root, GameFlowController flow, MissionContent content)
+        {
+            var view = CreateView<PauseMenuView>(root, "Pause", flow, content, out RectTransform panel);
+            Set(view, "audioService", _audio);
+            Stretch(Img(panel, "Dim", null, DimLight, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel);
+            Image box = Panel(panel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(150, 100));
+            Set(view, "titleText", Label(box.transform, "Title", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 8), Px(140, 20), false));
+            PixelButton resume = PixelBtn(box.transform, "ResumeButton", ButtonStyle.Primary, Top(0, 34), Px(100, 16), content.resumeButton);
+            PixelButton restart = PixelBtn(box.transform, "RestartButton", ButtonStyle.Secondary, Top(0, 55), Px(100, 15), content.restartButton);
+            PixelButton sound = PixelBtn(box.transform, "SoundButton", ButtonStyle.Secondary, Top(0, 75), Px(100, 15), content.soundOnLabel);
+            Set(view, "resumeButton", resume);
+            Set(view, "restartButton", restart);
+            Set(view, "soundButton", sound);
+            Set(view, "firstSelected", resume.Button);
+            Wire(resume.Button, view.OnResumeClicked);
+            Wire(restart.Button, view.OnRestartClicked);
+            Wire(sound.Button, view.OnSoundClicked);
+        }
+
+        // ---------------------------------------------------------------- UI helpers
+        // Positions/sizes are given in art pixels and converted to canvas units (x4).
+
+        private static Vector2 Px(float w, float h) => new Vector2(w * U, h * U);
+
+        private struct Spot { public Vector2 Anchor; public Vector2 Position; }
+
+        private static Spot Top(float x, float y) => new Spot { Anchor = new Vector2(0.5f, 1f), Position = new Vector2(x * U, -y * U) };
+        private static Spot TopLeft(float x, float y) => new Spot { Anchor = new Vector2(0f, 1f), Position = new Vector2(x * U, -y * U) };
+        private static Spot TopRight(float x, float y) => new Spot { Anchor = new Vector2(1f, 1f), Position = new Vector2(-x * U, -y * U) };
+        private static Spot Bottom(float x, float y) => new Spot { Anchor = new Vector2(0.5f, 0f), Position = new Vector2(x * U, y * U) };
+        private static Spot Center(float x, float y) => new Spot { Anchor = new Vector2(0.5f, 0.5f), Position = new Vector2(x * U, -y * U) };
+
+        private static RectTransform Stretch(RectTransform rt, Transform parent)
+        {
+            if (rt.parent != parent) rt.SetParent(parent, false);
             rt.anchorMin = Vector2.zero;
             rt.anchorMax = Vector2.one;
+            rt.pivot = new Vector2(0.5f, 0.5f);
             rt.offsetMin = Vector2.zero;
             rt.offsetMax = Vector2.zero;
-            if (background.HasValue) go.AddComponent<Image>().color = background.Value; // also blocks clicks to the field
             return rt;
         }
 
-        private static Text CreateText(Transform parent, string name, int size, Color color, TextAnchor alignment,
-            Vector2 anchor, Vector2 position, Vector2 dimensions)
+        private static Text Label(Transform parent, string name, Font font, int size, Color color, TextAnchor alignment,
+            Spot spot, Vector2 dimensions, bool shadow)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(Text));
             go.transform.SetParent(parent, false);
-            SetRect(go.GetComponent<RectTransform>(), anchor, position, dimensions);
+            SetRect(go.GetComponent<RectTransform>(), spot.Anchor, spot.Position, dimensions);
             var t = go.GetComponent<Text>();
-            t.font = _font;
+            t.font = font;
             t.fontSize = size;
             t.color = color;
             t.alignment = alignment;
             t.horizontalOverflow = HorizontalWrapMode.Wrap;
             t.verticalOverflow = VerticalWrapMode.Overflow;
+            t.supportRichText = false;
             t.raycastTarget = false;
+            t.text = name;
+            if (shadow)
+            {
+                var s = go.AddComponent<Shadow>();
+                s.effectColor = Midnight;
+                s.effectDistance = new Vector2(U, -U);
+            }
             return t;
         }
 
-        private static Image CreateImage(Transform parent, string name, Color color, Vector2 anchor, Vector2 position, Vector2 dimensions)
+        private static Image Img(Transform parent, string name, string sprite, Color color, Spot spot, Vector2 size) =>
+            Img(parent, name, sprite, color, spot.Anchor, spot.Position, size);
+
+        private static Image Img(Transform parent, string name, string sprite, Color color, Vector2 anchor, Vector2 position, Vector2 size)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(Image));
             go.transform.SetParent(parent, false);
-            SetRect(go.GetComponent<RectTransform>(), anchor, position, dimensions);
+            SetRect(go.GetComponent<RectTransform>(), anchor, position, size);
             var img = go.GetComponent<Image>();
             img.color = color;
+            if (sprite != null) img.sprite = LoadSprite(sprite);
+            img.raycastTarget = false;
             return img;
         }
 
-        private static Button CreateButton(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size)
+        private static Image Panel(Transform parent, string name, string sprite, Spot spot, Vector2 size)
         {
-            Image bg = CreateImage(parent, name, Color.white, anchor, position, size);
+            Image img = Img(parent, name, sprite, Color.white, spot, size);
+            img.type = Image.Type.Sliced;
+            img.raycastTarget = true; // panels block clicks to whatever is behind them
+            return img;
+        }
+
+        private static PixelButton PixelBtn(Transform parent, string name, ButtonStyle style, Spot spot, Vector2 size, string label) =>
+            PixelBtn(parent, name, style, spot.Anchor, spot.Position, size, label);
+
+        private static PixelButton PixelBtn(Transform parent, string name, ButtonStyle style, Vector2 anchor, Vector2 position,
+            Vector2 size, string label)
+        {
+            bool primary = style == ButtonStyle.Primary;
+            Image bg = Img(parent, name, primary ? "UI/ui_button_primary_slice3" : "UI/ui_button_secondary_slice3",
+                Color.white, anchor, position, size);
+            bg.type = Image.Type.Sliced;
+            bg.raycastTarget = true;
             var button = bg.gameObject.AddComponent<Button>();
             button.targetGraphic = bg;
+            button.transition = Selectable.Transition.SpriteSwap;
+            button.spriteState = new SpriteState
+            {
+                highlightedSprite = LoadSprite("UI/ui_button_selected_slice3"),
+                selectedSprite = LoadSprite("UI/ui_button_selected_slice3"),
+                pressedSprite = LoadSprite("UI/ui_button_pressed_slice3"),
+                disabledSprite = LoadSprite("UI/ui_button_disabled_slice3"),
+            };
+            Text text = Label(bg.transform, "Label", _bold, Body, primary ? Midnight : OffWhite, TextAnchor.MiddleCenter,
+                Center(0, -0.5f), size, false);
+            text.text = label;
+            Image cursor = Img(bg.transform, "Cursor", "UI/ui_cursor", Color.white, new Vector2(0f, 0.5f), new Vector2(3 * U, 0f), Px(6, 7));
+            cursor.rectTransform.pivot = new Vector2(0f, 0.5f);
+            cursor.enabled = false;
+
+            var pixel = bg.gameObject.AddComponent<PixelButton>();
+            Set(pixel, "label", text);
+            Set(pixel, "cursor", cursor);
+            Set(pixel, "audioService", _audio);
+            SetColor(pixel, "labelColor", primary ? Midnight : OffWhite);
+            SetColor(pixel, "selectedLabelColor", Midnight);
+            return pixel;
+        }
+
+        private static Button IconButton(Transform parent, string name, string sprite, Spot spot, int scale, out Image icon)
+        {
+            Sprite s = LoadSprite(sprite);
+            Vector2 size = s != null ? Px(s.rect.width * scale, s.rect.height * scale) : Px(16, 16);
+            icon = Img(parent, name, sprite, Color.white, spot, size);
+            icon.raycastTarget = true;
+            var button = icon.gameObject.AddComponent<Button>();
+            button.targetGraphic = icon;
             ColorBlock colors = button.colors;
-            colors.normalColor = Orange;
+            colors.normalColor = Color.white;
             colors.highlightedColor = Yellow;
-            colors.selectedColor = Yellow;
-            colors.pressedColor = OffWhite;
-            colors.disabledColor = new Color32(0x80, 0x80, 0x80, 0xFF);
+            colors.selectedColor = Color.white;
+            colors.pressedColor = Orange;
             colors.colorMultiplier = 1f;
             button.colors = colors;
-            CreateText(bg.transform, "Label", 24, Midnight, TextAnchor.MiddleCenter,
-                new Vector2(0.5f, 0.5f), Vector2.zero, size).text = name;
+            // No navigation: a HUD button must never hold focus, or Space would press it mid-play.
+            button.navigation = new Navigation { mode = Navigation.Mode.None };
+            var pixel = icon.gameObject.AddComponent<PixelButton>();
+            Set(pixel, "audioService", _audio);
+            SetBool(pixel, "selectOnHover", false);
             return button;
+        }
+
+        private static void SetAudioCue(PixelButton button, AudioCue cue)
+        {
+            var so = new SerializedObject(button);
+            so.FindProperty("clickCue").intValue = (int)cue;
+            so.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static void SetRect(RectTransform rt, Vector2 anchor, Vector2 position, Vector2 size)
@@ -508,14 +869,55 @@ namespace SayHeyDash.EditorTools.Scenes
         private static void Wire(Button button, UnityAction action) =>
             UnityEventTools.AddPersistentListener(button.onClick, action);
 
-        // ---------------------------------------------------------------- serialization helpers
+        // ---------------------------------------------------------------- assets
 
-        private static Sprite LoadSprite(string fileName)
+        /// <summary>Makes sure every M3 sprite uses the pixel-art import rules (and 9-slice borders).</summary>
+        private static void EnsureSpriteImportSettings()
         {
-            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(SpriteFolder + fileName);
-            if (sprite == null) Debug.LogError($"[MainSceneBuilder] Sprite not found: {SpriteFolder}{fileName}");
+            string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/_Project/Art/Sprites" });
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (path.Contains("/Prototype/")) continue;
+                if (AssetImporter.GetAtPath(path) is TextureImporter importer &&
+                    PixelArtTexturePostprocessor.Apply(importer, path))
+                    importer.SaveAndReimport();
+            }
+        }
+
+        private static Sprite LoadSprite(string relativePathNoExtension)
+        {
+            if (SpriteCache.TryGetValue(relativePathNoExtension, out Sprite cached) && cached != null) return cached;
+            string path = Sprites + relativePathNoExtension + ".png";
+            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            if (sprite == null)
+            {
+                _errors++;
+                Debug.LogError($"[MainSceneBuilder] Sprite not found: {path} (run Tools/ArtGen/generate_m3_art.py)");
+            }
+            SpriteCache[relativePathNoExtension] = sprite;
             return sprite;
         }
+
+        /// <summary>Loads prefix00, prefix01 ... until a frame is missing.</summary>
+        private static Sprite[] LoadFrames(string relativePrefix)
+        {
+            var frames = new List<Sprite>();
+            for (int i = 0; i < 64; i++)
+            {
+                Sprite s = AssetDatabase.LoadAssetAtPath<Sprite>($"{Sprites}{relativePrefix}{i:00}.png");
+                if (s == null) break;
+                frames.Add(s);
+            }
+            if (frames.Count == 0)
+            {
+                _errors++;
+                Debug.LogError($"[MainSceneBuilder] No frames found for {Sprites}{relativePrefix}NN.png");
+            }
+            return frames.ToArray();
+        }
+
+        // ---------------------------------------------------------------- serialization helpers
 
         private static void Set(Object target, string field, Object value)
         {
@@ -536,17 +938,55 @@ namespace SayHeyDash.EditorTools.Scenes
             }
         }
 
-        private static void SetString(Object target, string field, string value)
+        private static SerializedProperty Find(SerializedObject so, Object target, string field)
         {
-            var so = new SerializedObject(target);
             SerializedProperty prop = so.FindProperty(field);
             if (prop == null)
             {
                 _errors++;
                 Debug.LogError($"[MainSceneBuilder] Field '{field}' not found on {target.GetType().Name}.");
-                return;
             }
+            return prop;
+        }
+
+        private static void SetString(Object target, string field, string value)
+        {
+            var so = new SerializedObject(target);
+            SerializedProperty prop = Find(so, target, field);
+            if (prop == null) return;
             prop.stringValue = value;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetBool(Object target, string field, bool value)
+        {
+            var so = new SerializedObject(target);
+            SerializedProperty prop = Find(so, target, field);
+            if (prop == null) return;
+            prop.boolValue = value;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetColor(Object target, string field, Color value)
+        {
+            var so = new SerializedObject(target);
+            SerializedProperty prop = Find(so, target, field);
+            if (prop == null) return;
+            prop.colorValue = value;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetClip(Object target, string field, Sprite[] frames, float fps, bool loop)
+        {
+            var so = new SerializedObject(target);
+            SerializedProperty prop = Find(so, target, field);
+            if (prop == null) return;
+            prop.FindPropertyRelative("name").stringValue = field;
+            SerializedProperty array = prop.FindPropertyRelative("frames");
+            array.arraySize = frames.Length;
+            for (int i = 0; i < frames.Length; i++) array.GetArrayElementAtIndex(i).objectReferenceValue = frames[i];
+            prop.FindPropertyRelative("framesPerSecond").floatValue = fps;
+            prop.FindPropertyRelative("loop").boolValue = loop;
             so.ApplyModifiedPropertiesWithoutUndo();
         }
     }

@@ -17,6 +17,8 @@ namespace SayHeyDash.Gameplay
         [SerializeField] private SpriteRenderer shadow;
         [Tooltip("Ground Y the ball cannot pass (base of the outfield wall).")]
         [SerializeField] private float wallBaseY = 0.05f;
+        [Tooltip("Off: the outfielder's catch/spin frames draw the ball in the glove, so the ball sprite hides until the throw.")]
+        [SerializeField] private bool showWhenHeld;
 
         private Mode _mode = Mode.Hidden;
         private BallTrajectory _trajectory;
@@ -73,7 +75,7 @@ namespace SayHeyDash.Gameplay
             _mode = Mode.Held;
             _holder = holder;
             _holderOffset = worldPosition - (Vector2)holder.position;
-            ball.enabled = true;
+            ball.enabled = showWhenHeld;
             shadow.enabled = false;
             ball.transform.position = worldPosition;
         }

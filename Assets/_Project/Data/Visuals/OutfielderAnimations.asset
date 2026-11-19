@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adb0f23932afcf54caccadc51233c5cf, type: 3}
+  m_Name: OutfielderAnimations
+  m_EditorClassIdentifier: SayHeyDash.Runtime::SayHeyDash.Data.OutfielderAnimationSet
+  idle:
+    name: idle
+    frames:
+    - {fileID: 21300000, guid: 08fb93ffe35f75448889ccddbd63a37d, type: 3}
+    - {fileID: 21300000, guid: 69a11907701659d48b3d74ee6e56a9f0, type: 3}
+    - {fileID: 21300000, guid: 3d1a19bbeea94aa4e8bdcd96f1eb9d95, type: 3}
+    - {fileID: 21300000, guid: 6b877db5b07e40a468d620b81a64c60b, type: 3}
+    framesPerSecond: 4
+    loop: 1
+  run:
+    name: run
+    frames:
+    - {fileID: 21300000, guid: 095eca893b3150c488d3b6d2dff81f09, type: 3}
+    - {fileID: 21300000, guid: d949d969e82fbed439e5f67e08d02cbc, type: 3}
+    - {fileID: 21300000, guid: 900844640cf9e2a4ab5a0cd5883def2f, type: 3}
+    - {fileID: 21300000, guid: ce0665166c64966468a7892af7ef1652, type: 3}
+    - {fileID: 21300000, guid: 7c4ee16f1b1d786449e3e594c7d1650e, type: 3}
+    - {fileID: 21300000, guid: c0e8da5f38ed96546a6ab966e88de61d, type: 3}
+    framesPerSecond: 12
+    loop: 1
+  runReach:
+    name: runReach
+    frames:
+    - {fileID: 21300000, guid: e3152d2896683cf49b5bd2b3371bf5a2, type: 3}
+    - {fileID: 21300000, guid: feb0ec908b1098647ba7bacc141aad0f, type: 3}
+    - {fileID: 21300000, guid: 5c65b0edd988c4148aeaadebc895e704, type: 3}
+    - {fileID: 21300000, guid: 22466b49f3f30574a8fe6aa9b0b3a76e, type: 3}
+    - {fileID: 21300000, guid: eda2ef3627930474fa7441caad0817a7, type: 3}
+    - {fileID: 21300000, guid: be41516303bad6946a1f15f6377a009e, type: 3}
+    framesPerSecond: 12
+    loop: 1
+  reachIdle:
+    name: reachIdle
+    frames:
+    - {fileID: 21300000, guid: 5c65b0edd988c4148aeaadebc895e704, type: 3}
+    framesPerSecond: 1
+    loop: 1
+  catchBall:
+    name: catch
+    frames:
+    - {fileID: 21300000, guid: 783b8c6ca0c7d304ea38e7efd71c6747, type: 3}
+    - {fileID: 21300000, guid: baad3894bb0371a498744d4e2c05abb9, type: 3}
+    - {fileID: 21300000, guid: b66d93f6bd4c84b4891bb6e495f7203b, type: 3}
+    - {fileID: 21300000, guid: e97942d69d46f434494e64416fdb1cb0, type: 3}
+    framesPerSecond: 12
+    loop: 0
+  whiff:
+    name: whiff
+    frames:
+    - {fileID: 21300000, guid: 0b80e3b4a9315a944a2ce808ce1bd735, type: 3}
+    - {fileID: 21300000, guid: 60f55fa30e3a6764396d23c2eb293fb8, type: 3}
+    - {fileID: 21300000, guid: bfb0fac0ae541fa4aa7ff259dc8e60a0, type: 3}
+    framesPerSecond: 10
+    loop: 0
+  spin:
+    name: spin
+    frames:
+    - {fileID: 21300000, guid: 2cbcb188413d0a149b9e3ea5622bd936, type: 3}
+    - {fileID: 21300000, guid: 3f650cd60c04e024c81e491905ef7c23, type: 3}
+    - {fileID: 21300000, guid: 877902adae02b0f4f9a3cc97bdf87cb9, type: 3}
+    framesPerSecond: 10
+    loop: 0
+  throwReady:
+    name: throwReady
+    frames:
+    - {fileID: 21300000, guid: 5ec93b37cb6377b4193af6bdf33dbb0e, type: 3}
+    framesPerSecond: 1
+    loop: 1
+  throwRelease:
+    name: throwRelease
+    frames:
+    - {fileID: 21300000, guid: 02d38fcbd82433049b56068b70541f10, type: 3}
+    - {fileID: 21300000, guid: 7f4bb21ec054d8744940a18eb536b7a2, type: 3}
+    - {fileID: 21300000, guid: a4d510e465186844eaf74ded7503caeb, type: 3}
+    - {fileID: 21300000, guid: cbcea605d72421f43b5c226d08146d50, type: 3}
+    framesPerSecond: 14
+    loop: 0

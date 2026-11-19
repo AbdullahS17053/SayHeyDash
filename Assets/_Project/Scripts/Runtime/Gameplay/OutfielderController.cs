@@ -15,8 +15,10 @@ namespace SayHeyDash.Gameplay
         [SerializeField] private GameInput input;
         [SerializeField] private GameplayTuning tuning;
         [SerializeField] private SpriteRenderer body;
-        [Tooltip("Glove position relative to the feet when facing right.")]
-        [SerializeField] private Vector2 gloveOffset = new Vector2(0.35f, 0.65f);
+        [Tooltip("Glove position relative to the feet when facing right (matches the catch frames).")]
+        [SerializeField] private Vector2 gloveOffset = new Vector2(0.45f, 1.1f);
+        [Tooltip("Throwing hand at release, relative to the feet when facing right (matches the throw frames).")]
+        [SerializeField] private Vector2 throwReleaseOffset = new Vector2(0.45f, 0.85f);
 
         private Vector2 _velocity;
         private bool _controlEnabled;
@@ -31,6 +33,11 @@ namespace SayHeyDash.Gameplay
 
         public Vector2 GlovePosition =>
             Position + new Vector2(_facingRight ? gloveOffset.x : -gloveOffset.x, gloveOffset.y);
+
+        public Vector2 ThrowReleasePosition =>
+            Position + new Vector2(_facingRight ? throwReleaseOffset.x : -throwReleaseOffset.x, throwReleaseOffset.y);
+
+        public bool FacingRight => _facingRight;
 
         private void Awake()
         {
@@ -56,8 +63,12 @@ namespace SayHeyDash.Gameplay
             if (!value) _velocity = Vector2.zero;
         }
 
-        /// <summary>Turn toward the infield for the throw (placeholder pose until M3 animations).</summary>
+        /// <summary>Turn toward the infield for the throw (the spin itself is drawn by OutfielderAnimator).</summary>
         public void FaceTowards(Vector2 worldPoint) => Face(worldPoint.x >= Position.x);
+
+        /// <summary>Test hook: replaces the input direction (null = use real input). Batch-mode
+        /// test runs have no window focus, so simulated device input is dropped.</summary>
+        internal Vector2? MoveOverride { get; set; }
 
         /// <summary>Test / tooling hook: place the feet directly.</summary>
         internal void TeleportTo(Vector2 position)
@@ -70,7 +81,7 @@ namespace SayHeyDash.Gameplay
         {
             if (!_controlEnabled) return;
 
-            Vector2 move = input.Move;
+            Vector2 move = MoveOverride ?? input.Move;
             if (move.sqrMagnitude > 1f) move.Normalize();
             Vector2 targetVelocity = move * tuning.playerRunSpeed;
             _velocity = Vector2.MoveTowards(_velocity, targetVelocity, tuning.playerAcceleration * Time.deltaTime);
