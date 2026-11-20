@@ -9,8 +9,8 @@
 | Engine | **Unity 6.3 LTS (6000.3.9f1)**, C#, URP 2D — *replaces the Godot 4 suggested in the GDD* |
 | Target | WebGL (desktop + mobile browsers), embedded in the client's Wix site |
 | Design source | `THE SAY HEY DASH 2D GAME.pdf` (GDD) |
-| Current milestone | **Milestone 3 — Visual Production: complete, awaiting review** |
-| Last updated | 2026-11-19 |
+| Current milestone | **Milestone 3 — Visual Production: client feedback applied (new "sunset arcade" palette), awaiting review** |
+| Last updated | 2026-11-20 |
 
 ---
 
@@ -20,7 +20,7 @@
 |---|---|---|
 | 1 | Discovery & Technical Proof | ✅ Delivered — awaiting client review |
 | 2 | Gameplay Prototype | ✅ Delivered — awaiting client review |
-| 3 | Visual Production | ✅ Delivered — awaiting client review (art/palette approval: Q1, Q2) |
+| 3 | Visual Production | ✅ Delivered 2026-11-19 · client feedback (palette) applied 2026-11-20 — awaiting review of the new palette |
 | 4 | Content & Polish | ⏳ Not started (waiting for "Start Milestone 4") |
 | 5 | Testing & Final Handover | ⏳ |
 
@@ -99,13 +99,21 @@ Full report, editing guide and test results: [Docs/06_M3_Visual_Production.md](D
 - Gameplay touch-ups: `catchHeight` 0.65 → 1.1 (glove height; timing unchanged), ball hidden while in the glove, throw leaves from the throwing hand, throw meter recoloured (yellow zone, red needle), word feedback after the throw.
 - Tests: EditMode 70 (+ frame timing, font covers every on-screen string, every cue has a clip, every clip has frames, throw feedback words); PlayMode 9 (+ `PresentationTests`: one screen per state, animation follows the play, ball in glove, run → idle, mute). `ScreenGalleryCapture` (Explicit) writes `Docs/img/m3_screens/*.png`.
 
+**Milestone 3 — client feedback round 1 (2026-11-20)**
+- Client asked for "a slightly darker, more vibrant retro arcade feel" (deep purples, sunset oranges, muted greens, touches of bright yellow), with no changes to characters, animations or gameplay. Reference GIF: colours only.
+- New **"sunset arcade" palette** in `Tools/ArtGen/generate_m3_art.py` (adds Plum `#5B2C6F` and Sunset rose `#B4436C`; darker midnight/deep purple, warmer orange, brighter yellow, muted greens). Swatches: [Docs/02 §1](Docs/02_Art_Direction.html).
+- Sunset sky bands (1 px dither, no gradients): stadium sky behind the light towers fades purple → yellow at the bleacher line; title backdrop keeps the sunburst in the purple upper sky and glows rose → orange → yellow above the stadium (title text stays on purple for legibility).
+- Menu / results panels now deep purple with a plum inset; crowd gains sunset-rose shirts.
+- Outfielder colours **pinned** to the approved M3 values (`CHAR_*` constants) so the character is pixel-identical; layout, animation and gameplay untouched.
+- Matching colours in `MainSceneBuilder`, `HudView` / `PixelButton` defaults and the WebGL template (loader, `theme-color`). Scene rebuilt; EditMode 70/70, PlayMode 9/9; screenshots refreshed in `Docs/img/m3_screens/`.
+
 ## Pending / next (Milestone 4 — do not start until requested)
 - Historical narrative + animated replay on Screen 07 (client-approved copy, Q1/Q6), runner animation (lead runner holds at third).
 - Final scoring and rankings sign-off (Q6).
 - Sound mixing and a settings screen: `SettingsService` (mute, reduced motion, assisted mode persisted).
 - Mobile controls: show the on-screen stick/button on touch devices only; rotate-to-landscape overlay.
 - Accessibility pass (reduced-motion toggle in the UI, focus order, contrast check).
-- Client feedback on the M3 art (character, stadium, palette) and the developer credit line.
+- Client sign-off on the revised "sunset arcade" palette (feedback round 1 applied 2026-11-20) and the developer credit line.
 - Delete the M1 prototype code/scene once the client confirms M2.
 
 ## Open questions for the client
@@ -159,6 +167,7 @@ Full table: [Docs/04 §6](Docs/04_WebGL_and_Wix_Feasibility.md#6-findings-limita
 | 2026-11-19 | `catchHeight` 0.65 → 1.1 | Ball meets the glove of the over-the-shoulder pose; perfect-catch time unchanged |
 | 2026-11-19 | HUD prompt in the top sky band, zone label bottom centre | The fly ball never rises above row ~37, so prompts never hide the ball or the scoreboard |
 | 2026-11-19 | `OutfielderController.MoveOverride` test hook | Batch-mode runs have no window focus, so simulated keyboard input is dropped |
+| 2026-11-20 | "Sunset arcade" palette replaces the GDD palette everywhere except the outfielder | Client feedback on M3 (darker, more vibrant retro arcade; reference GIF for colours only). Character colours pinned so the approved character is unchanged |
 
 ---
 
@@ -181,7 +190,7 @@ Unity → Window → General → **Test Runner** → EditMode / PlayMode → Run
 ## How to build for the web
 
 - Editor: **Say Hey Dash → Build → WebGL (Release)** (or *Development*). Output: `Builds/WebGL/`.
-- Milestone 3 deliverable build: `Builds/SayHeyDash_M3_WebGL.zip` (2026-11-19). M2 build: `Builds/SayHeyDash_M2_WebGL.zip`. Upload the zip as-is to itch.io (Kind: HTML, "played in the browser"), or unzip it onto any HTTPS static host. No special server headers are needed.
+- Latest build (M3 + new palette): `Builds/SayHeyDash_M3_Palette_WebGL.zip` (2026-11-20). Original M3 deliverable: `Builds/SayHeyDash_M3_WebGL.zip` (2026-11-19). M2 build: `Builds/SayHeyDash_M2_WebGL.zip`. Upload the zip as-is to itch.io (Kind: HTML, "played in the browser"), or unzip it onto any HTTPS static host. No special server headers are needed.
 - **Always package with** `py -I Tools/Release/zip_webgl.py Builds/WebGL Builds/<name>.zip`. Do **not** use Windows' `Compress-Archive` or "Send to → Compressed folder": they write backslash paths, and itch.io then shows an unstyled page with "Could not load the game files".
 - Command line (editor closed):
   ```bash

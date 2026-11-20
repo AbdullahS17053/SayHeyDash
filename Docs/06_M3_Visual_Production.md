@@ -1,6 +1,6 @@
 # 06 — Milestone 3: Visual Production
 
-**Status:** delivered for review (2026-11-19). All art and audio are original and still need the client's approval (palette Q2, names/likeness Q1). Previews: [outfielder sheet](img/m3_outfielder_preview.png), [stadium](img/m3_stadium_preview.png), [title](img/m3_title_preview.png).
+**Status:** delivered for review (2026-11-19). **2026-11-20:** client feedback applied — new "sunset arcade" palette (deep purples, sunset oranges, muted greens, bright yellow; see [Docs/02 §1](02_Art_Direction.html)); character, animation and gameplay unchanged. Screenshots below are the new palette. All art and audio are original and still need the client's approval (palette Q2, names/likeness Q1). Previews: [outfielder sheet](img/m3_outfielder_preview.png), [stadium](img/m3_stadium_preview.png), [title](img/m3_title_preview.png).
 
 ## 1. GDD deliverables
 

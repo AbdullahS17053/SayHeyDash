@@ -1,10 +1,10 @@
-/* The Say Hey Dash - WebGL template styles. Palette from the GDD (pending client approval). */
+/* The Say Hey Dash - WebGL template styles. "Sunset arcade" palette (client feedback 2026-11-20). */
 :root {
-  --shd-midnight: #17152F;
-  --shd-yellow: #F6CE4B;
-  --shd-orange: #F38B37;
-  --shd-offwhite: #F5F1D9;
-  --shd-red: #D94D58;
+  --shd-midnight: #1B1030;
+  --shd-yellow: #FFD83D;
+  --shd-orange: #F57F32;
+  --shd-offwhite: #FBF0D5;
+  --shd-red: #E04858;
   --shd-font: "Courier New", Courier, monospace; /* replaced by the licensed pixel font in M3 */
 }
 

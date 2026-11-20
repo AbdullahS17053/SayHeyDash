@@ -54,13 +54,14 @@ namespace SayHeyDash.EditorTools.Scenes
         private const int Body = 40;           // Text.fontSize: 1 font px = 1 art px
         private const int Big = 80;            // 2 art px per font px
 
-        private static readonly Color32 Midnight = new Color32(0x17, 0x15, 0x2F, 0xFF);
-        private static readonly Color32 Yellow = new Color32(0xF6, 0xCE, 0x4B, 0xFF);
-        private static readonly Color32 Orange = new Color32(0xF3, 0x8B, 0x37, 0xFF);
-        private static readonly Color32 OffWhite = new Color32(0xF5, 0xF1, 0xD9, 0xFF);
-        private static readonly Color32 Red = new Color32(0xD9, 0x4D, 0x58, 0xFF);
-        private static readonly Color32 Dim = new Color32(0x17, 0x15, 0x2F, 0xD8);
-        private static readonly Color32 DimLight = new Color32(0x17, 0x15, 0x2F, 0xA0);
+        // "Sunset arcade" palette (client feedback 2026-11-20) - must match Tools/ArtGen.
+        private static readonly Color32 Midnight = new Color32(0x1B, 0x10, 0x30, 0xFF);
+        private static readonly Color32 Yellow = new Color32(0xFF, 0xD8, 0x3D, 0xFF);
+        private static readonly Color32 Orange = new Color32(0xF5, 0x7F, 0x32, 0xFF);
+        private static readonly Color32 OffWhite = new Color32(0xFB, 0xF0, 0xD5, 0xFF);
+        private static readonly Color32 Red = new Color32(0xE0, 0x48, 0x58, 0xFF);
+        private static readonly Color32 Dim = new Color32(0x1B, 0x10, 0x30, 0xD8);
+        private static readonly Color32 DimLight = new Color32(0x1B, 0x10, 0x30, 0xA0);
 
         private enum ButtonStyle { Primary, Secondary }
 

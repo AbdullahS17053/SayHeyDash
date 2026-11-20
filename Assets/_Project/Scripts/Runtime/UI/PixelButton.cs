@@ -17,8 +17,8 @@ namespace SayHeyDash.UI
     {
         [SerializeField] private Text label;
         [SerializeField] private Graphic cursor;
-        [SerializeField] private Color labelColor = new Color32(0x17, 0x15, 0x2F, 0xFF);
-        [SerializeField] private Color selectedLabelColor = new Color32(0x17, 0x15, 0x2F, 0xFF);
+        [SerializeField] private Color labelColor = new Color32(0x1B, 0x10, 0x30, 0xFF);
+        [SerializeField] private Color selectedLabelColor = new Color32(0x1B, 0x10, 0x30, 0xFF);
         [Tooltip("Optional: plays UI move / confirm sounds.")]
         [SerializeField] private AudioService audioService;
         [SerializeField] private AudioCue clickCue = AudioCue.UiConfirm;

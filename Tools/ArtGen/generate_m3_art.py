@@ -29,27 +29,38 @@ SPRITES = os.path.join(ART, "Sprites")
 PREVIEW_DIR = os.path.join(ROOT, "Docs", "img")
 
 # --- Palette ---------------------------------------------------------------
-MIDNIGHT = (0x17, 0x15, 0x2F, 255)
-YELLOW = (0xF6, 0xCE, 0x4B, 255)
-ORANGE = (0xF3, 0x8B, 0x37, 255)
-GREEN = (0x3C, 0x76, 0x59, 255)
-OFFWHITE = (0xF5, 0xF1, 0xD9, 255)
-RED = (0xD9, 0x4D, 0x58, 255)
-DUSK = (0x2E, 0x2A, 0x52, 255)
-GREEN_DARK = (0x2C, 0x5A, 0x44, 255)
-GREEN_LIGHT = (0x46, 0x86, 0x6A, 255)
-DIRT = (0x9C, 0x6B, 0x3E, 255)
+# "Sunset arcade" palette (client feedback after M3, 2026-11-20): deep purples, sunset
+# oranges, muted greens and touches of bright yellow. Darker overall than the M3 palette.
+MIDNIGHT = (0x1B, 0x10, 0x30, 255)     # outlines, deepest sky, panels
+DUSK = (0x33, 0x20, 0x4F, 255)         # deep purple: bleachers, panel insets
+PLUM = (0x5B, 0x2C, 0x6F, 255)         # mid purple: sky bands
+ROSE = (0xB4, 0x43, 0x6C, 255)         # sunset magenta: sky band near the horizon
+ORANGE = (0xF5, 0x7F, 0x32, 255)       # sunset orange
+YELLOW = (0xFF, 0xD8, 0x3D, 255)       # bright yellow accents
+OFFWHITE = (0xFB, 0xF0, 0xD5, 255)     # warm cream text
+RED = (0xE0, 0x48, 0x58, 255)
+GREEN = (0x46, 0x66, 0x4A, 255)        # muted greens
+GREEN_DARK = (0x2F, 0x46, 0x3A, 255)
+GREEN_LIGHT = (0x55, 0x75, 0x53, 255)
+DIRT = (0x96, 0x5A, 0x3A, 255)
 SKIN = (0x7A, 0x4A, 0x2E, 255)
 LEATHER = (0xA8, 0x5F, 0x2C, 255)
-SHADOW = (0x17, 0x15, 0x2F, 140)
+SHADOW = (0x1B, 0x10, 0x30, 140)
 CLEAR = (0, 0, 0, 0)
 WHITE = (255, 255, 255, 255)  # font atlas only (tinted at runtime)
+
+# The outfielder keeps his approved M3 colours exactly (client: no character changes).
+CHAR_OUTLINE = (0x17, 0x15, 0x2F, 255)
+CHAR_CAP = (0x2E, 0x2A, 0x52, 255)
+CHAR_WHITE = (0xF5, 0xF1, 0xD9, 255)
+CHAR_RED = (0xD9, 0x4D, 0x58, 255)
 
 PALETTE = {
     "K": MIDNIGHT, "Y": YELLOW, "O": ORANGE, "G": GREEN, "W": OFFWHITE, "R": RED,
     "D": DUSK, "g": GREEN_DARK, "l": GREEN_LIGHT, "T": DIRT, "S": SKIN, "L": LEATHER,
-    ".": CLEAR, "#": WHITE,
+    "P": PLUM, "M": ROSE, ".": CLEAR, "#": WHITE,
 }
+CHAR_KEY = dict(PALETTE, K=CHAR_OUTLINE, D=CHAR_CAP, W=CHAR_WHITE, R=CHAR_RED)
 
 
 # --- PNG + canvas helpers ----------------------------------------------------
@@ -213,7 +224,7 @@ def stamp(img, layers):
     for (x, y) in union:
         for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
             if (x + dx, y + dy) not in union:
-                put(img, x + dx, y + dy, MIDNIGHT)
+                put(img, x + dx, y + dy, CHAR_OUTLINE)
     for pts, color in layers:
         for (x, y) in pts:
             put(img, x, y, color)
@@ -221,7 +232,7 @@ def stamp(img, layers):
 
 def head_layers(kind, neck, flip=False):
     rows = HEADS[kind]
-    img = from_rows(rows)
+    img = from_rows(rows, CHAR_KEY)
     if flip:
         img = flip_h(img)
     h, w = len(img), len(img[0])
@@ -234,23 +245,23 @@ def head_layers(kind, neck, flip=False):
             if c[3] > 0:
                 by_color.setdefault(c, set()).add((ox + x, oy + y))
     # Stable order: cap, skin, then details (eye) last.
-    order = [DUSK, SKIN, MIDNIGHT]
+    order = [CHAR_CAP, SKIN, CHAR_OUTLINE]
     return [(by_color[c], c) for c in order if c in by_color]
 
 
 def leg_layers(hip, knee, foot, toe=1):
     mid = lerp(knee, foot, 0.45)
     return [
-        (capsule(hip[0], hip[1], knee[0], knee[1], 1.6), OFFWHITE),
-        (capsule(knee[0], knee[1], mid[0], mid[1], 1.35), OFFWHITE),
-        (capsule(mid[0], mid[1], foot[0], foot[1], 1.15), RED),
-        (capsule(foot[0], foot[1] + 0.3, foot[0] + 2.0 * toe, foot[1] + 0.3, 1.0), MIDNIGHT),
+        (capsule(hip[0], hip[1], knee[0], knee[1], 1.6), CHAR_WHITE),
+        (capsule(knee[0], knee[1], mid[0], mid[1], 1.35), CHAR_WHITE),
+        (capsule(mid[0], mid[1], foot[0], foot[1], 1.15), CHAR_RED),
+        (capsule(foot[0], foot[1] + 0.3, foot[0] + 2.0 * toe, foot[1] + 0.3, 1.0), CHAR_OUTLINE),
     ]
 
 
 def arm_layers(sho, elb, hand, glove=False, ball=False):
     layers = [
-        (capsule(sho[0], sho[1], elb[0], elb[1], 1.35), OFFWHITE),
+        (capsule(sho[0], sho[1], elb[0], elb[1], 1.35), CHAR_WHITE),
         (capsule(elb[0], elb[1], hand[0], hand[1], 1.1), SKIN),
     ]
     if glove:
@@ -258,12 +269,12 @@ def arm_layers(sho, elb, hand, glove=False, ball=False):
         layers.append((g, LEATHER))
         if ball:
             bx, by = int(math.floor(hand[0])), int(math.floor(hand[1])) - 1
-            layers.append(({(bx, by), (bx + 1, by), (bx, by + 1), (bx + 1, by + 1)}, OFFWHITE))
+            layers.append(({(bx, by), (bx + 1, by), (bx, by + 1), (bx + 1, by + 1)}, CHAR_WHITE))
     else:
         layers.append((capsule(hand[0], hand[1], hand[0], hand[1], 1.2), SKIN))
         if ball:
             bx, by = int(math.floor(hand[0])), int(math.floor(hand[1])) - 1
-            layers.append(({(bx, by), (bx + 1, by)}, OFFWHITE))
+            layers.append(({(bx, by), (bx + 1, by)}, CHAR_WHITE))
     return layers
 
 
@@ -274,7 +285,7 @@ def torso_layers(hip, sho):
         # Belt: the bottom two rows of the torso around the hip.
         if abs((y + 0.5) - (hip[1] + 0.6)) < 0.8:
             belt.add((x, y))
-    return [(pts, OFFWHITE), (belt, RED)]
+    return [(pts, CHAR_WHITE), (belt, CHAR_RED)]
 
 
 def draw_pose(p):
@@ -745,9 +756,28 @@ CROWD_TOP, CROWD_H = 26, 44
 FLAGS_TOP, FLAGS_H = 0, 12
 
 
+def sky_colour(stops, x, y):
+    """Banded sunset sky. stops: [(first_row, colour), ...] top to bottom. The first row of
+    each band is a 1 px checker dither with the band above (retro, no gradients)."""
+    colour = stops[0][1]
+    for i, (row, c) in enumerate(stops):
+        if y < row:
+            break
+        colour = c
+        if y == row and i > 0 and (x + y) % 2 == 0:
+            colour = stops[i - 1][1]
+    return colour
+
+
+STADIUM_SKY = [(9, DUSK), (12, PLUM), (15, ROSE), (18, ORANGE), (20, YELLOW)]
+
+
 def stadium():
     w, h = 320, 180
     img = new_img(w, h, DUSK)
+    for y in range(9, 22):
+        for x in range(w):
+            img[y][x] = sky_colour(STADIUM_SKY, x, y)
     fill(img, 0, 0, w, 6, MIDNIGHT)
     fill(img, 0, 8, w, 9, MIDNIGHT)
     # Light towers on the bleacher backs.
@@ -822,7 +852,7 @@ def pad(img, n):
 def crowd_frame(phase):
     """People in the bleachers as 1x2 px figures. phase 0/1 = idle shuffle, 2 = cheering."""
     img = new_img(320, CROWD_H)
-    colours = [ORANGE, OFFWHITE, YELLOW, RED, OFFWHITE, ORANGE]
+    colours = [ORANGE, OFFWHITE, YELLOW, ROSE, OFFWHITE, ORANGE]
     aisles = [(42, 45), (84, 87), (236, 239), (278, 281)]
     for row, y in enumerate(range(3, CROWD_H - 2, 4)):
         for x in range((row * 2) % 3, 320, 3):
@@ -860,15 +890,25 @@ def flags_frame(phase):
 
 
 # --- Title art ----------------------------------------------------------------
+# Kept dark behind the title text (rows ~0-115); the warm bands sit just above the
+# stadium silhouette that starts at row 128.
+TITLE_SKY = [(0, MIDNIGHT), (52, DUSK), (94, PLUM), (114, ROSE), (120, ORANGE), (125, YELLOW)]
+
+
 def title_backdrop():
     w, h = 320, 180
     img = new_img(w, h, MIDNIGHT)
     cx, cy = 160.0, 150.0
+    # Sunset sky: sunburst rays (one shade lighter) in the purple upper sky, then flat
+    # bands warming toward the horizon behind the stadium.
+    ray_colour = {MIDNIGHT: DUSK, DUSK: PLUM}
     for y in range(h):
         for x in range(w):
+            c = sky_colour(TITLE_SKY, x, y)
             a = math.atan2(y + 0.5 - cy, x + 0.5 - cx)
-            if int(math.floor((a + math.pi) / (math.pi / 10.0))) % 2 == 0:
-                img[y][x] = DUSK
+            if c in ray_colour and int(math.floor((a + math.pi) / (math.pi / 10.0))) % 2 == 0:
+                c = ray_colour[c]
+            img[y][x] = c
     # Stadium silhouette along the bottom.
     fill(img, 0, 128, w, 150, MIDNIGHT)
     crowd = crowd_frame(0)
@@ -1013,7 +1053,7 @@ def circle_img(d, fill_c, border_c, ring_only=False, label=None):
 
 def write_ui():
     ui = os.path.join(SPRITES, "UI")
-    write_png(os.path.join(ui, "ui_panel_slice3.png"), ui_panel(MIDNIGHT, OFFWHITE, DUSK))
+    write_png(os.path.join(ui, "ui_panel_slice3.png"), ui_panel(DUSK, OFFWHITE, PLUM))
     write_png(os.path.join(ui, "ui_board_slice3.png"), ui_panel(GREEN_DARK, OFFWHITE, GREEN))
     write_png(os.path.join(ui, "ui_chip_slice3.png"), ui_panel(MIDNIGHT, DUSK))
     write_png(os.path.join(ui, "ui_button_primary_slice3.png"), ui_button(ORANGE))

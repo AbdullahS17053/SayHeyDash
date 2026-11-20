@@ -23,9 +23,9 @@ namespace SayHeyDash.UI
         [SerializeField] private Text subText;
         [SerializeField] private Text situationText;
         [SerializeField] private Text modeText;
-        [SerializeField] private Color promptColor = new Color32(0xF5, 0xF1, 0xD9, 0xFF);
-        [SerializeField] private Color readyColor = new Color32(0xF6, 0xCE, 0x4B, 0xFF);
-        [SerializeField] private Color nowColor = new Color32(0xF3, 0x8B, 0x37, 0xFF);
+        [SerializeField] private Color promptColor = new Color32(0xFB, 0xF0, 0xD5, 0xFF);
+        [SerializeField] private Color readyColor = new Color32(0xFF, 0xD8, 0x3D, 0xFF);
+        [SerializeField] private Color nowColor = new Color32(0xF5, 0x7F, 0x32, 0xFF);
 
         [Header("Catch sequence (04)")]
         [SerializeField] private GameObject catchBanner;

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Say Hey Dash — Art Direction Reference Sheet (M1)</title>
 <style>
-  :root { --mid:#17152F; --yel:#F6CE4B; --org:#F38B37; --grn:#3C7659; --off:#F5F1D9; --red:#D94D58; }
+  :root { --mid:#1B1030; --yel:#FFD83D; --org:#F57F32; --grn:#46664A; --off:#FBF0D5; --red:#E04858; }
   * { box-sizing: border-box; }
   body { margin:0; background:var(--mid); color:var(--off); font-family:"Courier New",monospace; line-height:1.45; }
   main { max-width:1120px; margin:0 auto; padding:32px 24px 64px; }
@@ -43,22 +43,28 @@
   <p class="sub">Art-direction reference sheet · Milestone 1 · <span class="tag">DRAFT — REQUIRES CLIENT APPROVAL</span></p>
   <p>Goal: <b>"a forgotten 1990s arcade cabinet that teaches baseball history."</b> Simple, readable, chunky pixel art; flat colour; strong contrast; expressive but minimal animation. All artwork is original — creative references are thematic only.</p>
 
-  <h2>1. Palette</h2>
-  <p>Core six from the GDD. Every pixel in the game should come from this palette plus the approved extensions.</p>
+  <h2>1. Palette — "Sunset arcade" (revised 2026-11-20)</h2>
+  <p>Revised after the client's M3 feedback: a darker, more vibrant retro-arcade feel built from deep purples, sunset oranges, muted greens and touches of bright yellow. Every pixel in the game comes from this palette. The sky is drawn as flat sunset bands (purple → plum → rose → orange → yellow) with a 1 px dither between bands — no gradients.</p>
   <div class="grid g6">
-    <div class="sw"><div class="chip" style="background:#17152F"></div><div class="meta"><b>Midnight purple</b>#17152F · outlines, UI backgrounds, text on light</div></div>
-    <div class="sw"><div class="chip" style="background:#F6CE4B"></div><div class="meta"><b>Bright yellow</b>#F6CE4B · titles, highlights, scoreboard digits, "perfect"</div></div>
-    <div class="sw"><div class="chip" style="background:#F38B37"></div><div class="meta"><b>Arcade orange</b>#F38B37 · buttons, prompts, action cues</div></div>
-    <div class="sw"><div class="chip" style="background:#3C7659"></div><div class="meta"><b>Muted field green</b>#3C7659 · grass, outfield wall</div></div>
-    <div class="sw"><div class="chip" style="background:#F5F1D9"></div><div class="meta"><b>Off-white</b>#F5F1D9 · uniform, ball, body text</div></div>
-    <div class="sw"><div class="chip" style="background:#D94D58"></div><div class="meta"><b>Accent red</b>#D94D58 · ball stitches, socks/trim, fail state</div></div>
+    <div class="sw"><div class="chip" style="background:#1B1030"></div><div class="meta"><b>Midnight purple</b>#1B1030 · outlines, deepest sky, scoreboard, text on light</div></div>
+    <div class="sw"><div class="chip" style="background:#33204F"></div><div class="meta"><b>Deep purple</b>#33204F · menu panels, bleachers, upper sky</div></div>
+    <div class="sw"><div class="chip" style="background:#5B2C6F"></div><div class="meta"><b>Plum</b>#5B2C6F · sky bands, sunburst rays, panel inset</div></div>
+    <div class="sw"><div class="chip" style="background:#B4436C"></div><div class="meta"><b>Sunset rose</b>#B4436C · sky band above the horizon, crowd</div></div>
+    <div class="sw"><div class="chip" style="background:#F57F32"></div><div class="meta"><b>Sunset orange</b>#F57F32 · horizon glow, buttons, prompts, action cues</div></div>
+    <div class="sw"><div class="chip" style="background:#FFD83D"></div><div class="meta"><b>Bright yellow</b>#FFD83D · titles, highlights, landing ring, horizon line</div></div>
+    <div class="sw"><div class="chip" style="background:#FBF0D5"></div><div class="meta"><b>Warm cream</b>#FBF0D5 · body text, borders, ball</div></div>
+    <div class="sw"><div class="chip" style="background:#E04858"></div><div class="meta"><b>Accent red</b>#E04858 · logo shadow, fail state, throw needle</div></div>
+    <div class="sw"><div class="chip" style="background:#46664A"></div><div class="meta"><b>Muted field green</b>#46664A · grass, outfield wall</div></div>
+    <div class="sw"><div class="chip" style="background:#2F463A"></div><div class="meta"><b>Green dark</b>#2F463A · wall caps, clubhouse, briefing board</div></div>
+    <div class="sw"><div class="chip" style="background:#557553"></div><div class="meta"><b>Green light</b>#557553 · mowing stripes</div></div>
+    <div class="sw"><div class="chip" style="background:#965A3A"></div><div class="meta"><b>Dirt</b>#965A3A · warning track</div></div>
   </div>
-  <p style="margin-top:16px"><b>Proposed extensions</b> (needed for a readable character and field — pending approval, Q2):</p>
+  <p style="margin-top:16px"><b>Character colours — unchanged from M3</b> (the client asked for no character changes, so the outfielder keeps his approved colours exactly):</p>
   <div class="grid g6">
-    <div class="sw"><div class="chip" style="background:#2E2A52"></div><div class="meta"><b>Dusk</b>#2E2A52 · sky, panel borders</div></div>
-    <div class="sw"><div class="chip" style="background:#2C5A44"></div><div class="meta"><b>Green dark</b>#2C5A44 · wall caps, clubhouse</div></div>
-    <div class="sw"><div class="chip" style="background:#46866A"></div><div class="meta"><b>Green light</b>#46866A · mowing stripes</div></div>
-    <div class="sw"><div class="chip" style="background:#9C6B3E"></div><div class="meta"><b>Dirt</b>#9C6B3E · warning track, base paths</div></div>
+    <div class="sw"><div class="chip" style="background:#17152F"></div><div class="meta"><b>Outline</b>#17152F</div></div>
+    <div class="sw"><div class="chip" style="background:#2E2A52"></div><div class="meta"><b>Cap</b>#2E2A52</div></div>
+    <div class="sw"><div class="chip" style="background:#F5F1D9"></div><div class="meta"><b>Uniform</b>#F5F1D9</div></div>
+    <div class="sw"><div class="chip" style="background:#D94D58"></div><div class="meta"><b>Socks / belt</b>#D94D58</div></div>
     <div class="sw"><div class="chip" style="background:#7A4A2E"></div><div class="meta"><b>Skin</b>#7A4A2E · character skin tone</div></div>
     <div class="sw"><div class="chip" style="background:#A85F2C"></div><div class="meta"><b>Leather</b>#A85F2C · glove</div></div>
   </div>
