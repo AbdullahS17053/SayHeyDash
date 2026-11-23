@@ -9,8 +9,9 @@
 | Engine | **Unity 6.3 LTS (6000.3.9f1)**, C#, URP 2D — *replaces the Godot 4 suggested in the GDD* |
 | Target | WebGL (desktop + mobile browsers), embedded in the client's Wix site |
 | Design source | `THE SAY HEY DASH 2D GAME.pdf` (GDD) |
-| Current milestone | **Milestone 4 — Content & Polish: delivered for review** |
-| Last updated | 2026-11-22 |
+| Current milestone | **Milestone 5 — Testing & Final Handover: in progress** (branding + handover docs/video delivered) |
+| Last updated | 2026-11-23 |
+| Handover docs | [Developer Guide](Docs/Developer_Guide.md) · [User Manual](Docs/User_Manual.md) · tutorial video `Builds/SayHeyDash_Tutorial.mp4` |
 
 ---
 
@@ -22,7 +23,7 @@
 | 2 | Gameplay Prototype | ✅ Delivered — awaiting client review |
 | 3 | Visual Production | ✅ Delivered 2026-11-19 · client feedback (palette) applied 2026-11-20 — awaiting review of the new palette |
 | 4 | Content & Polish | ✅ Delivered 2026-11-22 — awaiting client review (history copy, scoring sign-off) |
-| 5 | Testing & Final Handover | ⏳ Not started (waiting for "Start Milestone 5") |
+| 5 | Testing & Final Handover | 🔄 Started 2026-11-23 — client logo / icon / splash, developer guide, user manual, tutorial video done; browser matrix, Wix embed and sign-offs still open |
 
 ### Milestone 1 deliverables
 
@@ -70,6 +71,19 @@ Full report, editing guide, accessibility checklist and test results: [Docs/07_M
 | Mobile controls | `UI/TouchControls`, `Platform/BrowserEvents`, WebGL template | ✅ touch-only stick + CATCH/THROW button, rotate screen, open-full-screen link, auto-pause |
 | Accessibility features | Settings → REDUCED MOTION (follows browser preference), focus fixes, contrast tests | ✅ checklist in Docs/07 §5 |
 | Full browser build for review | `Builds/SayHeyDash_M4_WebGL.zip` | ✅ |
+
+### Milestone 5 deliverables (in progress)
+Report: [Docs/08_M5_Testing_and_Handover.md](Docs/08_M5_Testing_and_Handover.md).
+
+| Item | Where | Status |
+|---|---|---|
+| Client logo, icon, splash (Player Settings) | `Art/Branding/`, *Say Hey Dash ▸ Branding*, `Editor/Branding/BrandingBuilder` | ✅ |
+| Logo splash in the browser + branded loader / favicon | `UI/BrandSplashView`, `Platform/BrandSplash`, WebGL template | ✅ |
+| Documentation + user manual | [Docs/Developer_Guide.md](Docs/Developer_Guide.md), [Docs/User_Manual.md](Docs/User_Manual.md) | ✅ |
+| Walkthrough recording | `Builds/SayHeyDash_Tutorial.mp4` · re-record: `Tools/Tutorial/make_tutorial.ps1` · in Unity: *Say Hey Dash ▸ Handover ▸ Play Editor Tour* | ✅ |
+| Tested production build (browser/device matrix) | — | ⏳ |
+| Wix embed on the agreed HTTPS host | — | ⏳ waiting for Q3/Q4 |
+| Clean-ups (URP log lines, M1 prototype) + final handover package | — | ⏳ |
 
 ---
 
@@ -128,12 +142,21 @@ Full report, editing guide, accessibility checklist and test results: [Docs/07_M
 - `TouchControls` (touch devices only, CATCH/THROW label), touch instructions on Screen 02, `playerBounds` ±6.5. `BrowserEvents` + template: rotate screen, open-full-screen link, auto-pause on hidden tab / blur / portrait. `BrowserBridge`: `PrefersReducedMotion`, `StorageAvailable`.
 - Tests: EditMode 96 (+ settings, replay choreography, replay text fits, next rank, WCAG contrast, mix order); PlayMode 19 (+ `ContentAndPolishPlayTests`). `ScreenGalleryCapture` now writes `Docs/img/m4_screens/`.
 
-## Pending / next (Milestone 5 — do not start until requested)
-- Client approval of the history copy and names (AC-11, Q1), scoring sign-off (Q6), museum URL (Q5), developer credit line, "sunset arcade" palette.
-- Tested production build: browser/device matrix (Firefox, Safari macOS/iPhone, Chrome Android), real-device check of touch controls, rotate screen and full-screen link, performance on phones.
+**Milestone 5 — part 1 (2026-11-23)**
+- `Assets/_Project/Art/Branding/FastballFuel_Logo.png` = client-supplied logo (source, never modified). `Editor/Branding/BrandingBuilder` (**Say Hey Dash ▸ Branding ▸ Rebuild Logo Files + Apply**, batch `BuildFromCommandLine`) trims it, converts black → transparent (`FastballFuel_Logo_Alpha.png`), makes the 1024 px icon (`FastballFuel_Icon.png`), the template's `favicon.png` / `apple-touch-icon.png` / `logo.png`, and sets Player Settings (names, default icon, splash = logo on black 2.5 s, Dolly, no Unity logo). `WebGLBuildPipeline` re-applies it every build.
+- WebGL: `Platform/BrandSplash` stops Unity's start-up splash (it would play hidden behind the click-to-play gate; `SplashScreen.Begin/Draw` after the click drew nothing on the WebGL canvas). `UI/BrandSplashView` (own canvas, sorting order 100, built by `MainSceneBuilder.CreateBrandSplash`) shows the same logo after the click: `BrowserEvents.OnBrowserStart` ← template. Fade 0.4 / hold 2.2 / fade 0.5 s unscaled, zoom unless reduced motion, skippable, mutes UI navigation, once per page load.
+- Template: logo image on the loading screen, favicon + apple-touch-icon links, start click sends `OnBrowserStart`.
+- `Editor/Handover/EditorTour` (**Say Hey Dash ▸ Handover ▸ Play Editor Tour**): captioned walkthrough (scene, auto-piloted mission, data assets with a restored demo edit, branding, Player Settings, Build Profiles, Test Runner); survives the Play-mode domain reload via `SessionState`. Runtime internals now visible to `SayHeyDash.Editor` for its autopilot.
+- `Tools/Tutorial/make_tutorial.ps1` (+ `TutorialImaging.cs`, `tutorial_script.txt`, `cards.txt`) and `Editor/Handover/TutorialVideoEncoder` (Unity `MediaEncoder`, H.264/AAC): title cards + screen capture of the tour + captions + Windows-voice narration → `Builds/SayHeyDash_Tutorial.mp4`. No downloads.
+- Docs: `Developer_Guide.md`, `User_Manual.md`, `08_M5_Testing_and_Handover.md`.
+- Tests: EditMode 106 (+ `BrandingTests`), PlayMode 21 (+ `BrandSplashPlayTests`); render tests now select the "UI" canvas by name.
+
+## Pending / next (rest of Milestone 5)
+- Client approval of the history copy and names (AC-11, Q1), scoring sign-off (Q6), museum URL (Q5), developer credit line, "sunset arcade" palette, splash / icon look. A larger or vector logo would make the 1024 px icon sharper (source is 931 × 616).
+- Tested production build: browser/device matrix (Firefox, Safari macOS/iPhone, Chrome Android), real-device check of touch controls, rotate screen, full-screen link and the logo splash, performance on phones.
 - Agreed Wix embed or standalone fallback on the chosen HTTPS host (Q3/Q4); hide fullscreen where unsupported.
 - Strip the two URP "shader not supported" log lines; delete the M1 prototype code/scene once M2 is confirmed.
-- Handover: full source/assets, documentation, walkthrough recording.
+- Final handover package: full source/assets, final build, documentation + video.
 
 ## Open questions for the client
 See [Docs/01 §1.2](Docs/01_Scope_and_Architecture.md#12-decisions-needed-from-the-client-blocking-later-milestones-not-m1): name/likeness licensing (Q1), palette extensions (Q2), HTTPS host (Q3), Wix editor & page (Q4), museum URL (Q5), scoring formula (Q6).
@@ -192,6 +215,9 @@ Full table: [Docs/04 §6](Docs/04_WebGL_and_Wix_Feasibility.md#6-findings-limita
 | 2026-11-22 | No AudioMixer: two player volumes + per-cue levels on plain AudioSources | Same behaviour in every WebGL browser; simple to edit |
 | 2026-11-22 | `playerBounds` x ±9 → ±6.5 | Outfielder never runs under the touch controls (Docs/04 F8); landing point and start unaffected |
 | 2026-11-22 | The web page pauses the game (tab hidden, focus lost, portrait) through `BrowserEvents` | A mission is never lost to something outside the game, especially in an embed |
+| 2026-11-23 | Logo files and Player Settings generated from one client PNG by `BrandingBuilder`; builds re-apply them | Replacing the logo is one file + one menu command; settings can't drift |
+| 2026-11-23 | Web builds show the logo splash in-game after the click-to-play gate; Unity's splash stays configured for other platforms | Unity's start-up splash would be hidden behind the gate, and it can't be restarted onto the WebGL canvas |
+| 2026-11-23 | Tutorial video = real Editor recording driven by `EditorTour` + Windows TTS + Unity `MediaEncoder` | Re-recordable from text files on any Windows machine with Unity; no third-party tools |
 
 ---
 
@@ -253,5 +279,14 @@ Tools/                 ArtGen, AudioGen, WebTest server, WixHarness, Release/zip
 Builds/                build output (git-ignored)
 ```
 
+## Branding and the tutorial video
+
+- Replace the logo: overwrite `Assets/_Project/Art/Branding/FastballFuel_Logo.png`, then **Say Hey Dash ▸ Branding ▸ Rebuild Logo Files + Apply** (details: [Developer Guide §3.1](Docs/Developer_Guide.md#31-logo-icon-and-splash-screen-milestone-5)).
+- Re-record the tutorial (Unity closed, hands off the mouse for ~5 min):
+  ```bash
+  powershell -ExecutionPolicy Bypass -File Tools/Tutorial/make_tutorial.ps1
+  ```
+  Stages can be run one at a time with `-Stage assets|record|compose|encode`. Output `Builds/SayHeyDash_Tutorial.mp4`; work files in `Builds/Tutorial_work/`.
+
 ## Third-party assets
-None. All art, the font and all audio are original (generated by the project's own scripts). Licence record: [Docs/ThirdPartyLicenses.md](Docs/ThirdPartyLicenses.md).
+None. All art, the font and all audio are original (generated by the project's own scripts). The Fastball Fuel Coffee Co. logo is the client's own artwork, supplied by the client for this game. Licence record: [Docs/ThirdPartyLicenses.md](Docs/ThirdPartyLicenses.md).

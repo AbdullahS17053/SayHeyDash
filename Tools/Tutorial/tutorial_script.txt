@@ -1,0 +1,21 @@
+# Handover tutorial video - one step per line:  id | kind | caption | narration
+# kind "card" = title card (content in cards.txt), "tour" = recorded Unity Editor step
+# (ids must match EditorTour.cs). Captions are shown under the recording; narration is spoken
+# by the built-in Windows voice. Edit here and re-run Tools/Tutorial/make_tutorial.ps1.
+intro|card||Welcome. This short tutorial shows how to get the Say Hey Dash Unity project onto your computer, open it in Unity, and make the most common changes in the editor.
+req|card||First, install Unity Hub. From the Hub, install Unity version six thousand dot three dot nine f one, and tick the Web Build Support module. You also need Git, or GitHub Desktop. Python 3 is optional. It runs the art and sound generators, and the local test server.
+clone|card||Next, clone the repository. In a terminal, type git clone, followed by the repository address shown on screen. Or, in GitHub Desktop, choose File, Clone repository, and paste the same address.
+open|card||Then, in Unity Hub, choose Add, Add project from disk, and select the Say Hey Dash folder. Make sure it opens with version six thousand dot three dot nine f one. The first open takes a few minutes, while Unity rebuilds its Library folder.
+overview|tour|Everything that belongs to the game is in Assets/_Project|Here is the project, open in the Unity editor. Everything that belongs to the game lives in the underscore Project folder, inside Assets.
+scene|tour|The whole game is one scene: Assets/_Project/Scenes/Main.unity|The whole game runs in a single scene, called Main, in the Scenes folder. Double-click it to open it.
+play|tour|Press Play (top centre) to run the game in the Editor|Press the Play button, at the top of the editor, to try the game.
+controls|tour|Arrows / WASD run  ·  Space catches and throws  ·  Esc pauses  ·  press Play again to stop|Use the arrow keys, or W A S D, to run to the landing ring. Press Space to catch, and Space again to throw. Escape pauses. Press Play again to stop.
+data|tour|Gameplay numbers: Data/Tuning/GameplayTuning (edit them in the Inspector, on the right)|Gameplay numbers never need code changes. They live in the Data folder. Select Gameplay Tuning, and its values appear in the Inspector, on the right.
+edit|tour|Example: Ball Flight Duration 3.6 → 4.2 keeps the ball in the air longer (put back after the demo)|For example, raise Ball Flight Duration, and the fly ball hangs in the air longer. Edits are saved with the project. For this demo, we put it back.
+text|tour|Every on-screen word, incl. the history replay: Data/Content/MissionContent|Every word shown on screen, including the history replay narration, is in Mission Content, in the Content folder.
+more|tour|Assisted mode: Data/Tuning/Difficulty_Assisted  ·  Score formula: Data/Scoring/ScoringConfig|Assisted mode is set up in Difficulty Assisted, and the score formula is in Scoring Config.
+brand|tour|Client logo: Art/Branding  →  replace the PNG, then Say Hey Dash ▸ Branding ▸ Rebuild Logo Files + Apply|The client logo is in the Branding folder. To change it, replace the logo file, then choose Say Hey Dash, Branding, Rebuild Logo Files and Apply.
+player|tour|Edit ▸ Project Settings ▸ Player: company, product name, icon, splash screen|That updates the Player settings: the company and product names, the icon, and the splash screen.
+build|tour|Web build: Say Hey Dash ▸ Build ▸ WebGL (Release)  →  Builds/WebGL|To make a web build, choose Say Hey Dash, Build, Web G L Release. The finished web site is written to the Builds, Web G L folder.
+tests|tour|Window ▸ General ▸ Test Runner: run EditMode + PlayMode tests before shipping|Before you ship a new build, open Window, General, Test Runner, and run the Edit Mode and Play Mode tests.
+outro|card||That's it. The Developer Guide and the User Manual, in the Docs folder, cover every step in more detail. Thanks for watching.

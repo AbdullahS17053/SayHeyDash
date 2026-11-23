@@ -30,8 +30,9 @@ namespace SayHeyDash.Tests
             var ball = Object.FindFirstObjectByType<BallFlight>();
             var catchSystem = Object.FindFirstObjectByType<CatchSystem>();
             Canvas canvas = null;
+            // The game UI canvas (M5 added a second root canvas, "BrandSplash", for the logo splash).
             foreach (Canvas c in Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None))
-                if (c.isRootCanvas) canvas = c;
+                if (c.isRootCanvas && c.name == "UI") canvas = c;
             Assert.IsNotNull(canvas);
 
             var rt = new RenderTexture(1280, 720, 24);

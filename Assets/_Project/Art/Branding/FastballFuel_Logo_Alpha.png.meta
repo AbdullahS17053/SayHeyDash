@@ -1,0 +1,676 @@
+fileFormatVersion: 2
+guid: 909cae4042a249242b65ba98ec1c3fa0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7164688549202438655
+    second: FastballFuel_Logo_Alpha_0
+  - first:
+      213: -7448989969630717924
+    second: FastballFuel_Logo_Alpha_1
+  - first:
+      213: 7955908193425322538
+    second: FastballFuel_Logo_Alpha_2
+  - first:
+      213: -1052864673038557764
+    second: FastballFuel_Logo_Alpha_3
+  - first:
+      213: -2558304994668828523
+    second: FastballFuel_Logo_Alpha_4
+  - first:
+      213: -8698518110138984797
+    second: FastballFuel_Logo_Alpha_5
+  - first:
+      213: -4852982869221201461
+    second: FastballFuel_Logo_Alpha_6
+  - first:
+      213: 3272768758991673552
+    second: FastballFuel_Logo_Alpha_7
+  - first:
+      213: 3712497566793014162
+    second: FastballFuel_Logo_Alpha_8
+  - first:
+      213: -1936400543022114764
+    second: FastballFuel_Logo_Alpha_9
+  - first:
+      213: -3795631462188557477
+    second: FastballFuel_Logo_Alpha_10
+  - first:
+      213: -5687966011538739901
+    second: FastballFuel_Logo_Alpha_11
+  - first:
+      213: 4002991696344683204
+    second: FastballFuel_Logo_Alpha_12
+  - first:
+      213: -3371986861065289380
+    second: FastballFuel_Logo_Alpha_13
+  - first:
+      213: 5829743643797037118
+    second: FastballFuel_Logo_Alpha_14
+  - first:
+      213: 3643345025370493459
+    second: FastballFuel_Logo_Alpha_15
+  - first:
+      213: 6802887266265037754
+    second: FastballFuel_Logo_Alpha_16
+  - first:
+      213: -4619920574394966676
+    second: FastballFuel_Logo_Alpha_17
+  - first:
+      213: -1299866442096904379
+    second: FastballFuel_Logo_Alpha_18
+  - first:
+      213: 7857114904699628524
+    second: FastballFuel_Logo_Alpha_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_0
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 138
+        width: 285
+        height: 223
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 106da7289b9e19c90800000000000000
+      internalID: -7164688549202438655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_1
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 207
+        width: 146
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1896bcc61fdf9890800000000000000
+      internalID: -7448989969630717924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_2
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 212
+        width: 178
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a227cb68950196e60800000000000000
+      internalID: 7955908193425322538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_3
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 348
+        width: 199
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbd9afe78297361f0800000000000000
+      internalID: -1052864673038557764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_4
+      rect:
+        serializedVersion: 2
+        x: 518
+        y: 226
+        width: 160
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59828ad69231f7cd0800000000000000
+      internalID: -2558304994668828523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_5
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 25
+        width: 279
+        height: 171
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a61dd49dd7a84780800000000000000
+      internalID: -8698518110138984797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_6
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 70
+        width: 116
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc9a30beacdb6acb0800000000000000
+      internalID: -4852982869221201461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_7
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 85
+        width: 127
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d8d1bfa8d53b6d20800000000000000
+      internalID: 3272768758991673552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_8
+      rect:
+        serializedVersion: 2
+        x: 437
+        y: 101
+        width: 139
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29b133a0ed0758330800000000000000
+      internalID: 3712497566793014162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_9
+      rect:
+        serializedVersion: 2
+        x: 507
+        y: 187
+        width: 153
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4381b4237f58025e0800000000000000
+      internalID: -1936400543022114764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_10
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 59
+        width: 248
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5b54f59b45335bc0800000000000000
+      internalID: -3795631462188557477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_11
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 26
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34decb37c094011b0800000000000000
+      internalID: -5687966011538739901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_12
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 26
+        width: 13
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c296733dbb7d8730800000000000000
+      internalID: 4002991696344683204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_13
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 26
+        width: 13
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c514beeb0db4431d0800000000000000
+      internalID: -3371986861065289380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_14
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 26
+        width: 14
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e302d1ce4f867e050800000000000000
+      internalID: 5829743643797037118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_15
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 26
+        width: 14
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 312156f4ff2cf8230800000000000000
+      internalID: 3643345025370493459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_16
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 26
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abb71c8ece5b86e50800000000000000
+      internalID: 6802887266265037754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_17
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 26
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6d5ba807beb2efb0800000000000000
+      internalID: -4619920574394966676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_18
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 33
+        width: 32
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 547fc5f9b52f5fde0800000000000000
+      internalID: -1299866442096904379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FastballFuel_Logo_Alpha_19
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 26
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ceb6c0680641a0d60800000000000000
+      internalID: 7857114904699628524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      FastballFuel_Logo_Alpha_0: -7164688549202438655
+      FastballFuel_Logo_Alpha_1: -7448989969630717924
+      FastballFuel_Logo_Alpha_10: -3795631462188557477
+      FastballFuel_Logo_Alpha_11: -5687966011538739901
+      FastballFuel_Logo_Alpha_12: 4002991696344683204
+      FastballFuel_Logo_Alpha_13: -3371986861065289380
+      FastballFuel_Logo_Alpha_14: 5829743643797037118
+      FastballFuel_Logo_Alpha_15: 3643345025370493459
+      FastballFuel_Logo_Alpha_16: 6802887266265037754
+      FastballFuel_Logo_Alpha_17: -4619920574394966676
+      FastballFuel_Logo_Alpha_18: -1299866442096904379
+      FastballFuel_Logo_Alpha_19: 7857114904699628524
+      FastballFuel_Logo_Alpha_2: 7955908193425322538
+      FastballFuel_Logo_Alpha_3: -1052864673038557764
+      FastballFuel_Logo_Alpha_4: -2558304994668828523
+      FastballFuel_Logo_Alpha_5: -8698518110138984797
+      FastballFuel_Logo_Alpha_6: -4852982869221201461
+      FastballFuel_Logo_Alpha_7: 3272768758991673552
+      FastballFuel_Logo_Alpha_8: 3712497566793014162
+      FastballFuel_Logo_Alpha_9: -1936400543022114764
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

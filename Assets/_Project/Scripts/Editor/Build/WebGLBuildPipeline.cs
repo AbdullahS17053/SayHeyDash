@@ -43,12 +43,11 @@ namespace SayHeyDash.EditorTools.Build
         {
             var target = NamedBuildTarget.WebGL;
 
-            PlayerSettings.companyName = "Fastball Fuel Coffee Company";
-            PlayerSettings.productName = "The Say Hey Dash";
+            // Names, icon and splash screen (client logo) - Say Hey Dash > Branding (Milestone 5).
+            Branding.BrandingBuilder.ApplyPlayerSettings(saveAssets: false);
             PlayerSettings.runInBackground = false;
             PlayerSettings.defaultWebScreenWidth = 960;
             PlayerSettings.defaultWebScreenHeight = 540;
-            PlayerSettings.SplashScreen.show = false; // Optional for Unity Personal since Unity 6.
 
             PlayerSettings.WebGL.template = TemplateName;
             PlayerSettings.WebGL.linkerTarget = WebGLLinkerTarget.Wasm;

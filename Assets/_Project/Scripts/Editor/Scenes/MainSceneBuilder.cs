@@ -206,6 +206,8 @@ namespace SayHeyDash.EditorTools.Scenes
 
             CreateEventSystem(actions);
             CreateUi(flow, catchSystem, throwSystem, content, animations, settings);
+            // M5: client-logo splash shown after the web page's start click.
+            Set(browserEvents, "splash", CreateBrandSplash(flow));
 
             if (_errors > 0)
             {
@@ -432,6 +434,59 @@ namespace SayHeyDash.EditorTools.Scenes
         }
 
         // ---------------------------------------------------------------- UI
+
+        /// <summary>
+        /// M5: the client-logo splash (logo on black) on its own canvas above all game UI.
+        /// Uses the transparent logo made by Say Hey Dash &gt; Branding.
+        /// </summary>
+        private static BrandSplashView CreateBrandSplash(GameFlowController flow)
+        {
+            var go = new GameObject("BrandSplash", typeof(RectTransform), typeof(Canvas),
+                typeof(CanvasScaler), typeof(GraphicRaycaster), typeof(CanvasGroup));
+            var canvas = go.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = 100;
+            var scaler = go.GetComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1280f, 720f);
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = 0.5f;
+            var group = go.GetComponent<CanvasGroup>();
+            group.alpha = 0f;
+
+            var backdrop = new GameObject("Backdrop", typeof(RectTransform), typeof(Image)).GetComponent<Image>();
+            backdrop.transform.SetParent(go.transform, false);
+            backdrop.color = Color.black;
+            var rt = backdrop.rectTransform;
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = new Vector2(-400f, -400f); // overscan: covers any aspect ratio
+            rt.offsetMax = new Vector2(400f, 400f);
+
+            const string logoPath = Branding.BrandingBuilder.LogoAlphaPath;
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(logoPath);
+            if (sprite == null)
+            {
+                _errors++;
+                Debug.LogError($"[MainSceneBuilder] Missing {logoPath}. Run Say Hey Dash > Branding > Rebuild Logo Files + Apply.");
+            }
+            var logo = new GameObject("Logo", typeof(RectTransform), typeof(Image)).GetComponent<Image>();
+            logo.transform.SetParent(go.transform, false);
+            logo.sprite = sprite;
+            logo.preserveAspect = true;
+            logo.raycastTarget = false;
+            var lrt = logo.rectTransform;
+            lrt.anchorMin = lrt.anchorMax = new Vector2(0.5f, 0.5f);
+            lrt.sizeDelta = new Vector2(760f, 468f);
+            lrt.anchoredPosition = Vector2.zero;
+
+            var view = go.AddComponent<BrandSplashView>();
+            Set(view, "flow", flow);
+            Set(view, "canvas", canvas);
+            Set(view, "group", group);
+            Set(view, "logo", lrt);
+            return view;
+        }
 
         private static void CreateUi(GameFlowController flow, CatchSystem catchSystem, ThrowSystem throwSystem,
             MissionContent content, OutfielderAnimationSet animations, SettingsService settings)

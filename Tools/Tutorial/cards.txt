@@ -1,0 +1,41 @@
+# Title cards for the tutorial video. One block per card id (see tutorial_script.txt):
+#   [id]  kicker=  title=  code=  bullet= (repeatable)  footer=  big=1 (large centred logo)
+[intro]
+big=1
+title=The Say Hey Dash
+kicker=Unity project tutorial: clone, open, play, edit, build
+bullet=Unity 6.3 LTS (6000.3.9f1)  ·  WebGL
+footer=Milestone 5 handover
+
+[req]
+kicker=Step 1 of 3 · Install the tools
+title=What you need
+bullet=Unity Hub (unity.com/download)
+bullet=Unity 6000.3.9f1 (6.3 LTS) with the Web Build Support module
+bullet=Git, or GitHub Desktop
+bullet=Optional: Python 3 (art and sound generators, local test server, release zip tool)
+footer=The Say Hey Dash · project setup
+
+[clone]
+kicker=Step 2 of 3 · Get the code
+title=Clone the repository
+code=git clone https://github.com/AbdullahS17053/SayHeyDash.git
+bullet=Or GitHub Desktop: File ▸ Clone repository ▸ URL ▸ paste the address
+bullet=Private repository? Sign in with the GitHub account that was given access
+footer=The Say Hey Dash · project setup
+
+[open]
+kicker=Step 3 of 3 · Open it
+title=Add the project in Unity Hub
+bullet=Projects ▸ Add ▸ Add project from disk
+bullet=Pick the SayHeyDash folder (the one that contains Assets and ProjectSettings)
+bullet=Editor version: 6000.3.9f1 (install it from the Hub if asked)
+bullet=The first open takes a few minutes while Unity rebuilds the Library folder
+footer=The Say Hey Dash · project setup
+
+[outro]
+big=1
+title=You're all set
+kicker=Docs/Developer_Guide.md  ·  Docs/User_Manual.md
+bullet=Replay this tour inside Unity: Say Hey Dash ▸ Handover ▸ Play Editor Tour
+footer=The Say Hey Dash · Milestone 5 handover

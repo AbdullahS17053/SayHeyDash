@@ -1,4 +1,5 @@
 using SayHeyDash.Flow;
+using SayHeyDash.UI;
 using UnityEngine;
 
 namespace SayHeyDash.Platform
@@ -10,6 +11,7 @@ namespace SayHeyDash.Platform
     /// player clicks outside the game (embedded page loses focus) and when the "rotate your
     /// device" overlay covers it - so a mission is never lost to something outside the game.
     /// Pausing outside live play is a no-op (the flow controller decides).
+    /// Milestone 5: the page's start click plays the client-logo splash.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class BrowserEvents : MonoBehaviour
@@ -17,12 +19,13 @@ namespace SayHeyDash.Platform
         public const string GameObjectName = "BrowserEvents";
 
         [SerializeField] private GameFlowController flow;
+        [SerializeField] private BrandSplashView splash;
 
         public int PauseRequests { get; private set; }
 
         private void Awake()
         {
-            if (flow == null)
+            if (flow == null || splash == null)
             {
                 Debug.LogError($"[{nameof(BrowserEvents)}] Missing reference.", this);
                 enabled = false;
@@ -37,6 +40,17 @@ namespace SayHeyDash.Platform
             if (!enabled) return;
             PauseRequests++;
             flow.Pause();
+        }
+
+        /// <summary>
+        /// Called by the page when the player clicks "click or tap to play": shows the client-logo
+        /// splash once per page load (it replaces the start-up splash that <see cref="BrandSplash"/>
+        /// holds back in WebGL, which would otherwise play unseen behind the page's start gate).
+        /// </summary>
+        public void OnBrowserStart()
+        {
+            if (!enabled || !BrandSplash.ClaimStartSplash()) return;
+            splash.Play();
         }
     }
 }

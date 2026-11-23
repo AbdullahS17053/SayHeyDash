@@ -127,9 +127,46 @@ namespace SayHeyDash.Tests
             }
         }
 
-        private void Setup()
+        /// <summary>M5: the client-logo splash shown after the web page's start click (Docs/img/m5_screens).</summary>
+        [UnityTest]
+        public IEnumerator CaptureBrandSplash()
         {
-            _dir = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Docs", "img", "m4_screens"));
+            if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Null)
+                Assert.Ignore("No graphics device (-nographics).");
+
+            Platform.BrandSplash.ResetForTests();
+            SceneManager.LoadScene("Main", LoadSceneMode.Single);
+            yield return null;
+            yield return null;
+            Setup("m5_screens");
+            var splash = Object.FindFirstObjectByType<BrandSplashView>();
+            var splashCanvas = splash.GetComponent<Canvas>();
+            splashCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            splashCanvas.worldCamera = _cam;
+            splashCanvas.planeDistance = 0.5f;
+            splashCanvas.sortingOrder = 2000; // above the game UI canvas (1000 here)
+            try
+            {
+                yield return Wait(0.6f);
+                Capture("00a_title_before_click");
+                Object.FindFirstObjectByType<Platform.BrowserEvents>().OnBrowserStart();
+                float start = Time.realtimeSinceStartup;
+                while (Time.realtimeSinceStartup - start < 0.2f) yield return null;
+                Capture("00b_splash_fade_in");
+                while (Time.realtimeSinceStartup - start < 1.5f) yield return null;
+                Capture("00c_splash_hold");
+                while (splash.IsShowing) yield return null;
+                Capture("00d_after_splash");
+            }
+            finally
+            {
+                Teardown();
+            }
+        }
+
+        private void Setup(string folder = "m4_screens")
+        {
+            _dir = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Docs", "img", folder));
             Directory.CreateDirectory(_dir);
             _cam = Camera.main;
             foreach (Behaviour b in _cam.GetComponents<Behaviour>())
@@ -137,7 +174,7 @@ namespace SayHeyDash.Tests
             _cam.orthographicSize = 180f / 32f;
             _rt = new RenderTexture(Width, Height, 24);
             foreach (Canvas c in Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None))
-                if (c.isRootCanvas) _canvas = c;
+                if (c.isRootCanvas && c.name == "UI") _canvas = c; // not the M5 "BrandSplash" canvas
             _canvas.renderMode = RenderMode.ScreenSpaceCamera;
             _canvas.worldCamera = _cam;
             _canvas.planeDistance = 1f;
