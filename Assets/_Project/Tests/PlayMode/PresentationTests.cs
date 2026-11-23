@@ -50,7 +50,7 @@ namespace SayHeyDash.Tests
             Assert.IsNotNull(_flow, "Main scene has no GameFlowController - run Say Hey Dash > Build Main Scene.");
             Assert.IsNotNull(_animator);
             Assert.IsNotNull(_audio);
-            Assert.AreEqual(7, _views.Length, "Title, Briefing, HUD, Pause, Failed, Complete, Replay");
+            Assert.AreEqual(8, _views.Length, "Title, Briefing, HUD, Pause, Failed, Complete, Replay + Settings overlay");
             Time.timeScale = TimeScale;
         }
 

@@ -21,8 +21,9 @@ namespace SayHeyDash.Data
         [Tooltip("Feet position at the start of every attempt.")]
         public Vector2 playerStartPosition = new Vector2(-2f, -4f);
 
-        [Tooltip("Area the outfielder's feet may move in (x, y = bottom-left; width, height).")]
-        public Rect playerBounds = new Rect(-9f, -5f, 18f, 5f);
+        [Tooltip("Area the outfielder's feet may move in (x, y = bottom-left; width, height). M4: +/-6.5 keeps the " +
+                 "outfielder clear of the on-screen stick and button at the bottom corners on touch devices.")]
+        public Rect playerBounds = new Rect(-6.5f, -5f, 13f, 5f);
 
         [Header("Ball flight (scripted, deterministic - no randomness)")]
         [Tooltip("Ground point the ball leaves from (below the bottom of the screen = home plate direction).")]

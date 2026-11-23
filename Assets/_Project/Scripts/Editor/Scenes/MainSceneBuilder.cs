@@ -8,6 +8,9 @@ using SayHeyDash.EditorTools.Fonts;
 using SayHeyDash.EditorTools.Import;
 using SayHeyDash.Flow;
 using SayHeyDash.Gameplay;
+using SayHeyDash.Platform;
+using SayHeyDash.Replay;
+using SayHeyDash.Settings;
 using SayHeyDash.UI;
 using SayHeyDash.Visuals;
 using UnityEditor;
@@ -22,6 +25,7 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using SettingsService = SayHeyDash.Settings.SettingsService; // not UnityEditor.SettingsService
 
 namespace SayHeyDash.EditorTools.Scenes
 {
@@ -193,8 +197,15 @@ namespace SayHeyDash.EditorTools.Scenes
             Set(environment, "flow", flow);
             _audio = CreateAudio(audioLibrary, flow, catchSystem, throwSystem);
 
+            // M4: persisted options + best score, and the web page's pause requests.
+            var settings = new GameObject("Settings").AddComponent<SettingsService>();
+            Set(settings, "flow", flow);
+            Set(settings, "audioService", _audio);
+            var browserEvents = new GameObject(BrowserEvents.GameObjectName).AddComponent<BrowserEvents>();
+            Set(browserEvents, "flow", flow);
+
             CreateEventSystem(actions);
-            CreateUi(flow, catchSystem, throwSystem, content, animations);
+            CreateUi(flow, catchSystem, throwSystem, content, animations, settings);
 
             if (_errors > 0)
             {
@@ -270,20 +281,23 @@ namespace SayHeyDash.EditorTools.Scenes
             if (library.entries != null && library.entries.Length > 0) return;
             (AudioCue cue, string file, float volume)[] map =
             {
-                (AudioCue.UiMove, "SFX/ui_move", 0.5f),
-                (AudioCue.UiConfirm, "SFX/ui_confirm", 0.6f),
+                // M4 mix: levels matched by measured loudness (Docs/07 section 4). The bat crack and
+                // the catch lead, cues and jingles sit just under them, menus and music below,
+                // the crowd bed lowest.
+                (AudioCue.UiMove, "SFX/ui_move", 0.4f),
+                (AudioCue.UiConfirm, "SFX/ui_confirm", 0.5f),
                 (AudioCue.UiBack, "SFX/ui_back", 0.5f),
-                (AudioCue.BatCrack, "SFX/sfx_bat_crack", 0.9f),
+                (AudioCue.BatCrack, "SFX/sfx_bat_crack", 1f),
                 (AudioCue.CrowdLoop, "SFX/sfx_crowd_loop", 0.35f),
-                (AudioCue.CrowdCheer, "SFX/sfx_crowd_cheer", 0.7f),
-                (AudioCue.CatchReady, "SFX/sfx_ready", 0.5f),
-                (AudioCue.CatchNow, "SFX/sfx_now", 0.6f),
-                (AudioCue.Catch, "SFX/sfx_catch", 0.9f),
-                (AudioCue.Whiff, "SFX/sfx_whiff", 0.6f),
-                (AudioCue.Throw, "SFX/sfx_throw", 0.8f),
-                (AudioCue.SuccessJingle, "Music/jingle_success", 0.7f),
-                (AudioCue.FailJingle, "Music/jingle_fail", 0.6f),
-                (AudioCue.TitleMusic, "Music/music_title_loop", 0.45f),
+                (AudioCue.CrowdCheer, "SFX/sfx_crowd_cheer", 0.5f),
+                (AudioCue.CatchReady, "SFX/sfx_ready", 0.4f),
+                (AudioCue.CatchNow, "SFX/sfx_now", 0.5f),
+                (AudioCue.Catch, "SFX/sfx_catch", 1f),
+                (AudioCue.Whiff, "SFX/sfx_whiff", 0.45f),
+                (AudioCue.Throw, "SFX/sfx_throw", 0.85f),
+                (AudioCue.SuccessJingle, "Music/jingle_success", 0.6f),
+                (AudioCue.FailJingle, "Music/jingle_fail", 0.65f),
+                (AudioCue.TitleMusic, "Music/music_title_loop", 0.5f),
             };
             var entries = new List<AudioCueLibrary.Entry>();
             foreach (var (cue, file, volume) in map)
@@ -420,7 +434,7 @@ namespace SayHeyDash.EditorTools.Scenes
         // ---------------------------------------------------------------- UI
 
         private static void CreateUi(GameFlowController flow, CatchSystem catchSystem, ThrowSystem throwSystem,
-            MissionContent content, OutfielderAnimationSet animations)
+            MissionContent content, OutfielderAnimationSet animations, SettingsService settings)
         {
             var canvasGo = new GameObject("UI", typeof(RectTransform), typeof(Canvas),
                 typeof(CanvasScaler), typeof(GraphicRaycaster));
@@ -435,13 +449,17 @@ namespace SayHeyDash.EditorTools.Scenes
             scaler.referencePixelsPerUnit = PixelsPerUnit * U; // 16 PPU sprites draw 4 units per pixel
             Transform root = canvasGo.transform;
 
-            BuildHud(root, flow, catchSystem, throwSystem, content);
-            BuildTitle(root, flow, content, animations);
-            BuildBriefing(root, flow, content);
+            TouchControls touch = BuildHud(root, flow, catchSystem, throwSystem, content);
+            TitleScreenView title = BuildTitle(root, flow, content, animations);
+            BuildBriefing(root, flow, content, touch);
             BuildFailed(root, flow, content);
-            BuildComplete(root, flow, content);
+            BuildComplete(root, flow, content, settings);
             BuildReplay(root, flow, content);
-            BuildPause(root, flow, content);
+            PauseMenuView pause = BuildPause(root, flow, content);
+            // Last = drawn on top of the title screen and the pause menu that open it.
+            SettingsMenuView menu = BuildSettings(root, flow, content, settings);
+            Set(title, "settingsMenu", menu);
+            Set(pause, "settingsMenu", menu);
         }
 
         private static T CreateView<T>(Transform root, string name, GameFlowController flow, MissionContent content,
@@ -458,7 +476,7 @@ namespace SayHeyDash.EditorTools.Scenes
         }
 
         // --- 03/04 HUD ------------------------------------------------------------------
-        private static void BuildHud(Transform root, GameFlowController flow, CatchSystem catchSystem,
+        private static TouchControls BuildHud(Transform root, GameFlowController flow, CatchSystem catchSystem,
             ThrowSystem throwSystem, MissionContent content)
         {
             var view = CreateView<HudView>(root, "Hud", flow, content, out RectTransform hud);
@@ -498,7 +516,15 @@ namespace SayHeyDash.EditorTools.Scenes
             // Below the meter: at throw time the outfielder stands on the warning track above it.
             Set(view, "throwFeedbackText", Label(hud, "ThrowFeedback", _bold, Big, Orange, TextAnchor.UpperCenter, Bottom(0, 30), Px(300, 20), true));
 
-            CreateOnScreenControls(hud);
+            // M4 mobile controls: shown on touch devices only (TouchControls lives on the always-active view).
+            CreateOnScreenControls(hud, out GameObject stick, out GameObject actionButton, out Text actionLabel);
+            var touch = view.gameObject.AddComponent<TouchControls>();
+            Set(touch, "flow", flow);
+            Set(touch, "content", content);
+            Set(touch, "stick", stick);
+            Set(touch, "actionButton", actionButton);
+            Set(touch, "actionLabel", actionLabel);
+            return touch;
         }
 
         private static ThrowMeterView CreateThrowMeter(Transform parent, ThrowSystem throwSystem)
@@ -542,7 +568,8 @@ namespace SayHeyDash.EditorTools.Scenes
             return meterView;
         }
 
-        private static void CreateOnScreenControls(Transform parent)
+        private static void CreateOnScreenControls(Transform parent, out GameObject stickRoot, out GameObject actionRoot,
+            out Text actionLabel)
         {
             const float k = 6f; // touch controls are drawn 6x for finger-sized targets
             Image stickBase = Img(parent, "OnScreenStickBase", "UI/ui_stick_base", Color.white, new Vector2(0f, 0f),
@@ -562,10 +589,18 @@ namespace SayHeyDash.EditorTools.Scenes
             actionButton.rectTransform.pivot = new Vector2(0.5f, 0.5f);
             var onScreenButton = actionButton.gameObject.AddComponent<OnScreenButton>();
             SetString(onScreenButton, "m_ControlPath", "<Gamepad>/buttonSouth");
+
+            // What the button does right now (CATCH / THROW), just above it.
+            actionLabel = Label(parent, "OnScreenActionLabel", _bold, Body, OffWhite, TextAnchor.LowerCenter,
+                new Spot { Anchor = new Vector2(1f, 0f), Position = Vector2.zero }, Px(48, 10), true);
+            actionLabel.rectTransform.pivot = new Vector2(0.5f, 0f);
+            actionLabel.rectTransform.anchoredPosition = new Vector2(-110f, 110f + 12 * k + 2 * U);
+            stickRoot = stickBase.gameObject;
+            actionRoot = actionButton.gameObject;
         }
 
         // --- 01 Title ------------------------------------------------------------------
-        private static void BuildTitle(Transform root, GameFlowController flow, MissionContent content,
+        private static TitleScreenView BuildTitle(Transform root, GameFlowController flow, MissionContent content,
             OutfielderAnimationSet animations)
         {
             var view = CreateView<TitleScreenView>(root, "Title", flow, content, out RectTransform panel);
@@ -591,7 +626,10 @@ namespace SayHeyDash.EditorTools.Scenes
             Set(heroAnim, "image", hero);
             SetClip(heroAnim, "startClip", animations.runReach.frames, 10f, true);
 
-            PixelButton start = PixelBtn(panel, "StartButton", ButtonStyle.Primary, Top(0, 130), Px(72, 16), content.startButton);
+            PixelButton start = PixelBtn(panel, "StartButton", ButtonStyle.Primary, Top(-40, 130), Px(72, 16), content.startButton);
+            PixelButton settingsBtn = PixelBtn(panel, "SettingsButton", ButtonStyle.Secondary, Top(40, 130), Px(72, 16), content.settingsButton);
+            Set(view, "settingsButton", settingsBtn);
+            Wire(settingsBtn.Button, view.OnSettingsClicked);
             PixelButton sound = PixelBtn(panel, "SoundButton", ButtonStyle.Secondary, TopLeft(26, 152), Px(68, 15), content.soundOnLabel);
             PixelButton assisted = PixelBtn(panel, "AssistedButton", ButtonStyle.Secondary, TopLeft(102, 152), Px(120, 15), content.assistedOffLabel);
             PixelButton credits = PixelBtn(panel, "CreditsButton", ButtonStyle.Secondary, TopLeft(230, 152), Px(64, 15), content.creditsButton);
@@ -614,15 +652,19 @@ namespace SayHeyDash.EditorTools.Scenes
             Set(view, "creditsBodyText", Label(box.transform, "Body", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 28), Px(256, 110), false));
             PixelButton back = PixelBtn(box.transform, "BackButton", ButtonStyle.Primary, Bottom(0, 5), Px(64, 16), content.closeButton);
             SetAudioCue(back, AudioCue.UiBack);
+            // The only control on the overlay: arrow keys must not wander to the title buttons beneath it.
+            back.Button.navigation = new Navigation { mode = Navigation.Mode.None };
             Set(view, "creditsBackButton", back);
             Wire(back.Button, view.OnCreditsBackClicked);
             creditsPanel.gameObject.SetActive(false);
+            return view;
         }
 
         // --- 02 Mission objective -----------------------------------------------------
-        private static void BuildBriefing(Transform root, GameFlowController flow, MissionContent content)
+        private static void BuildBriefing(Transform root, GameFlowController flow, MissionContent content, TouchControls touch)
         {
             var view = CreateView<BriefingScreenView>(root, "Briefing", flow, content, out RectTransform panel);
+            Set(view, "touchControls", touch);
             Stretch(Img(panel, "Dim", null, Dim, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel).GetComponent<Image>().raycastTarget = true;
             Set(view, "headerText", Label(panel, "Header", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 6), Px(300, 20), true));
             Image board = Panel(panel, "Scoreboard", "UI/ui_board_slice3", Top(0, 28), Px(180, 60));
@@ -653,9 +695,10 @@ namespace SayHeyDash.EditorTools.Scenes
         }
 
         // --- 06 Mission complete -------------------------------------------------------
-        private static void BuildComplete(Transform root, GameFlowController flow, MissionContent content)
+        private static void BuildComplete(Transform root, GameFlowController flow, MissionContent content, SettingsService settings)
         {
             var view = CreateView<MissionCompleteView>(root, "Complete", flow, content, out RectTransform panel);
+            Set(view, "settings", settings);
             Stretch(Img(panel, "Dim", null, DimLight, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel);
             Image box = Panel(panel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(280, 164));
             Transform b = box.transform;
@@ -672,7 +715,9 @@ namespace SayHeyDash.EditorTools.Scenes
             Set(view, "allStarBadge", LoadSprite("UI/badge_allstar"));
             Set(view, "legendaryBadge", LoadSprite("UI/badge_legendary"));
             Set(view, "rankText", Label(b, "Rank", _bold, Body, Orange, TextAnchor.UpperCenter, TopLeft(160, 100), Px(112, 10), false));
-            Set(view, "outcomeText", Label(b, "Outcome", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 114), Px(256, 20), false));
+            Set(view, "nextRankText", Label(b, "NextRank", _regular, Body, OffWhite, TextAnchor.UpperCenter, TopLeft(160, 111), Px(112, 10), false));
+            Set(view, "bestText", Label(b, "Best", _regular, Body, OffWhite, TextAnchor.UpperLeft, TopLeft(40, 106), Px(120, 10), false));
+            Set(view, "outcomeText", Label(b, "Outcome", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 124), Px(264, 10), false));
             PixelButton replay = PixelBtn(b, "ReplayMissionButton", ButtonStyle.Primary, new Vector2(0.5f, 0f), new Vector2(-52 * U, 8 * U), Px(80, 16), content.replayMissionButton);
             PixelButton replayMode = PixelBtn(b, "ReplayModeButton", ButtonStyle.Secondary, new Vector2(0.5f, 0f), new Vector2(48 * U, 8 * U), Px(104, 16), content.replayModeButton);
             Set(view, "replayButton", replay);
@@ -686,26 +731,81 @@ namespace SayHeyDash.EditorTools.Scenes
         private static void BuildReplay(Transform root, GameFlowController flow, MissionContent content)
         {
             var view = CreateView<ReplayScreenView>(root, "Replay", flow, content, out RectTransform panel);
-            Stretch(Img(panel, "Dim", null, Dim, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel);
-            Image box = Panel(panel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(280, 164));
-            Set(view, "headerText", Label(box.transform, "Header", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 8), Px(260, 20), false));
-            Set(view, "recapText", Label(box.transform, "Recap", _regular, Body, OffWhite, TextAnchor.UpperCenter, Top(0, 34), Px(260, 96), false));
-            PixelButton museum = PixelBtn(box.transform, "MuseumButton", ButtonStyle.Secondary, new Vector2(0.5f, 0f), new Vector2(-58 * U, 8 * U), Px(128, 16), content.museumButton);
-            PixelButton back = PixelBtn(box.transform, "BackToTitleButton", ButtonStyle.Primary, new Vector2(0.5f, 0f), new Vector2(66 * U, 8 * U), Px(112, 16), content.backToTitleButton);
+            Stretch(Img(panel, "Dim", null, Dim, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel)
+                .GetComponent<Image>().raycastTarget = true;
+            Image box = Panel(panel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(312, 172));
+            Transform b = box.transform;
+            Set(view, "headerText", Label(b, "Header", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 5), Px(300, 20), false));
+
+            // Left: the field diagram with the moving markers, the step caption and a shape legend.
+            Image frame = Panel(b, "DiagramFrame", "UI/ui_chip_slice3", TopLeft(8, 28), Px(132, 84));
+            Image diagram = Img(frame.transform, "Diagram", "Replay/replay_field", Color.white, Center(0, 0),
+                Px(ReplayTimeline.DiagramWidth, ReplayTimeline.DiagramHeight));
+            RectTransform d = diagram.rectTransform;
+            var trail = new RectTransform[10];
+            for (int i = 0; i < trail.Length; i++)
+            {
+                trail[i] = Marker(d, "TrailDot" + i, null, Yellow, 1);
+                trail[i].gameObject.SetActive(false);
+            }
+            RectTransform leadRunner = Marker(d, "LeadRunner", "Replay/replay_runner", Color.white, 7);
+            RectTransform trailRunner = Marker(d, "TrailRunner", "Replay/replay_runner", Color.white, 7);
+            RectTransform batter = Marker(d, "Batter", "Replay/replay_runner", Color.white, 7);
+            RectTransform fielder = Marker(d, "Fielder", "Replay/replay_fielder", Color.white, 7);
+            RectTransform ball = Marker(d, "Ball", null, OffWhite, 2);
+
+            var director = view.gameObject.AddComponent<ReplayDirector>();
+            Set(director, "flow", flow);
+            Set(director, "content", content);
+            Set(director, "audioService", _audio);
+            Set(director, "diagram", d);
+            Set(director, "ball", ball);
+            Set(director, "fielder", fielder);
+            Set(director, "leadRunner", leadRunner);
+            Set(director, "trailRunner", trailRunner);
+            Set(director, "batter", batter);
+            SetObjectArray(director, "trail", trail);
+            Set(view, "director", director);
+
+            Set(view, "stepText", Label(b, "Step", _bold, Body, Yellow, TextAnchor.UpperCenter, TopLeft(8, 114), Px(132, 10), false));
+            Img(b, "LegendFielder", "Replay/replay_fielder", Color.white, TopLeft(14, 127), Px(7, 7));
+            Set(view, "legendFielderText", Label(b, "LegendFielderLabel", _regular, Body, OffWhite, TextAnchor.UpperLeft, TopLeft(24, 127), Px(50, 10), false));
+            Img(b, "LegendRunner", "Replay/replay_runner", Color.white, TopLeft(76, 127), Px(7, 7));
+            Set(view, "legendRunnerText", Label(b, "LegendRunnerLabel", _regular, Body, OffWhite, TextAnchor.UpperLeft, TopLeft(86, 127), Px(56, 10), false));
+
+            // Right: the narration for the current step, then the museum / STORY MODE link.
+            Set(view, "narrationText", Label(b, "Narration", _regular, Body, OffWhite, TextAnchor.UpperLeft, TopLeft(148, 30), Px(156, 96), false));
+            PixelButton museum = PixelBtn(b, "MuseumButton", ButtonStyle.Secondary, TopLeft(148, 130), Px(156, 15), content.museumButton);
+
+            PixelButton again = PixelBtn(b, "WatchAgainButton", ButtonStyle.Secondary, BottomLeft(8, 6), Px(88, 16), content.watchAgainButton);
+            PixelButton next = PixelBtn(b, "NextButton", ButtonStyle.Secondary, BottomLeft(100, 6), Px(64, 16), content.nextStepButton);
+            PixelButton back = PixelBtn(b, "BackToTitleButton", ButtonStyle.Primary, BottomRight(8, 6), Px(104, 16), content.backToTitleButton);
+            Set(view, "watchAgainButton", again);
+            Set(view, "nextButton", next);
             Set(view, "museumButton", museum);
             Set(view, "backButton", back);
-            Set(view, "firstSelected", back.Button);
+            Set(view, "firstSelected", next.Button);
+            Wire(again.Button, view.OnWatchAgainClicked);
+            Wire(next.Button, view.OnNextClicked);
             Wire(museum.Button, view.OnMuseumClicked);
             Wire(back.Button, view.OnBackClicked);
         }
 
+        /// <summary>A replay marker: child of the diagram, anchored top-left, centred on its position.</summary>
+        private static RectTransform Marker(RectTransform diagram, string name, string sprite, Color color, int sizePx)
+        {
+            Image img = Img(diagram, name, sprite, color, new Vector2(0f, 1f), Vector2.zero, Px(sizePx, sizePx));
+            img.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            return img.rectTransform;
+        }
+
         // --- Pause overlay --------------------------------------------------------------
-        private static void BuildPause(Transform root, GameFlowController flow, MissionContent content)
+        private static PauseMenuView BuildPause(Transform root, GameFlowController flow, MissionContent content)
         {
             var view = CreateView<PauseMenuView>(root, "Pause", flow, content, out RectTransform panel);
             Set(view, "audioService", _audio);
             Stretch(Img(panel, "Dim", null, DimLight, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel);
-            Image box = Panel(panel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(150, 100));
+            Image box = Panel(panel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(150, 118));
             Set(view, "titleText", Label(box.transform, "Title", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 8), Px(140, 20), false));
             PixelButton resume = PixelBtn(box.transform, "ResumeButton", ButtonStyle.Primary, Top(0, 34), Px(100, 16), content.resumeButton);
             PixelButton restart = PixelBtn(box.transform, "RestartButton", ButtonStyle.Secondary, Top(0, 55), Px(100, 15), content.restartButton);
@@ -717,6 +817,57 @@ namespace SayHeyDash.EditorTools.Scenes
             Wire(resume.Button, view.OnResumeClicked);
             Wire(restart.Button, view.OnRestartClicked);
             Wire(sound.Button, view.OnSoundClicked);
+            PixelButton settingsBtn = PixelBtn(box.transform, "SettingsButton", ButtonStyle.Secondary, Top(0, 95), Px(100, 15), content.settingsButton);
+            Set(view, "settingsButton", settingsBtn);
+            Wire(settingsBtn.Button, view.OnSettingsClicked);
+            return view;
+        }
+
+        // --- Settings overlay (M4) -------------------------------------------------------
+        private static SettingsMenuView BuildSettings(Transform root, GameFlowController flow, MissionContent content,
+            SettingsService settings)
+        {
+            var view = CreateView<SettingsMenuView>(root, "SettingsMenu", flow, content, out RectTransform panel);
+            Set(view, "settings", settings);
+            Set(view, "audioService", _audio);
+            Stretch(Img(panel, "Dim", null, Dim, Vector2.zero, Vector2.zero, Vector2.zero).rectTransform, panel)
+                .GetComponent<Image>().raycastTarget = true; // blocks clicks to the menu underneath
+            Image box = Panel(panel, "Box", "UI/ui_panel_slice3", Center(0, 0), Px(200, 162));
+            Transform b = box.transform;
+            Set(view, "titleText", Label(b, "Title", _bold, Big, Yellow, TextAnchor.UpperCenter, Top(0, 6), Px(180, 20), false));
+            string[] names = { "SoundButton", "MusicButton", "EffectsButton", "ReducedMotionButton", "AssistedButton" };
+            string[] fields = { "soundButton", "musicButton", "effectsButton", "reducedMotionButton", "assistedButton" };
+            UnityAction[] actions = { view.OnSoundClicked, view.OnMusicClicked, view.OnEffectsClicked, view.OnReducedMotionClicked, view.OnAssistedClicked };
+            string[] labels =
+            {
+                content.soundOnLabel, string.Format(content.musicVolumeFormat, 100), string.Format(content.effectsVolumeFormat, 100),
+                content.reducedMotionOffLabel, content.assistedOffLabel,
+            };
+            var rows = new PixelButton[names.Length + 1];
+            for (int i = 0; i < names.Length; i++)
+            {
+                rows[i] = PixelBtn(b, names[i], ButtonStyle.Secondary, Top(0, 30 + i * 17), Px(170, 15), labels[i]);
+                Set(view, fields[i], rows[i]);
+                Wire(rows[i].Button, actions[i]);
+            }
+            Set(view, "noteText", Label(b, "Note", _regular, Body, Orange, TextAnchor.UpperCenter, Top(0, 117), Px(190, 20), false));
+            PixelButton back = PixelBtn(b, "BackButton", ButtonStyle.Primary, Bottom(0, 5), Px(64, 16), content.closeButton);
+            SetAudioCue(back, AudioCue.UiBack);
+            rows[names.Length] = back;
+            Set(view, "backButton", back);
+            Wire(back.Button, view.OnBackClicked);
+            Set(view, "firstSelected", rows[0].Button);
+            // Explicit up/down loop: focus must never wander to the screen underneath the overlay.
+            for (int i = 0; i < rows.Length; i++)
+            {
+                rows[i].Button.navigation = new Navigation
+                {
+                    mode = Navigation.Mode.Explicit,
+                    selectOnUp = rows[(i - 1 + rows.Length) % rows.Length].Button,
+                    selectOnDown = rows[(i + 1) % rows.Length].Button,
+                };
+            }
+            return view;
         }
 
         // ---------------------------------------------------------------- UI helpers
@@ -730,6 +881,8 @@ namespace SayHeyDash.EditorTools.Scenes
         private static Spot TopLeft(float x, float y) => new Spot { Anchor = new Vector2(0f, 1f), Position = new Vector2(x * U, -y * U) };
         private static Spot TopRight(float x, float y) => new Spot { Anchor = new Vector2(1f, 1f), Position = new Vector2(-x * U, -y * U) };
         private static Spot Bottom(float x, float y) => new Spot { Anchor = new Vector2(0.5f, 0f), Position = new Vector2(x * U, y * U) };
+        private static Spot BottomLeft(float x, float y) => new Spot { Anchor = new Vector2(0f, 0f), Position = new Vector2(x * U, y * U) };
+        private static Spot BottomRight(float x, float y) => new Spot { Anchor = new Vector2(1f, 0f), Position = new Vector2(-x * U, y * U) };
         private static Spot Center(float x, float y) => new Spot { Anchor = new Vector2(0.5f, 0.5f), Position = new Vector2(x * U, -y * U) };
 
         private static RectTransform Stretch(RectTransform rt, Transform parent)
@@ -974,6 +1127,16 @@ namespace SayHeyDash.EditorTools.Scenes
             SerializedProperty prop = Find(so, target, field);
             if (prop == null) return;
             prop.colorValue = value;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetObjectArray(Object target, string field, Object[] values)
+        {
+            var so = new SerializedObject(target);
+            SerializedProperty prop = Find(so, target, field);
+            if (prop == null) return;
+            prop.arraySize = values.Length;
+            for (int i = 0; i < values.Length; i++) prop.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 

@@ -32,9 +32,9 @@ namespace SayHeyDash.Flow
         [SerializeField] private DifficultyProfile defaultDifficulty;
         [SerializeField] private DifficultyProfile assistedDifficulty;
 
-        [Header("Options (moved to SettingsService in Milestone 4)")]
+        [Header("Options (start-up values; the Settings menu changes them and SettingsService saves them)")]
         [Tooltip("Shortens the catch sequence (GDD: skippable or shortened in reduced-motion mode) and freezes " +
-                 "decorative animation: crowd, flags, blinking prompt, score count-up.")]
+                 "decorative animation: crowd, flags, blinking prompt, score count-up, replay tweening.")]
         [SerializeField] private bool reducedMotion;
         [Tooltip("Log every state change to the console.")]
         [SerializeField] private bool logStateChanges;
@@ -48,6 +48,9 @@ namespace SayHeyDash.Flow
         public event Action<GameState, GameState> StateChanged;
         public event Action<bool> PauseChanged;
         public event Action<bool> AssistedModeChanged;
+        public event Action<bool> ReducedMotionChanged;
+        /// <summary>Raised with the final score just before MissionComplete is entered.</summary>
+        public event Action<ScoreBreakdown> MissionCompleted;
 
         public GameState State { get; private set; } = GameState.None;
         public bool IsPaused { get; private set; }
@@ -58,6 +61,8 @@ namespace SayHeyDash.Flow
         public CatchOutcome LastCatchOutcome => _lastCatch.Outcome;
         public ThrowResult LastThrow => _lastThrow;
         public ScoreBreakdown LastScore { get; private set; }
+        /// <summary>The scoring parameters in use (ScoringConfig asset).</summary>
+        public ScoringRules ScoringRules => scoring != null ? scoring.ToRules() : Scoring.ScoringRules.Default;
         /// <summary>Attempts started this session (each retry / replay counts).</summary>
         public int AttemptCount { get; private set; }
         public int CompletedCount { get; private set; }
@@ -161,6 +166,19 @@ namespace SayHeyDash.Flow
 
         public void ToggleAssistedMode() => SetAssistedMode(!AssistedMode);
 
+        /// <summary>Assisted mode can only change outside an attempt (it applies to the next one).</summary>
+        public bool CanChangeAssistedMode => !GameFlowRules.IsGameplay(State);
+
+        public void ToggleReducedMotion() => SetReducedMotion(!reducedMotion);
+
+        /// <summary>Takes effect immediately (decorative animation freezes / resumes).</summary>
+        public void SetReducedMotion(bool value)
+        {
+            if (value == reducedMotion) return;
+            reducedMotion = value;
+            ReducedMotionChanged?.Invoke(value);
+        }
+
         /// <summary>Takes effect from the next attempt; ignored mid-attempt.</summary>
         public void SetAssistedMode(bool value)
         {
@@ -172,8 +190,6 @@ namespace SayHeyDash.Flow
         // ------------------------------------------------------------------ test hooks
 
         internal void SimulateActionPress() => OnActionPressed();
-
-        internal void SetReducedMotion(bool value) => reducedMotion = value;
 
         // ------------------------------------------------------------------ input
 
@@ -278,6 +294,7 @@ namespace SayHeyDash.Flow
                 _lastCatch.PositioningQuality, _lastCatch.TimingQuality, _lastThrow.Quality);
             CompletedCount++;
             if (logStateChanges) Debug.Log($"[Flow] Score: {LastScore}");
+            MissionCompleted?.Invoke(LastScore);
             ChangeState(GameState.MissionComplete);
         }
 

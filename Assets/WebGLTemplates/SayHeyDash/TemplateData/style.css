@@ -5,7 +5,7 @@
   --shd-orange: #F57F32;
   --shd-offwhite: #FBF0D5;
   --shd-red: #E04858;
-  --shd-font: "Courier New", Courier, monospace; /* replaced by the licensed pixel font in M3 */
+  --shd-font: "Courier New", Courier, monospace; /* web page only; the game itself uses Say Hey Pixel */
 }
 
 html, body {
@@ -112,6 +112,58 @@ html, body {
   padding: 1em;
   text-align: center;
 }
+
+/* M4: open the game on its own page (touch devices, embedded). Shown with the start gate only. */
+#shd-open-full {
+  position: absolute;
+  right: 2%;
+  bottom: 3%;
+  color: var(--shd-midnight);
+  background: var(--shd-yellow);
+  font-family: var(--shd-font);
+  font-weight: bold;
+  font-size: clamp(10px, 2.6vmin, 16px);
+  text-decoration: none;
+  border: 3px solid var(--shd-offwhite);
+  padding: 0.5em 0.8em;
+  z-index: 2;
+}
+
+/* M4: touch device held in portrait. Covers the whole viewport (not just the 16:9 stage). */
+#shd-rotate {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4vmin;
+  padding: 6vmin;
+  box-sizing: border-box;
+  background: var(--shd-midnight);
+  color: var(--shd-offwhite);
+  font-family: var(--shd-font);
+  font-weight: bold;
+  text-align: center;
+}
+#shd-rotate .shd-title { font-size: clamp(16px, 6vmin, 32px); }
+#shd-rotate .shd-presents { font-size: clamp(11px, 3.5vmin, 18px); }
+/* A phone turned on its side (static: no motion needed to get the message). */
+.shd-phone {
+  width: 22vmin;
+  height: 13vmin;
+  border: 1.2vmin solid var(--shd-offwhite);
+  border-radius: 2vmin;
+  box-shadow: inset 0 0 0 1vmin var(--shd-midnight), inset 0 0 0 100vmin var(--shd-orange);
+}
+.shd-link {
+  color: var(--shd-yellow);
+  font-size: clamp(12px, 3.8vmin, 18px);
+  text-decoration: underline;
+  padding: 0.6em;
+}
+#shd-open-full:focus-visible, .shd-link:focus-visible { outline: 3px solid var(--shd-yellow); outline-offset: 3px; }
 
 .shd-hidden { display: none !important; }
 

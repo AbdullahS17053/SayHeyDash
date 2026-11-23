@@ -115,11 +115,12 @@ flowchart LR
 | `ThrowSystem` / `ThrowJudge` | MonoBehaviour / pure | Ping-pong accuracy needle + target zone + time limit, emits `ThrowResolved(result)` (**done in M2**) | M2 |
 | `ScoreCalculator` | plain C# | Pure scoring + rank function (unit-tested) (**done in M2**, final sign-off Q6) | M2 (basic) / M4 (final) |
 | `PlaceholderFlowView` + `ThrowMeterView` | MonoBehaviour | **M2 placeholder UI** — one panel per state, text from `MissionContent`; replaced by per-screen views in M3 | M2 → M3 |
-| `RunnerSequence` | MonoBehaviour | Scripted base-runner outcome (Doby to 3rd, no run scores). M2 shows it as text on Screen 06; animation in M4 | M2 basic / M4 |
+| `RunnerSequence` → `ReplayTimeline` | pure C# | Scripted base-runner outcome (Doby tags up, takes 3rd, no run scores). Text on Screen 06 (M2); **animated in the Screen 07 replay (done in M4)**, unit-tested so it can never show another outcome | M2 basic / M4 |
 | Screen views (`TitleScreenView`, ...) | MonoBehaviour per screen | Show/hide on `StateChanged`; no game logic | M3 |
-| `AudioService` | MonoBehaviour | Plays cues from an `AudioCueLibrary` SO; mute | M3 / M4 |
-| `SettingsService` | plain C# + PlayerPrefs | Mute, reduced motion, assisted mode (persisted, fails gracefully in partitioned iframes) | M4 |
-| `ReplayDirector` | MonoBehaviour | Simplified animated replay on Screen 07 | M4 |
+| `AudioService` | MonoBehaviour | Plays cues from an `AudioCueLibrary` SO; mute; MUSIC / EFFECTS volumes, crowd ducking, music fade (**mix done in M4**) | M3 / M4 |
+| `SettingsService` + `ISettingsStore` | MonoBehaviour + plain C# (PlayerPrefs / memory) | Mute, volumes, reduced motion, assisted mode, best score (persisted best-effort, fails gracefully in partitioned iframes; first-visit reduced motion follows the browser preference) (**done in M4**) | M4 |
+| `ReplayDirector` | MonoBehaviour | Simplified animated replay on Screen 07: markers on a field diagram, six narrated steps (**done in M4**) | M4 |
+| `TouchControls` / `BrowserEvents` | MonoBehaviour | On-screen controls on touch devices only; pause requests from the web page (tab hidden, focus lost, portrait) (**done in M4**) | M4 |
 
 ## 5. Game flow (the 7 required states)
 

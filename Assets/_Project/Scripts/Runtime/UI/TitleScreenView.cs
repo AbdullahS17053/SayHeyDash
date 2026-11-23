@@ -7,12 +7,14 @@ namespace SayHeyDash.UI
 {
     /// <summary>
     /// Screen 01 - Title / Press Start: the presents line, pixel-art title treatment, the
-    /// mission lines, a blinking PRESS START, and START / SOUND / ASSISTED MODE / CREDITS.
-    /// Credits open as an overlay inside this screen (not a game state).
+    /// mission lines, a blinking PRESS START, and START / SETTINGS / SOUND / ASSISTED MODE / CREDITS.
+    /// Credits open as an overlay inside this screen (not a game state); SETTINGS opens the
+    /// shared settings overlay.
     /// </summary>
     public sealed class TitleScreenView : ScreenView
     {
         [SerializeField] private AudioService audioService;
+        [SerializeField] private SettingsMenuView settingsMenu;
 
         [Header("Text")]
         [SerializeField] private Text presentsText;
@@ -25,6 +27,7 @@ namespace SayHeyDash.UI
         [SerializeField] private PixelButton soundButton;
         [SerializeField] private PixelButton assistedButton;
         [SerializeField] private PixelButton creditsButton;
+        [SerializeField] private PixelButton settingsButton;
 
         [Header("Credits overlay")]
         [SerializeField] private GameObject creditsPanel;
@@ -35,7 +38,8 @@ namespace SayHeyDash.UI
         public bool CreditsOpen => creditsPanel != null && creditsPanel.activeSelf;
 
         protected override bool Validate() =>
-            audioService != null && presentsText != null && arcadeModeText != null && infoText != null &&
+            audioService != null && settingsMenu != null && settingsButton != null &&
+            presentsText != null && arcadeModeText != null && infoText != null &&
             pressStartText != null && startButton != null && soundButton != null && assistedButton != null &&
             creditsButton != null && creditsPanel != null && creditsTitleText != null && creditsBodyText != null &&
             creditsBackButton != null;
@@ -45,6 +49,7 @@ namespace SayHeyDash.UI
             base.OnEnable();
             if (!enabled) return;
             flow.AssistedModeChanged += OnAssistedModeChanged;
+            flow.ReducedMotionChanged += OnReducedMotionChanged;
             audioService.MuteChanged += OnMuteChanged;
             RefreshToggles();
         }
@@ -52,7 +57,11 @@ namespace SayHeyDash.UI
         protected override void OnDisable()
         {
             base.OnDisable();
-            if (flow != null) flow.AssistedModeChanged -= OnAssistedModeChanged;
+            if (flow != null)
+            {
+                flow.AssistedModeChanged -= OnAssistedModeChanged;
+                flow.ReducedMotionChanged -= OnReducedMotionChanged;
+            }
             if (audioService != null) audioService.MuteChanged -= OnMuteChanged;
         }
 
@@ -66,6 +75,7 @@ namespace SayHeyDash.UI
             SetText(pressStartText, content.pressStart);
             startButton.Label = content.startButton;
             creditsButton.Label = content.creditsButton;
+            settingsButton.Label = content.settingsButton;
             SetText(creditsTitleText, content.creditsTitle);
             SetText(creditsBodyText, content.creditsText);
             creditsBackButton.Label = content.closeButton;
@@ -77,7 +87,7 @@ namespace SayHeyDash.UI
             if (!justShown) return;
             creditsPanel.SetActive(false);
             RefreshToggles();
-            if (pressStartText.TryGetComponent(out BlinkingText blink)) blink.Steady = flow.ReducedMotion;
+            OnReducedMotionChanged(flow.ReducedMotion);
         }
 
         // ------------------------------------------------------------------ buttons
@@ -88,6 +98,8 @@ namespace SayHeyDash.UI
         public void OnSoundClicked() => audioService.ToggleMute();
 
         public void OnAssistedClicked() => flow.ToggleAssistedMode();
+
+        public void OnSettingsClicked() => settingsMenu.Open(settingsButton.Button);
 
         public void OnCreditsClicked()
         {
@@ -106,6 +118,11 @@ namespace SayHeyDash.UI
         private void OnAssistedModeChanged(bool _) => RefreshToggles();
 
         private void OnMuteChanged(bool _) => RefreshToggles();
+
+        private void OnReducedMotionChanged(bool reduced)
+        {
+            if (pressStartText.TryGetComponent(out BlinkingText blink)) blink.Steady = reduced;
+        }
 
         private void RefreshToggles()
         {

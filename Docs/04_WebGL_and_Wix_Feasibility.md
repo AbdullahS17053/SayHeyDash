@@ -88,12 +88,12 @@ Wix **cannot host** the Unity build itself (it needs static hosting for `.wasm`/
 |---|---|---|---|
 | F1 | The game needs a user click/tap before keyboard and audio work inside an iframe | Expected browser behaviour | Solved by the start gate, which doubles as "PRESS START" (M3 merges it with Screen 01) |
 | F2 | Fullscreen inside a Wix embed is likely blocked by Wix's outer iframe | No fullscreen on desktop embed | Hide the fullscreen button when unsupported (`document.fullscreenEnabled`) + standalone-page link |
-| F3 | Portrait phone embeds are tiny (16:9 game in a tall box) | Poor mobile UX | M4: "rotate to landscape" overlay + mobile "play full screen" link (option C) |
+| F3 | Portrait phone embeds are tiny (16:9 game in a tall box) | Poor mobile UX | **Done (M4):** "please rotate your device" screen in portrait + "open full screen" link on touch devices when embedded (option C). Real-device check in M5 |
 | F4 | iPhone Safari has **no Fullscreen API** for elements | No fullscreen on iPhone | Standalone page + `viewport-fit=cover`; acceptable per GDD (disclose limitation) |
 | F5 | iOS Safari WebGL memory limits | Possible crashes with large builds | Build is small (9.3 MB); keep initial memory modest; test on device in M5 |
-| F6 | Storage (PlayerPrefs → IndexedDB) may be partitioned or blocked in third-party iframes (Safari ITP, Chrome partitioning) | Mute/assisted/reduced-motion settings may not persist between visits when embedded | `SettingsService` (M4) treats storage as best-effort; defaults are sensible; no personal data stored |
+| F6 | Storage (PlayerPrefs → IndexedDB) may be partitioned or blocked in third-party iframes (Safari ITP, Chrome partitioning) | Mute/assisted/reduced-motion settings may not persist between visits when embedded | **Done (M4):** `SettingsService` treats storage as best-effort; if storage is blocked the Settings menu says settings last for this visit; defaults are sensible; no personal data stored |
 | F7 | URP prints two "shader not supported" lines on WebGL | Console noise against "no persistent console errors" | M5: strip HDR debug / CoreCopy variants or switch these features off in URP assets |
-| F8 | On-screen controls overlap the play area at the far right/left | Visual clash when the player reaches the edge | M4: show touch controls only on touch devices; keep field bounds clear of them |
+| F8 | On-screen controls overlap the play area at the far right/left | Visual clash when the player reaches the edge | **Done (M4):** touch controls only on touch devices; `playerBounds` narrowed to ±6.5 so the outfielder never runs under them |
 | F9 | Legacy uGUI `Text` used in the PoC | None (PoC only) | M3: TextMeshPro with OFL pixel font |
 | F10 | `window.open('noopener')` always returns `null` | Would have produced false "popup blocked" warnings | **Fixed** in `BrowserBridge.jslib` (opener detached manually) |
 

@@ -34,15 +34,35 @@ namespace SayHeyDash.Tests
             var content = AssetDatabase.LoadAssetAtPath<MissionContent>(ContentPath);
             Assert.IsNotNull(content);
             var missing = new List<string>();
-            foreach (FieldInfo f in typeof(MissionContent).GetFields(BindingFlags.Public | BindingFlags.Instance))
+            foreach ((string name, string raw) in AllStrings(content))
             {
-                if (f.FieldType != typeof(string) || f.Name == nameof(MissionContent.museumUrl)) continue;
-                var value = (string)f.GetValue(content) ?? string.Empty;
+                // {0}-style placeholders are replaced by numbers / rank names before display.
+                string value = System.Text.RegularExpressions.Regex.Replace(raw, @"\{\d+\}", string.Empty);
                 foreach (char c in value)
                     if (c != '\n' && c != '\r' && !glyphs.Contains(c))
-                        missing.Add($"{f.Name}: '{c}' (U+{(int)c:X4})");
+                        missing.Add($"{name}: '{c}' (U+{(int)c:X4})");
             }
             Assert.IsEmpty(missing, "Characters without a glyph:\n" + string.Join("\n", missing.Distinct()));
+        }
+
+        /// <summary>Every on-screen string, including the replay beats (M4); the museum URL is never drawn.</summary>
+        private static IEnumerable<(string, string)> AllStrings(MissionContent content)
+        {
+            foreach (FieldInfo f in typeof(MissionContent).GetFields(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (f.Name == nameof(MissionContent.museumUrl)) continue;
+                if (f.FieldType == typeof(string))
+                    yield return (f.Name, (string)f.GetValue(content) ?? string.Empty);
+                else if (f.FieldType == typeof(MissionContent.ReplayBeat[]))
+                {
+                    var beats = (MissionContent.ReplayBeat[])f.GetValue(content) ?? Array.Empty<MissionContent.ReplayBeat>();
+                    for (int i = 0; i < beats.Length; i++)
+                    {
+                        yield return ($"{f.Name}[{i}].title", beats[i].title ?? string.Empty);
+                        yield return ($"{f.Name}[{i}].narration", beats[i].narration ?? string.Empty);
+                    }
+                }
+            }
         }
 
         [Test]

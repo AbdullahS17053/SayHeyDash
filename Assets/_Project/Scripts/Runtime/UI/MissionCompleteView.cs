@@ -1,5 +1,6 @@
 using SayHeyDash.Flow;
 using SayHeyDash.Scoring;
+using SayHeyDash.Settings;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ namespace SayHeyDash.UI
     /// Screen 06 - Mission Complete: title and date, the score breakdown counting up, the
     /// final score, the rank as a badge + stars + word (never colour alone), the documented
     /// runner outcome, and REPLAY / REPLAY MODE. Reduced motion shows the numbers at once.
+    /// Milestone 4: the best score on this device (or NEW BEST!) and the next rank to aim for.
     /// </summary>
     public sealed class MissionCompleteView : ScreenView
     {
@@ -24,6 +26,9 @@ namespace SayHeyDash.UI
         [SerializeField] private Sprite allStarBadge;
         [SerializeField] private Sprite legendaryBadge;
         [SerializeField] private Text outcomeText;
+        [SerializeField] private Text bestText;
+        [SerializeField] private Text nextRankText;
+        [SerializeField] private SettingsService settings;
         [SerializeField] private PixelButton replayButton;
         [SerializeField] private PixelButton replayModeButton;
         [Min(0f)] [SerializeField] private float tallySeconds = 1.2f;
@@ -38,6 +43,7 @@ namespace SayHeyDash.UI
             titleText != null && subtitleText != null && labelsText != null && valuesText != null &&
             totalLabelText != null && totalValueText != null && rankText != null && rankBadge != null &&
             rookieBadge != null && allStarBadge != null && legendaryBadge != null && outcomeText != null &&
+            bestText != null && nextRankText != null && settings != null &&
             replayButton != null && replayModeButton != null;
 
         protected override bool IsVisibleIn(GameState state) => state == GameState.MissionComplete;
@@ -61,6 +67,12 @@ namespace SayHeyDash.UI
             rankBadge.sprite = _score.Rank == Rank.Legendary ? legendaryBadge :
                 _score.Rank == Rank.AllStar ? allStarBadge : rookieBadge;
             rankBadge.enabled = _score.Rank != Rank.None;
+            bestText.text = settings.LastScoreWasNewBest
+                ? content.newBestLabel
+                : $"{content.bestScoreLabel}: {settings.BestScore}";
+            nextRankText.text = ScoreCalculator.TryGetNextRank(flow.ScoringRules, _score.Total, out Rank next, out int at)
+                ? string.Format(content.nextRankFormat, content.RankName(next), at)
+                : content.topRankLabel;
             if (flow.ReducedMotion || tallySeconds <= 0f) ShowNumbers(1f);
             else
             {
@@ -85,6 +97,8 @@ namespace SayHeyDash.UI
             totalValueText.text = Count(_score.Total, t).ToString();
             bool done = t >= 1f;
             rankText.enabled = done;
+            bestText.enabled = done;
+            nextRankText.enabled = done;
             rankBadge.gameObject.SetActive(done && _score.Rank != Rank.None);
         }
 

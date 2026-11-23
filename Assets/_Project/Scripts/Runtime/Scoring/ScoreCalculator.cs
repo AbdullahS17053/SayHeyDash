@@ -35,6 +35,20 @@ namespace SayHeyDash.Scoring
             return Rank.None;
         }
 
+        /// <summary>
+        /// The next rank above <paramref name="total"/> and the score it needs (the "ALL-STAR AT 750"
+        /// hint on Screen 06). Returns false at the top rank.
+        /// </summary>
+        public static bool TryGetNextRank(in ScoringRules rules, int total, out Rank next, out int threshold)
+        {
+            if (total < rules.RookieThreshold) { next = Rank.Rookie; threshold = rules.RookieThreshold; return true; }
+            if (total < rules.AllStarThreshold) { next = Rank.AllStar; threshold = rules.AllStarThreshold; return true; }
+            if (total < rules.LegendaryThreshold) { next = Rank.Legendary; threshold = rules.LegendaryThreshold; return true; }
+            next = Rank.None;
+            threshold = 0;
+            return false;
+        }
+
         private static float Clamp01(float v)
         {
             if (float.IsNaN(v)) return 0f;

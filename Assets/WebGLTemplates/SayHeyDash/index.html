@@ -15,6 +15,10 @@
        - "click / tap to play" gate = guaranteed iframe keyboard focus + audio unlock
        - re-focus hint when the iframe loses keyboard focus
        - no external fonts/scripts (works under strict CSP / sandboxed iframes)
+      Milestone 4:
+       - "rotate your device" overlay on touch devices held in portrait
+       - "open full screen" link for touch devices when embedded (small phone embeds, Docs/04 F3)
+       - the game pauses itself when the tab is hidden, the page loses focus or the overlay shows
     -->
     <div id="shd-stage">
       <canvas id="unity-canvas" width="{{{ WIDTH }}}" height="{{{ HEIGHT }}}" tabindex="-1" aria-label="{{{ PRODUCT_NAME }}} game"></canvas>
@@ -31,8 +35,16 @@
         <span class="shd-blink">CLICK OR TAP TO PLAY</span>
       </button>
 
+      <a id="shd-open-full" class="shd-hidden" href="#" target="_blank" rel="noopener">OPEN FULL SCREEN</a>
       <button id="shd-refocus" class="shd-hidden" type="button">CLICK GAME TO RESUME KEYBOARD CONTROL</button>
       <div id="shd-error" class="shd-hidden" role="alert"></div>
+    </div>
+
+    <div id="shd-rotate" class="shd-hidden" role="alert" aria-live="assertive">
+      <div class="shd-phone" aria-hidden="true"></div>
+      <div class="shd-title">PLEASE ROTATE YOUR DEVICE</div>
+      <div class="shd-presents">THE SAY HEY DASH PLAYS IN LANDSCAPE</div>
+      <a id="shd-rotate-full" class="shd-link shd-hidden" href="#" target="_blank" rel="noopener">OR OPEN THE GAME FULL SCREEN</a>
     </div>
 
     <script>
@@ -44,7 +56,12 @@
         var startGate = document.getElementById("shd-start");
         var refocus = document.getElementById("shd-refocus");
         var errorBox = document.getElementById("shd-error");
+        var rotate = document.getElementById("shd-rotate");
+        var openFull = document.getElementById("shd-open-full");
+        var rotateFull = document.getElementById("shd-rotate-full");
         var started = false;
+        var isTouch = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
+        var embedded = (function () { try { return window.self !== window.top; } catch (e) { return true; } })();
 
         function show(el) { el.classList.remove("shd-hidden"); }
         function hide(el) { el.classList.add("shd-hidden"); }
@@ -59,6 +76,32 @@
           canvas.focus();
         }
 
+        // Ask the game to pause (no-op unless a mission is being played). See BrowserEvents.cs.
+        function pauseGame() {
+          if (!started || !window.sayHeyDash) return;
+          try { window.sayHeyDash.SendMessage("BrowserEvents", "OnBrowserPause"); } catch (e) { /* not ready */ }
+        }
+
+        // Touch device held in portrait: cover the game with a rotate hint (and pause it).
+        function updateRotate() {
+          var portrait = window.innerHeight > window.innerWidth;
+          var on = isTouch && portrait;
+          rotate.classList.toggle("shd-hidden", !on);
+          if (on) pauseGame();
+        }
+        window.addEventListener("resize", updateRotate);
+        window.addEventListener("orientationchange", updateRotate);
+        updateRotate();
+
+        // Embedded on a phone or tablet: offer the game on its own page (bigger, can rotate freely).
+        if (isTouch && embedded) {
+          openFull.href = window.location.href;
+          rotateFull.href = window.location.href;
+          show(rotateFull);
+        }
+
+        document.addEventListener("visibilitychange", function () { if (document.hidden) pauseGame(); });
+
         function showBanner(msg, type) {
           if (type === "error") showError(msg);
           else console.warn("[SayHeyDash] " + msg);
@@ -70,7 +113,7 @@
         });
 
         // Keyboard focus is lost when the player clicks elsewhere on the host (Wix) page.
-        window.addEventListener("blur", function () { if (started) show(refocus); });
+        window.addEventListener("blur", function () { if (started) { show(refocus); pauseGame(); } });
         window.addEventListener("focus", function () { hide(refocus); });
         refocus.addEventListener("click", function () { hide(refocus); focusGame(); });
         canvas.addEventListener("pointerdown", function () { hide(refocus); focusGame(); });
@@ -111,6 +154,7 @@
             window.sayHeyDash = unityInstance; // handy for debugging from the console
             hide(loading);
             show(startGate);
+            if (isTouch && embedded) show(openFull);
             startGate.focus();
           }).catch(function (message) {
             showError(String(message));
@@ -122,6 +166,7 @@
         startGate.addEventListener("click", function () {
           started = true;
           hide(startGate);
+          hide(openFull);
           focusGame();
         });
 

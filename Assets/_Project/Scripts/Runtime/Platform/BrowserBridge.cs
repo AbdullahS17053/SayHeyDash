@@ -15,7 +15,41 @@ namespace SayHeyDash.Platform
         [DllImport("__Internal")] private static extern int SHD_HasFocus();
         [DllImport("__Internal")] private static extern double SHD_GetDevicePixelRatio();
         [DllImport("__Internal")] private static extern void SHD_OpenUrlOnNextGesture(string url);
+        [DllImport("__Internal")] private static extern int SHD_PrefersReducedMotion();
+        [DllImport("__Internal")] private static extern int SHD_StorageAvailable();
 #endif
+
+        /// <summary>
+        /// The browser / OS "reduce motion" accessibility preference. Used as the default for the
+        /// game's reduced-motion setting on a first visit. Editor: false.
+        /// </summary>
+        public static bool PrefersReducedMotion
+        {
+            get
+            {
+#if UNITY_WEBGL && !UNITY_EDITOR
+                return SHD_PrefersReducedMotion() == 1;
+#else
+                return false;
+#endif
+            }
+        }
+
+        /// <summary>
+        /// False when the browser blocks storage for this page (e.g. a partitioned or sandboxed
+        /// third-party iframe). Settings then last for the current visit only.
+        /// </summary>
+        public static bool StorageAvailable
+        {
+            get
+            {
+#if UNITY_WEBGL && !UNITY_EDITOR
+                return SHD_StorageAvailable() == 1;
+#else
+                return true;
+#endif
+            }
+        }
 
         public static bool IsWebPlayer =>
 #if UNITY_WEBGL && !UNITY_EDITOR

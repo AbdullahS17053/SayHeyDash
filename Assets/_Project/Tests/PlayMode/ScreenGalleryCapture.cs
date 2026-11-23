@@ -4,6 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using SayHeyDash.Flow;
 using SayHeyDash.Gameplay;
+using SayHeyDash.Replay;
 using SayHeyDash.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,7 +14,7 @@ using Object = UnityEngine.Object;
 namespace SayHeyDash.Tests
 {
     /// <summary>
-    /// Not a regular test: renders every screen of the real Main scene to PNG (Docs/img/m3_screens)
+    /// Not a regular test: renders every screen of the real Main scene to PNG (Docs/img/m4_screens)
     /// for art review and client reports. Run it on purpose:
     /// -runTests -testPlatform PlayMode -testFilter SayHeyDash.Tests.ScreenGalleryCapture
     /// Needs a graphics device (no -nographics).
@@ -50,14 +51,20 @@ namespace SayHeyDash.Tests
                 yield return null;
                 Capture("01b_credits");
                 Object.FindFirstObjectByType<TitleScreenView>().OnCreditsBackClicked();
+                Object.FindFirstObjectByType<TitleScreenView>().OnSettingsClicked();
+                yield return null;
+                Capture("01c_settings");
+                Object.FindFirstObjectByType<SettingsMenuView>().OnBackClicked();
 
+                // Touch-device look (on-screen stick + CATCH/THROW button) for the rest of the run.
+                Object.FindFirstObjectByType<TouchControls>().SetTouchMode(true);
                 flow.StartMission();
                 yield return Wait(0.2f);
-                Capture("02_mission_objective");
+                Capture("02_mission_objective_touch");
 
                 flow.BeginMission();
                 yield return Wait(0.6f);
-                Capture("03_gameplay_track");
+                Capture("03_gameplay_track_touch");
                 outfielder.TeleportTo(ball.Trajectory.Landing + new Vector2(-0.2f, 0f));
                 while (catchSystem.Cue != CatchCue.Ready) yield return null;
                 yield return null;
@@ -83,7 +90,20 @@ namespace SayHeyDash.Tests
 
                 flow.ShowReplayMode();
                 yield return null;
-                Capture("07_replay");
+                var replay = Object.FindFirstObjectByType<ReplayScreenView>();
+                var director = Object.FindFirstObjectByType<ReplayDirector>();
+                Capture("07a_replay_setting");
+                replay.OnNextClicked();                                     // the drive, mid-flight
+                while (director.StepProgress < 0.55f) yield return null;
+                Capture("07b_replay_drive");
+                replay.OnNextClicked();
+                replay.OnNextClicked();                                     // the throw, mid-way
+                while (director.StepProgress < 0.5f) yield return null;
+                Capture("07c_replay_throw");
+                replay.OnNextClicked();
+                replay.OnNextClicked();
+                yield return null;
+                Capture("07d_replay_why_it_matters");
                 flow.BackToTitle();
                 yield return null;
                 flow.StartMission();
@@ -93,6 +113,9 @@ namespace SayHeyDash.Tests
                 flow.Pause();
                 yield return null;
                 Capture("pause_menu");
+                Object.FindFirstObjectByType<PauseMenuView>().OnSettingsClicked();
+                yield return null;
+                Capture("pause_settings");
                 flow.Resume();
                 while (flow.State != GameState.MissionFailed) yield return null;
                 yield return null;
@@ -106,7 +129,7 @@ namespace SayHeyDash.Tests
 
         private void Setup()
         {
-            _dir = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Docs", "img", "m3_screens"));
+            _dir = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Docs", "img", "m4_screens"));
             Directory.CreateDirectory(_dir);
             _cam = Camera.main;
             foreach (Behaviour b in _cam.GetComponents<Behaviour>())

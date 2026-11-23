@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace SayHeyDash.UI
 {
-    /// <summary>Pause overlay (not one of the seven states): RESUME, RESTART and SOUND.</summary>
+    /// <summary>Pause overlay (not one of the seven states): RESUME, RESTART, SOUND and SETTINGS.</summary>
     public sealed class PauseMenuView : ScreenView
     {
         [SerializeField] private AudioService audioService;
@@ -13,9 +13,12 @@ namespace SayHeyDash.UI
         [SerializeField] private PixelButton resumeButton;
         [SerializeField] private PixelButton restartButton;
         [SerializeField] private PixelButton soundButton;
+        [SerializeField] private PixelButton settingsButton;
+        [SerializeField] private SettingsMenuView settingsMenu;
 
         protected override bool Validate() =>
-            audioService != null && titleText != null && resumeButton != null && restartButton != null && soundButton != null;
+            audioService != null && titleText != null && resumeButton != null && restartButton != null &&
+            soundButton != null && settingsButton != null && settingsMenu != null;
 
         protected override void OnEnable()
         {
@@ -39,6 +42,7 @@ namespace SayHeyDash.UI
             SetText(titleText, content.pausedTitle);
             resumeButton.Label = content.resumeButton;
             restartButton.Label = content.restartButton;
+            settingsButton.Label = content.settingsButton;
         }
 
         protected override void OnHidden() => UiSelection.Select(null); // back to play: nothing focused
@@ -48,6 +52,8 @@ namespace SayHeyDash.UI
         public void OnRestartClicked() => flow.RestartAttempt();
 
         public void OnSoundClicked() => audioService.ToggleMute();
+
+        public void OnSettingsClicked() => settingsMenu.Open(settingsButton.Button);
 
         private void OnPauseChanged(bool _) => Refresh(flow.State);
 

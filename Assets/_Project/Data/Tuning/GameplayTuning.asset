@@ -17,9 +17,9 @@ MonoBehaviour:
   playerStartPosition: {x: -2, y: -4}
   playerBounds:
     serializedVersion: 2
-    x: -9
+    x: -6.5
     y: -5
-    width: 18
+    width: 13
     height: 5
   ballLaunchPoint: {x: 0.5, y: -8}
   landingPoint: {x: 3.5, y: -0.25}

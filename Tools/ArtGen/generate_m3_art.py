@@ -8,6 +8,7 @@ All art is original and drawn from code so it is reproducible and easy to tweak:
   * Title-screen backdrop and logo
   * UI kit: 9-slice panels/buttons, cursor, icons, rank badges, on-screen controls
   * Bitmap pixel font atlas (+ metrics JSON read by the Unity font builder)
+  * Milestone 4: the Screen 07 replay field diagram (128x80, top-down) and its 7x7 markers
   * Preview sheets for review (Docs/img/, not imported by Unity)
 
 Usage (from the repository root):
@@ -1120,12 +1121,115 @@ def gameplay_mockup(base, crowd, flags):
     write_png(os.path.join(PREVIEW_DIR, "m3_stadium_preview.png"), scale(img, 4))
 
 
+# --- Replay diagram (Milestone 4, Screen 07) --------------------------------------
+# Top-down, Polo Grounds-style field (short foul lines, very deep center field) for the
+# simplified animated replay. Coordinates must match Scripts/Runtime/Replay/ReplayTimeline.cs.
+REPLAY_W, REPLAY_H = 128, 80
+REPLAY_HOME = (64, 74)
+REPLAY_BASES = [(73, 65), (64, 56), (55, 65)]
+# Outfield wall from the left-field pole round to the right-field pole.
+REPLAY_WALL = [(36, 46), (31, 38), (30, 25), (40, 15), (52, 9), (64, 6), (76, 9), (88, 15), (98, 25),
+               (97, 38), (90, 48)]
+
+
+def point_in_poly(x, y, poly):
+    inside = False
+    j = len(poly) - 1
+    for i in range(len(poly)):
+        xi, yi = poly[i]
+        xj, yj = poly[j]
+        if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / float(yj - yi) + xi:
+            inside = not inside
+        j = i
+    return inside
+
+
+def dist_to_segment(px, py, a, b):
+    ax, ay = a
+    bx, by = b
+    dx, dy = bx - ax, by - ay
+    t = 0.0 if dx == dy == 0 else max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / float(dx * dx + dy * dy)))
+    return math.hypot(px - (ax + t * dx), py - (ay + t * dy))
+
+
+def replay_field():
+    img = new_img(REPLAY_W, REPLAY_H, DUSK)                 # the stands
+    park = [(64, 79), (46, 79)] + REPLAY_WALL + [(82, 79)]
+    fair = [REPLAY_HOME] + REPLAY_WALL
+    hx, hy = REPLAY_HOME
+    for y in range(REPLAY_H):
+        for x in range(REPLAY_W):
+            cx, cy = x + 0.5, y + 0.5
+            if not point_in_poly(cx, cy, park):
+                continue
+            if not point_in_poly(cx, cy, fair):
+                img[y][x] = GREEN_DARK                        # foul ground
+                continue
+            wall = min(dist_to_segment(cx, cy, REPLAY_WALL[i], REPLAY_WALL[i + 1])
+                       for i in range(len(REPLAY_WALL) - 1))
+            if wall < 2.0:
+                img[y][x] = DIRT                              # warning track
+            elif math.hypot(cx - 64, cy - 64.5) <= 13.0:
+                img[y][x] = DIRT                              # infield
+            else:
+                img[y][x] = GREEN if (y // 6) % 2 == 0 else GREEN_LIGHT  # mowing stripes
+    # Infield grass inside the base paths, then the mound and home-plate circle.
+    for y in range(REPLAY_H):
+        for x in range(REPLAY_W):
+            if abs(x + 0.5 - 64) + abs(y + 0.5 - 65) <= 6.0:
+                img[y][x] = GREEN
+            if math.hypot(x + 0.5 - 64, y + 0.5 - 65.5) <= 1.6 or math.hypot(x + 0.5 - hx, y + 0.5 - hy) <= 2.6:
+                img[y][x] = DIRT
+    # Outfield wall just outside fair territory.
+    for y in range(REPLAY_H):
+        for x in range(REPLAY_W):
+            if img[y][x] == DUSK and min(dist_to_segment(x + 0.5, y + 0.5, REPLAY_WALL[i], REPLAY_WALL[i + 1])
+                                         for i in range(len(REPLAY_WALL) - 1)) < 1.2:
+                img[y][x] = OFFWHITE
+    # Foul lines (45 degrees) from home to the poles.
+    for (px, py) in (REPLAY_WALL[0], REPLAY_WALL[-1]):
+        step = 1 if px > hx else -1
+        for k in range(1, abs(px - hx) + 1):
+            put(img, hx + step * k, hy - k, OFFWHITE)
+    for (bx, by) in REPLAY_BASES + [REPLAY_HOME]:
+        fill(img, bx - 1, by - 1, bx + 1, by + 1, OFFWHITE)
+    # Clubhouse beyond center field with the famous distance marker.
+    fill(img, 52, 0, 77, 5, PLUM)
+    mini_text(img, 59, 0, "483", YELLOW)
+    return img
+
+
+def replay_marker(kind):
+    """7x7 markers. Shape is the non-colour cue: round = the center fielder, diamond = Cleveland runners."""
+    if kind == "fielder":
+        rows = ["..KKK..", ".KWWWK.", "KWWRWWK", "KWRRRWK", "KWWRWWK", ".KWWWK.", "..KKK.."]
+        return from_rows(rows, CHAR_KEY)
+    rows = ["...K...", "..KMK..", ".KMMMK.", "KMMWMMK", ".KMMMK.", "..KMK..", "...K..."]
+    return from_rows(rows)
+
+
+def write_replay():
+    out = os.path.join(SPRITES, "Replay")
+    field = replay_field()
+    write_png(os.path.join(out, "replay_field.png"), field)
+    write_png(os.path.join(out, "replay_fielder.png"), replay_marker("fielder"))
+    write_png(os.path.join(out, "replay_runner.png"), replay_marker("runner"))
+    # Docs preview: the final picture of the replay (fielder at the catch, runner held at third).
+    prev = [list(r) for r in field]
+    blit(prev, replay_marker("fielder"), 67 - 3, 14 - 3)
+    for (x, y) in ((55, 65), (73, 65)):
+        blit(prev, replay_marker("runner"), x - 3, y - 3)
+    fill(prev, 65, 50, 67, 52, OFFWHITE)
+    write_png(os.path.join(PREVIEW_DIR, "m4_replay_diagram_preview.png"), scale(prev, 6))
+
+
 def main():
     rows = write_character()
     preview_sheet(rows, os.path.join(PREVIEW_DIR, "m3_outfielder_preview.png"))
     base, crowd, flags = write_environment()
     gameplay_mockup(base, crowd, flags)
     write_ui()
+    write_replay()
     meta = write_font()
     title = [list(r) for r in title_backdrop()]
     logo = title_logo()

@@ -23,6 +23,27 @@ mergeInto(LibraryManager.library, {
     return window.devicePixelRatio || 1;
   },
 
+  SHD_PrefersReducedMotion: function () {
+    try {
+      return (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ? 1 : 0;
+    } catch (e) {
+      return 0;
+    }
+  },
+
+  // Unity's PlayerPrefs live in IndexedDB. If the page cannot even use localStorage, storage
+  // is blocked (sandboxed / partitioned iframe) and settings can only last for this visit.
+  SHD_StorageAvailable: function () {
+    try {
+      var k = '__shd_probe';
+      window.localStorage.setItem(k, '1');
+      window.localStorage.removeItem(k);
+      return (typeof indexedDB !== 'undefined' && indexedDB !== null) ? 1 : 0;
+    } catch (e) {
+      return 0;
+    }
+  },
+
   // Popups are only allowed during a real user gesture. Unity processes input one frame
   // after the browser event, so we defer window.open to the next pointerup/keyup.
   SHD_OpenUrlOnNextGesture: function (urlPtr) {

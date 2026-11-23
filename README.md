@@ -9,8 +9,8 @@
 | Engine | **Unity 6.3 LTS (6000.3.9f1)**, C#, URP 2D — *replaces the Godot 4 suggested in the GDD* |
 | Target | WebGL (desktop + mobile browsers), embedded in the client's Wix site |
 | Design source | `THE SAY HEY DASH 2D GAME.pdf` (GDD) |
-| Current milestone | **Milestone 3 — Visual Production: client feedback applied (new "sunset arcade" palette), awaiting review** |
-| Last updated | 2026-11-20 |
+| Current milestone | **Milestone 4 — Content & Polish: delivered for review** |
+| Last updated | 2026-11-22 |
 
 ---
 
@@ -21,8 +21,8 @@
 | 1 | Discovery & Technical Proof | ✅ Delivered — awaiting client review |
 | 2 | Gameplay Prototype | ✅ Delivered — awaiting client review |
 | 3 | Visual Production | ✅ Delivered 2026-11-19 · client feedback (palette) applied 2026-11-20 — awaiting review of the new palette |
-| 4 | Content & Polish | ⏳ Not started (waiting for "Start Milestone 4") |
-| 5 | Testing & Final Handover | ⏳ |
+| 4 | Content & Polish | ✅ Delivered 2026-11-22 — awaiting client review (history copy, scoring sign-off) |
+| 5 | Testing & Final Handover | ⏳ Not started (waiting for "Start Milestone 5") |
 
 ### Milestone 1 deliverables
 
@@ -58,6 +58,18 @@ Full report, editing guide and test results: [Docs/06_M3_Visual_Production.md](D
 | Title and mission screens | `UI/TitleScreenView` (+ credits), `UI/BriefingScreenView` | ✅ |
 | HUD, menus and results screens | `UI/HudView`, `PauseMenuView`, `MissionFailedView`, `MissionCompleteView`, `ReplayScreenView`, `PixelButton` | ✅ (Screen 07 content is M4) |
 | Initial sound implementation | `Audio/AudioService`, `Data/Audio/AudioCueLibrary`, `Assets/_Project/Audio` | ✅ 14 original cues + mute |
+
+### Milestone 4 deliverables
+Full report, editing guide, accessibility checklist and test results: [Docs/07_M4_Content_and_Polish.md](Docs/07_M4_Content_and_Polish.md). Screenshots: `Docs/img/m4_screens/`.
+
+| GDD deliverable | Where | Status |
+|---|---|---|
+| Historical narrative and replay screen | `Replay/ReplayTimeline`, `ReplayDirector`, `UI/ReplayScreenView`, `MissionContent.replayBeats`, `Art/Sprites/Replay` | ✅ 6-step animated replay on a field diagram + narration (draft copy for approval) |
+| Final scoring and rankings | `Scoring/ScoreCalculator.TryGetNextRank`, `UI/MissionCompleteView` | ✅ best score on this device, NEW BEST!, next rank hint (formula sign-off Q6 still open) |
+| Sound mixing and settings | `Audio/AudioService`, `AudioCueLibrary`, `Settings/*`, `UI/SettingsMenuView` | ✅ loudness-matched mix, MUSIC/EFFECTS volumes, ducking, saved settings |
+| Mobile controls | `UI/TouchControls`, `Platform/BrowserEvents`, WebGL template | ✅ touch-only stick + CATCH/THROW button, rotate screen, open-full-screen link, auto-pause |
+| Accessibility features | Settings → REDUCED MOTION (follows browser preference), focus fixes, contrast tests | ✅ checklist in Docs/07 §5 |
+| Full browser build for review | `Builds/SayHeyDash_M4_WebGL.zip` | ✅ |
 
 ---
 
@@ -107,14 +119,21 @@ Full report, editing guide and test results: [Docs/06_M3_Visual_Production.md](D
 - Outfielder colours **pinned** to the approved M3 values (`CHAR_*` constants) so the character is pixel-identical; layout, animation and gameplay untouched.
 - Matching colours in `MainSceneBuilder`, `HudView` / `PixelButton` defaults and the WebGL template (loader, `theme-color`). Scene rebuilt; EditMode 70/70, PlayMode 9/9; screenshots refreshed in `Docs/img/m3_screens/`.
 
-## Pending / next (Milestone 4 — do not start until requested)
-- Historical narrative + animated replay on Screen 07 (client-approved copy, Q1/Q6), runner animation (lead runner holds at third).
-- Final scoring and rankings sign-off (Q6).
-- Sound mixing and a settings screen: `SettingsService` (mute, reduced motion, assisted mode persisted).
-- Mobile controls: show the on-screen stick/button on touch devices only; rotate-to-landscape overlay.
-- Accessibility pass (reduced-motion toggle in the UI, focus order, contrast check).
-- Client sign-off on the revised "sunset arcade" palette (feedback round 1 applied 2026-11-20) and the developer credit line.
-- Delete the M1 prototype code/scene once the client confirms M2.
+**Milestone 4 (2026-11-22)**
+- Screen 07: `ReplayTimeline` (pure, tested choreography: lead runner tags up, takes third, never scores; batter out; runner on first goes back) + `ReplayDirector` (markers on `replay_field.png`, trail dots, unscaled time, reduced motion = jump, step sounds) + six narrated `replayBeats` in `MissionContent` (draft copy). NEXT / WATCH AGAIN / BACK TO TITLE; museum button still hidden until Q5.
+- `Settings/`: `SettingsData` + `SettingsSerializer` (pure), `ISettingsStore` (`PlayerPrefsSettingsStore` best-effort, `MemorySettingsStore` in Editor/tests), `SettingsService` (execution order −100; loads, pushes into flow/audio, saves on change; best score; first-visit reduced motion from `prefers-reduced-motion`).
+- `SettingsMenuView` overlay (title + pause): SOUND, MUSIC %, EFFECTS %, REDUCED MOTION, ASSISTED MODE (locked mid-attempt), saved/visit-only note; explicit up/down focus loop.
+- `AudioService`: MUSIC / EFFECTS volumes, crowd ducks under jingles, title music fades out; `AudioCueLibrary` re-levelled from measured loudness.
+- Screen 06: best score / NEW BEST!, next rank (`ScoreCalculator.TryGetNextRank`).
+- `TouchControls` (touch devices only, CATCH/THROW label), touch instructions on Screen 02, `playerBounds` ±6.5. `BrowserEvents` + template: rotate screen, open-full-screen link, auto-pause on hidden tab / blur / portrait. `BrowserBridge`: `PrefersReducedMotion`, `StorageAvailable`.
+- Tests: EditMode 96 (+ settings, replay choreography, replay text fits, next rank, WCAG contrast, mix order); PlayMode 19 (+ `ContentAndPolishPlayTests`). `ScreenGalleryCapture` now writes `Docs/img/m4_screens/`.
+
+## Pending / next (Milestone 5 — do not start until requested)
+- Client approval of the history copy and names (AC-11, Q1), scoring sign-off (Q6), museum URL (Q5), developer credit line, "sunset arcade" palette.
+- Tested production build: browser/device matrix (Firefox, Safari macOS/iPhone, Chrome Android), real-device check of touch controls, rotate screen and full-screen link, performance on phones.
+- Agreed Wix embed or standalone fallback on the chosen HTTPS host (Q3/Q4); hide fullscreen where unsupported.
+- Strip the two URP "shader not supported" log lines; delete the M1 prototype code/scene once M2 is confirmed.
+- Handover: full source/assets, documentation, walkthrough recording.
 
 ## Open questions for the client
 See [Docs/01 §1.2](Docs/01_Scope_and_Architecture.md#12-decisions-needed-from-the-client-blocking-later-milestones-not-m1): name/likeness licensing (Q1), palette extensions (Q2), HTTPS host (Q3), Wix editor & page (Q4), museum URL (Q5), scoring formula (Q6).
@@ -122,12 +141,11 @@ See [Docs/01 §1.2](Docs/01_Scope_and_Architecture.md#12-decisions-needed-from-t
 ## Known issues / limitations
 Full table: [Docs/04 §6](Docs/04_WebGL_and_Wix_Feasibility.md#6-findings-limitations--risks). Summary:
 - **Fullscreen inside the Wix embed is probably blocked** by Wix's outer iframe → standalone-page fallback + hide the button when unsupported (M4/M5).
-- **Portrait phone embeds are tiny** → "rotate to landscape" overlay + mobile "play full screen" link (M4).
+- **Portrait phone embeds are tiny** → rotate screen + "open full screen" link added in M4; needs a real-device check (M5).
 - **iPhone Safari has no element Fullscreen API** → disclose as a limitation; standalone page works.
-- **Settings persistence may fail in third-party iframes** (storage partitioning) → best-effort `SettingsService` (M4).
+- **Settings persistence may fail in third-party iframes** (storage partitioning) → `SettingsService` is best-effort and the menu says when saving is blocked (M4).
 - URP logs two harmless "shader not supported" lines on WebGL → strip in M5.
-- On-screen controls overlap the field edges → show only on touch devices (M4).
-- **M3 by design (later milestones):** Screen 07 has placeholder history text and no animated replay; mute / assisted / reduced motion are not saved and reduced motion has no UI toggle yet; on-screen controls always visible; first-pass sound levels; credits show "[DEVELOPER CREDIT - TO CONFIRM]". See [Docs/06 §6](Docs/06_M3_Visual_Production.md#6-known-limitations-later-milestones).
+- **Open after M4:** history copy and names are drafts (AC-11/Q1); scoring sign-off (Q6); museum button hidden until its URL (Q5); credits show "[DEVELOPER CREDIT - TO CONFIRM]"; menu buttons slightly under the 44 px touch-target guideline on phones; settings may not persist in some embeds (menu says so). See [Docs/07 §8](Docs/07_M4_Content_and_Polish.md#8-known-limitations--open-items).
 - **M3 art is generated from code** (`Tools/ArtGen`), delivered as PNG frames + sheets, not Aseprite files.
 - **In-browser scripted play is unreliable while the browser pane is hidden** (background tab throttling). Visual checks of the catch/throw/results screens use the `ScreenGalleryCapture` PlayMode capture instead.
 - **Gameplay feel not yet tuned with real players:** the default values (3.6 s flight, ±0.2 s catch window, 0.16 throw zone) were checked only by automated tests and a scripted browser run. Client playtest feedback is wanted before M3.
@@ -168,6 +186,12 @@ Full table: [Docs/04 §6](Docs/04_WebGL_and_Wix_Feasibility.md#6-findings-limita
 | 2026-11-19 | HUD prompt in the top sky band, zone label bottom centre | The fly ball never rises above row ~37, so prompts never hide the ball or the scoreboard |
 | 2026-11-19 | `OutfielderController.MoveOverride` test hook | Batch-mode runs have no window focus, so simulated keyboard input is dropped |
 | 2026-11-20 | "Sunset arcade" palette replaces the GDD palette everywhere except the outfielder | Client feedback on M3 (darker, more vibrant retro arcade; reference GIF for colours only). Character colours pinned so the approved character is unchanged |
+| 2026-11-22 | `SettingsService` persists, but `GameFlowController` / `AudioService` stay the owners of the options | Nothing else had to change how it reads options; persistence is one component that can fail safely |
+| 2026-11-22 | In the Editor settings are kept in memory unless *Persist In Editor* is ticked | Tests and reviews always start from the same defaults; builds always save |
+| 2026-11-22 | Screen 07 replay = markers on a top-down field diagram driven by a pure `ReplayTimeline`, not a re-run of the gameplay scene | Shows the whole play (batter, runners, throw) that the gameplay camera never sees; the documented outcome is unit-tested |
+| 2026-11-22 | No AudioMixer: two player volumes + per-cue levels on plain AudioSources | Same behaviour in every WebGL browser; simple to edit |
+| 2026-11-22 | `playerBounds` x ±9 → ±6.5 | Outfielder never runs under the touch controls (Docs/04 F8); landing point and start unaffected |
+| 2026-11-22 | The web page pauses the game (tab hidden, focus lost, portrait) through `BrowserEvents` | A mission is never lost to something outside the game, especially in an embed |
 
 ---
 
@@ -176,7 +200,7 @@ Full table: [Docs/04 §6](Docs/04_WebGL_and_Wix_Feasibility.md#6-findings-limita
 1. Install **Unity 6000.3.9f1** with **Web Build Support** via Unity Hub.
 2. Unity Hub → *Add project from disk* → this folder.
 3. Open `Assets/_Project/Scenes/Main.unity` → Play.
-   Controls: arrows/WASD (or drag the on-screen stick) to run; Space (or the **A** button) to catch, throw and skip; Enter/Space to confirm menus; Esc or **II** to pause.
+   Controls: arrows/WASD (or drag the on-screen stick on touch devices) to run; Space (or the **A** button) to catch, throw and skip; Enter/Space to confirm menus; Esc or **II** to pause. **SETTINGS** (title screen or pause menu) has sound, music / effects volume, reduced motion and assisted mode.
 
 If the scene is missing or broken: **Say Hey Dash → Build Main Scene**. To regenerate art or sound (from the repo root): `py -I Tools/ArtGen/generate_m3_art.py` and `py -I Tools/AudioGen/generate_audio.py`, then Build Main Scene. Gameplay numbers and all text are edited in `Assets/_Project/Data/` (see the [tuning guide](Docs/05_M2_Gameplay_Prototype.md#3-tuning-guide-no-code-changes-needed)).
 
@@ -190,7 +214,7 @@ Unity → Window → General → **Test Runner** → EditMode / PlayMode → Run
 ## How to build for the web
 
 - Editor: **Say Hey Dash → Build → WebGL (Release)** (or *Development*). Output: `Builds/WebGL/`.
-- Latest build (M3 + new palette): `Builds/SayHeyDash_M3_Palette_WebGL.zip` (2026-11-20). Original M3 deliverable: `Builds/SayHeyDash_M3_WebGL.zip` (2026-11-19). M2 build: `Builds/SayHeyDash_M2_WebGL.zip`. Upload the zip as-is to itch.io (Kind: HTML, "played in the browser"), or unzip it onto any HTTPS static host. No special server headers are needed.
+- Latest build (M4): `Builds/SayHeyDash_M4_WebGL.zip` (2026-11-22, 9.80 MB compressed). M3 + new palette: `Builds/SayHeyDash_M3_Palette_WebGL.zip` (2026-11-20). Original M3 deliverable: `Builds/SayHeyDash_M3_WebGL.zip` (2026-11-19). M2 build: `Builds/SayHeyDash_M2_WebGL.zip`. Upload the zip as-is to itch.io (Kind: HTML, "played in the browser"), or unzip it onto any HTTPS static host. No special server headers are needed.
 - **Always package with** `py -I Tools/Release/zip_webgl.py Builds/WebGL Builds/<name>.zip`. Do **not** use Windows' `Compress-Archive` or "Send to → Compressed folder": they write backslash paths, and itch.io then shows an unstyled page with "Could not load the game files".
 - Command line (editor closed):
   ```bash
